@@ -18,13 +18,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         >
+
+
         <!--
         <activity
             android:name=".models.LandingActivity"
             android:label="@string/title_activity_landing_activity"
             android:theme="@style/AppTheme"></activity>
         -->
-        <activity android:name="com.example.safetravelsclient.models.LandingActivity">
+        <!-- 
+    <activity android:name="com.example.safetravelsclient.models.LandingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -41,6 +44,7 @@
                 android:value="edu.uark.uarkregisterapp.LandingActivity" />
         </activity>
         -->
+
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -52,17 +56,17 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-        <!--
+
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        -->
+
+
     </application>
 
 </manifest>
