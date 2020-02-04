@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 
 import com.example.safetravelsclient.R;
+import android.content.Intent;
 /*import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;

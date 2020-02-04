@@ -18,8 +18,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         >
-
-
+        <!--
+        <activity
+            android:name=".models.LandingActivity"
+            android:label="@string/title_activity_landing_activity"
+            android:theme="@style/AppTheme"></activity>
+        -->
         <activity android:name="com.example.safetravelsclient.models.LandingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
