@@ -35,16 +35,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         getDirection = findViewById(R.id.button);
-       // getDirection.setOnClickListener(new View.OnClickListener() {
-            //@Override
-         //   public void onClick(View view) {
-            //    new FetchURL(MapsActivity.this).execute(getUrl(place1.getPosition(), place2.getPosition(), "driving"), "driving");
-         //   }
-       // });
+        getDirection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new FetchURL(MapsActivity.this).execute(getUrl(place1.getPosition(), place2.getPosition(), "driving"), "driving");
+            }
+        });
         //27.658143,85.3199503
         //27.667491,85.3208583
-        place1 = new MarkerOptions().position(new LatLng(27.658143, 85.3199503)).title("Location 1");
-        place2 = new MarkerOptions().position(new LatLng(27.667491, 85.3208583)).title("Location 2");
+        place1 = new MarkerOptions().position(new LatLng(36.0822, -94.1719)).title("Location 1");
+        place2 = new MarkerOptions().position(new LatLng(41.18781, -87.6298)).title("Location 2");
        // MapFragment mapFragment = (MapFragment) getFragmentManager()
         //        .findFragmentById(R.id.map);
        // mapFragment.getMapAsync(this);
@@ -57,14 +57,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         Log.d("mylog", "Added Markers");
-        LatLng latLng = new LatLng(27.658143, 85.3199503);
+        LatLng latLng = new LatLng(36.0822, -94.1719);
         mMap.addMarker(place1);
         mMap.addMarker(place2);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 
     }
 
-    /*
+    public void onClick(View v)
+    {
+        new FetchURL(MapsActivity.this).execute(getUrl(place1.getPosition(),place2.getPosition(), "driving"), "driving");
+    }
+
     private String getUrl(LatLng origin, LatLng dest, String directionMode) {
         // Origin of route
         String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
@@ -80,7 +84,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters + "&key=" + getString(R.string.google_maps_key);
         return url;
     }
-*/
+
     @Override
     public void onTaskDone(Object... values) {
         if (currentPolyline != null)
