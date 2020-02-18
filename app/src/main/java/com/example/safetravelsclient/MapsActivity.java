@@ -23,6 +23,9 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.example.safetravelsclient.models.FetchURL;
 
+import java.text.DecimalFormat;
+import java.util.List;
+
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, TaskLoadedCallback {
     private GoogleMap mMap;
@@ -87,10 +90,79 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onTaskDone(Object... values) {
+
+        List<LatLng> points;
+
         if (currentPolyline != null)
             currentPolyline.remove();
+
         currentPolyline = mMap.addPolyline((PolylineOptions) values[0]);
+        points = currentPolyline.getPoints();
+        GetMarkers(points);
+        System.out.println(points.get(0));
+    }
+
+    public void GetMarkers(List<LatLng> points)
+    {
+        double totalDistance = 0;
+        for (int i = 0; i < points.size() - 1; i++)
+        {
+            String stringOne = points.get(i).toString();
+            String stringTwo = points.get(i+1).toString();
+
+            LatLng valueOne = parseString(stringOne);
+            LatLng valueTwo = parseString(stringTwo);
+
+            totalDistance = totalDistance + calculationByDistance(valueOne,valueTwo);
+            if (totalDistance >= 96.5606)
+            {
+                MarkerOptions location = new MarkerOptions().position(valueTwo).title("Location");
+                mMap.addMarker(location);
+                totalDistance = 0;
+            }
+        }
+
+        System.out.println("The total distance is: " + totalDistance);
+    }
+
+    public LatLng parseString(String value)
+    {
+        String values[];
+
+        value = value.replace("lat/lng: (","");
+        value = value.replace(")","");
+
+        values = value.split(",");
+
+        LatLng marker = new LatLng(Double.parseDouble(values[0]), Double.parseDouble(values[1]));
+
+        return marker;
     }
 
 
+    public double calculationByDistance(LatLng StartP, LatLng EndP) {
+        int Radius = 6371;// radius of earth in Km
+        double lat1 = StartP.latitude;
+        double lat2 = EndP.latitude;
+        double lon1 = StartP.longitude;
+        double lon2 = EndP.longitude;
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLon = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+                + Math.cos(Math.toRadians(lat1))
+                * Math.cos(Math.toRadians(lat2)) * Math.sin(dLon / 2)
+                * Math.sin(dLon / 2);
+        double c = 2 * Math.asin(Math.sqrt(a));
+        double valueResult = Radius * c;
+        double km = valueResult / 1;
+        DecimalFormat newFormat = new DecimalFormat("####");
+        //DecimalFormat newFormat = new DecimalFormat("####");
+        int kmInDec = Integer.valueOf(newFormat.format(km));
+        double meter = valueResult % 1000;
+        int meterInDec = Integer.valueOf(newFormat.format(meter));
+        Log.i("Radius Value", "" + valueResult + "   KM  " + kmInDec
+                + " Meter   " + meterInDec);
+
+        return Radius * c;
+    }
 }
