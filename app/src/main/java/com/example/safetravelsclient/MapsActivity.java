@@ -37,12 +37,15 @@ import java.util.List;
 
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, TaskLoadedCallback {
+
+    int destCheck = 0;
     private GoogleMap mMap;
     private MarkerOptions place1, place2;
     Button getDirection;
 
     Button getCords;
-    EditText getAddress;
+    EditText getFrom;
+    EditText getTo;
     private Polyline currentPolyline;
 
     @Override
@@ -50,16 +53,20 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         getCords = findViewById(R.id.button3);
-        getAddress = findViewById(R.id.plain_text_input);
+        getFrom = findViewById(R.id.plain_text_input);
+        getTo = findViewById(R.id.plain_text_input2);
         getDirection = findViewById(R.id.button);
 
         getCords.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new GetCoordinates().execute(getAddress.getText().toString().replace(" ", "+"));
+                new GetCoordinates().execute(getFrom.getText().toString().replace(" ", "+"));
+                new GetCoordinates().execute(getTo.getText().toString().replace(" ", "+"));
+
             }
 
         });
+
 
         getDirection.setOnClickListener(new View.OnClickListener() {
         public void onClick(View view) {
@@ -68,8 +75,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
 
 
-        place1 = new MarkerOptions().position(new LatLng(36.0822, -94.1719)).title("Location 1");
-        place2 = new MarkerOptions().position(new LatLng(41.18781, -87.6298)).title("Location 2");
+      //  place1 = new MarkerOptions().position(new LatLng(36.0822, -94.1719)).title("Location 1");
+      //  place2 = new MarkerOptions().position(new LatLng(41.18781, -87.6298)).title("Location 2");
 
 
                     SupportMapFragment mapFragment = (SupportMapFragment)getSupportFragmentManager()
@@ -82,8 +89,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap = googleMap;
         Log.d("mylog", "Added Markers");
         LatLng latLng = new LatLng(36.0822, -94.1719);
-        mMap.addMarker(place1);
-        mMap.addMarker(place2);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 
     }
@@ -119,6 +124,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         @Override
         protected void onPostExecute(String s)
         {
+
             try {
                 JSONObject jsonObject = new JSONObject(s);
 
@@ -127,7 +133,22 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 String lng = ((JSONArray)jsonObject.get("results")).getJSONObject(0).getJSONObject("geometry")
                         .getJSONObject("location").get("lng").toString();
 
+                if (destCheck == 0)
+                {
+
+                    place1 = new MarkerOptions().position(new LatLng(Double.parseDouble(lat),Double.parseDouble(lng))).title("Location 1");
+                    mMap.addMarker(place1);
+
+                }
+                else
+                {
+                    place2 = new MarkerOptions().position(new LatLng(Double.parseDouble(lat),Double.parseDouble(lng))).title("Location 2");
+                    mMap.addMarker(place2);
+
+                }
+
                 System.out.println("Cooridnates: " + lat + ", " + lng);
+                destCheck++;
             }
             catch (Exception e) {
                 e.printStackTrace();
