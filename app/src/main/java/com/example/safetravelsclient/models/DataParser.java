@@ -1,5 +1,7 @@
 package com.example.safetravelsclient.models;
 
+import android.util.Log;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
@@ -12,13 +14,23 @@ import java.util.List;
 
 public class DataParser{
 /** Receives a JSONObject and returns a list of lists containing latitude and longitude */
-public List<List<HashMap<String,String>>> parse(JSONObject jObject){
+public List<List<HashMap<String,String>>> parse(JSONObject jObject) throws JSONException {
 
         List<List<HashMap<String, String>>> routes = new ArrayList<>() ;
         JSONArray jRoutes;
         JSONArray jLegs;
         JSONArray jSteps;
 
+
+        JSONArray array = jObject.getJSONArray("routes");
+        JSONObject routesTwo = array.getJSONObject(0);
+        JSONArray legs = routesTwo.getJSONArray("legs");
+        JSONObject steps = legs.getJSONObject(0);
+        JSONObject distance = steps.getJSONObject("distance");
+
+        Log.i("trJSON", "Distance String: " + distance.toString());
+        Double dist = Double.parseDouble(distance.getString("text").replaceAll("[^\\.0123456789]","") );
+        Log.i("trJSON", "Distance Double: " + dist);
         try {
 
         jRoutes = jObject.getJSONArray("routes");
