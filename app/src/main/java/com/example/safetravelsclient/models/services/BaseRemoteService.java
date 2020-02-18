@@ -1,10 +1,22 @@
 package com.example.safetravelsclient.models.services;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.UUID;
+
+import com.example.safetravelsclient.models.interfaces.PathElementInterface;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public abstract class BaseRemoteService
 {
-
-    //private ApiObject apiObject;
-
     private static final String URL_JOIN = "/";
     private static final String GET_REQUEST_METHOD = "GET";
     private static final String PUT_REQUEST_METHOD = "PUT";
@@ -17,4 +29,161 @@ public abstract class BaseRemoteService
     //private static final String BASE_URL = "https://uarkregserv-sprint2.herokuapp.com/api/";
     private static final String BASE_URL = "https://mobileregisterapp.herokuapp.com/api/";
 //	private static final String BASE_URL = "https://uarkregservnodejs-sprint2.herokuapp.com/api/";
+
+    private ApiObject apiObject;
+
+    BaseRemoteService(ApiObject apiObject)
+    {
+        this.apiObject = apiObject;
+    }
+
+    URL buildPath()
+    {
+        return this.buildPath(new PathElementInterface[0], "");
+    }
+
+    URL buildPath(UUID tripID)
+    {
+        return this.buildPath(new PathElementInterface[0], tripID.toString());
+    }
+
+    URL buildPath(PathElementInterface[] pathElements)
+    {
+        return this.buildPath(pathElements, "");
+    }
+
+    URL buildPath(PathElementInterface[] pathElements, String paramaterValue)
+    {
+        String completePath = BASE_URL + this.apiObject.getPathValue();
+
+        for(PathElementInterface pathElement : pathElements)
+        {
+            String pathEntry = pathElement.getPathValue();
+
+            if(pathEntry.length() > 0)
+            {
+                completePath += pathEntry + URL_JOIN;
+            }
+        }
+
+        if(paramaterValue.length() > 0)
+        {
+            completePath += paramaterValue;
+        }
+
+        URL connectionUrl;
+        try
+        {
+            connectionUrl = new URL(completePath);
+        }
+        catch(MalformedURLException e)
+        {
+            e.printStackTrace();
+            connectionUrl = null;
+        }
+
+        return connectionUrl;
+
+    }
+
+    <T extends Object> ApiResponse<T> performGetRequest(URL connectionUrl){
+        ApiResponse<T> apiResponse = new ApiResponse<>();
+
+        String rawResponse = "";
+
+        if(connectionUrl == null)
+        {
+            return apiResponse.setValidResponse(false).setMessage("Invalid network path provided.");
+        }
+
+        try {
+            HttpURLConnection conn = (HttpURLConnection) connectionUrl.openConnection();
+
+            conn.setRequestMethod(GET_REQUEST_METHOD);
+
+            conn.addRequestProperty(ACCEPT_REQUEST_PROPERTY, JSON_PAYLOAD_TYPE);
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+            String line = "";
+
+            while((line = reader.readLine()) != null)
+            {
+                rawResponse += line;
+            }
+
+            reader.close();
+        }
+        catch(IOException e) {
+            e.printStackTrace();
+        }
+
+        return apiResponse.setRawResponse(rawResponse);
+    }
+
+    <T extends Object> ApiResponse<T> performPutRequest(URL connectionUrl, JSONObject jsonObject)
+    {
+        return this.performUploadRequest(PUT_REQUEST_METHOD, connectionUrl, jsonObject);
+    }
+
+    <T extends Object> ApiResponse<T> performPostRequest(URL connectionUrl, JSONObject jsonObject)
+    {
+        return this.performUploadRequest(POST_REQUEST_METHOD, connectionUrl, jsonObject);
+    }
+
+    // Perform Upload Request
+    private <T extends Object> ApiResponse<T> performUploadRequest(String requestType, URL connectionURL,
+                                                                   JSONObject jsonObject)
+    {
+        ApiResponse<T> apiResponse = new ApiResponse<>();
+
+        return apiResponse;
+    }
+
+    // perform Delete Request
+
+    // rawResponse to JSON object
+    JSONObject rawResponseToJSONObject(String rawResponse)
+    {
+        JSONObject jsonObject = null;
+
+        if(rawResponse.length() > 0)
+        {
+            try {
+                jsonObject = new JSONObject(rawResponse);
+            }
+            catch(JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return jsonObject;
+    }
+
+    // rawResponse to JSON array
+    JSONArray rawResponseToJSONArray(String rawResponse)
+    {
+        JSONArray jsonArray = null;
+
+        if(rawResponse.length() > 0)
+        {
+            try{
+                jsonArray = new JSONArray(rawResponse);
+            }
+            catch(JSONException e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+        return jsonArray;
+    }
+
+    private boolean isValidResponse(int responseCode)
+    {
+        return( (responseCode == HttpURLConnection.HTTP_OK) ||
+                (responseCode == HttpURLConnection.HTTP_CREATED) ||
+                (responseCode == HttpURLConnection.HTTP_ACCEPTED) ||
+                (responseCode == HttpURLConnection.HTTP_NO_CONTENT));
+    }
 }
