@@ -74,11 +74,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
-
-      //  place1 = new MarkerOptions().position(new LatLng(36.0822, -94.1719)).title("Location 1");
-      //  place2 = new MarkerOptions().position(new LatLng(41.18781, -87.6298)).title("Location 2");
-
-
                     SupportMapFragment mapFragment = (SupportMapFragment)getSupportFragmentManager()
                     .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
