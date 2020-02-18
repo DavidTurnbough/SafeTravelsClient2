@@ -8,6 +8,7 @@ import android.util.Log;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -42,10 +43,14 @@ public class PointsParser extends AsyncTask<String, Integer, List<List<HashMap<S
             Log.d("mylog", "Executing routes");
             Log.d("mylog", routes.toString());
 
+
         } catch (Exception e) {
             Log.d("mylog", e.toString());
             e.printStackTrace();
         }
+
+
+
         return routes;
     }
 
@@ -57,7 +62,7 @@ public class PointsParser extends AsyncTask<String, Integer, List<List<HashMap<S
         // Traversing through all the routes
         for (int i = 0; i < result.size(); i++) {
             points = new ArrayList<>();
-            lineOptions = new PolylineOptions();
+            lineOptions = new PolylineOptions().geodesic(true);
             // Fetching i-th route
             List<HashMap<String, String>> path = result.get(i);
             // Fetching all the points in i-th route

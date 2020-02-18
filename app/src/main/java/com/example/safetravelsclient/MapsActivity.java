@@ -1,15 +1,19 @@
 package com.example.safetravelsclient;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 //import android.support.annotation.Nullable;
 //import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.safetravelsclient.models.HttpDataHandler;
 import com.example.safetravelsclient.models.TaskLoadedCallback;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -23,6 +27,11 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.example.safetravelsclient.models.FetchURL;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.List;
 
@@ -31,26 +40,38 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private GoogleMap mMap;
     private MarkerOptions place1, place2;
     Button getDirection;
+
+    Button getCords;
+    EditText getAddress;
     private Polyline currentPolyline;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        getCords = findViewById(R.id.button3);
+        getAddress = findViewById(R.id.plain_text_input);
         getDirection = findViewById(R.id.button);
-        getDirection.setOnClickListener(new View.OnClickListener() {
+
+        getCords.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                new GetCoordinates().execute(getAddress.getText().toString().replace(" ", "+"));
+            }
+
+        });
+
+        getDirection.setOnClickListener(new View.OnClickListener() {
+        public void onClick(View view) {
                 new FetchURL(MapsActivity.this).execute(getUrl(place1.getPosition(), place2.getPosition(), "driving"), "driving");
             }
         });
-        //27.658143,85.3199503
-        //27.667491,85.3208583
+
+
         place1 = new MarkerOptions().position(new LatLng(36.0822, -94.1719)).title("Location 1");
         place2 = new MarkerOptions().position(new LatLng(41.18781, -87.6298)).title("Location 2");
-       // MapFragment mapFragment = (MapFragment) getFragmentManager()
-        //        .findFragmentById(R.id.map);
-       // mapFragment.getMapAsync(this);
+
+
                     SupportMapFragment mapFragment = (SupportMapFragment)getSupportFragmentManager()
                     .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -64,6 +85,54 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.addMarker(place1);
         mMap.addMarker(place2);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+
+    }
+
+    private class GetCoordinates extends AsyncTask<String,Void,String> {
+        ProgressBar bar = new ProgressBar(MapsActivity.this);
+
+        @Override
+        protected String doInBackground(String... strings) {
+            String response;
+            try {
+                String address = strings[0];
+                HttpDataHandler http = new HttpDataHandler();
+                String url = String.format("https://maps.googleapis.com/maps/api/geocode/json?address=%s",address + "&key=" + getString(R.string.google_maps_key));
+                response = http.getaHttpData(url);
+                return response;
+            }
+
+            catch (Exception ex) {
+            }
+        return null;
+        }
+
+        @Override
+        protected void onPreExecute()
+        {
+            super.onPreExecute();
+           // bar.set
+        }
+
+
+
+        @Override
+        protected void onPostExecute(String s)
+        {
+            try {
+                JSONObject jsonObject = new JSONObject(s);
+
+                String lat = ((JSONArray)jsonObject.get("results")).getJSONObject(0).getJSONObject("geometry")
+                        .getJSONObject("location").get("lat").toString();
+                String lng = ((JSONArray)jsonObject.get("results")).getJSONObject(0).getJSONObject("geometry")
+                        .getJSONObject("location").get("lng").toString();
+
+                System.out.println("Cooridnates: " + lat + ", " + lng);
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 
