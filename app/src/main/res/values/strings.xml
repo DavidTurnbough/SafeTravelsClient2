@@ -2,4 +2,5 @@
     <string name="app_name">SafeTravelsClient</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_landing_activity">LandingActivity</string>
+    <string name="activity_maps_to_weather_list">List</string>
 </resources>

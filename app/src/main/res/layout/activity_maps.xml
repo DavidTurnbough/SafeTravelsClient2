@@ -20,6 +20,15 @@
         android:layout_height="75dp"
         android:text="Get Directions"></Button>
 
+    <Button
+        android:id="@+id/button_to_weather_list"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:text="@string/activity_maps_to_weather_list"
+        android:onClick="startActivityOnClick"></Button>
+
     <EditText
         android:id="@+id/plain_text_input"
         android:layout_width="128dp"
