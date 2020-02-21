@@ -2,11 +2,17 @@ package com.example.safetravelsclient.models.services;
 
 public class ApiResponse<T> {
 
+    //**********
+    // Variable Declarations.
+    //**********
     private boolean isValidResponse;
     private String message;
     private String rawResponse;
     private T data;
 
+    //**********
+    // Constructors.
+    //**********
     public ApiResponse()
     {
         this.isValidResponse = true;
@@ -15,11 +21,9 @@ public class ApiResponse<T> {
         this.data = null;
     }
 
-    public boolean isValidResponse()
-    {
-        return this.isValidResponse;
-    }
-
+    //**********
+    // Getter Methods.
+    //**********
     public String getMessage()
     {
         return this.message;
@@ -35,6 +39,9 @@ public class ApiResponse<T> {
         return this.data;
     }
 
+    //**********
+    // Setter Methods.
+    //**********
     public ApiResponse<T> setValidResponse(boolean isValidResponse)
     {
         this.isValidResponse = isValidResponse;
@@ -57,6 +64,14 @@ public class ApiResponse<T> {
     {
         this.data = data;
         return this;
+    }
+
+    //**********
+    // Other Methods.
+    //**********
+    public boolean isValidResponse()
+    {
+        return this.isValidResponse;
     }
 
 }

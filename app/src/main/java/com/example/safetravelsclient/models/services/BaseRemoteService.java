@@ -26,9 +26,7 @@ public abstract class BaseRemoteService
     private static final String ACCEPT_REQUEST_PROPERTY = "Accept";
     private static final String JSON_PAYLOAD_TYPE = "application/json";
     private static final String CONTENT_TYPE_REQUEST_PROPERTY = "Content-Type";
-    //private static final String BASE_URL = "https://uarkregserv-sprint2.herokuapp.com/api/";
-    private static final String BASE_URL = "https://mobileregisterapp.herokuapp.com/api/";
-//	private static final String BASE_URL = "https://uarkregservnodejs-sprint2.herokuapp.com/api/";
+    private static final String BASE_URL = "https://weatherways-server.herokuapp.com/api/";
 
     private ApiObject apiObject;
 
@@ -42,9 +40,14 @@ public abstract class BaseRemoteService
         return this.buildPath(new PathElementInterface[0], "");
     }
 
-    URL buildPath(UUID tripID)
+    URL buildPath(UUID routeID)
     {
-        return this.buildPath(new PathElementInterface[0], tripID.toString());
+        return this.buildPath(new PathElementInterface[0], routeID.toString());
+    }
+
+    URL buildPath(String parameterValue)
+    {
+        return this.buildPath(new PathElementInterface[0], parameterValue);
     }
 
     URL buildPath(PathElementInterface[] pathElements)
@@ -52,7 +55,7 @@ public abstract class BaseRemoteService
         return this.buildPath(pathElements, "");
     }
 
-    URL buildPath(PathElementInterface[] pathElements, String paramaterValue)
+    URL buildPath(PathElementInterface[] pathElements, String parameterValue)
     {
         String completePath = BASE_URL + this.apiObject.getPathValue();
 
@@ -66,9 +69,9 @@ public abstract class BaseRemoteService
             }
         }
 
-        if(paramaterValue.length() > 0)
+        if(parameterValue.length() > 0)
         {
-            completePath += paramaterValue;
+            completePath += parameterValue;
         }
 
         URL connectionUrl;
@@ -86,7 +89,7 @@ public abstract class BaseRemoteService
 
     }
 
-    <T extends Object> ApiResponse<T> performGetRequest(URL connectionUrl){
+    <T extends Object> ApiResponse<T> getRequest(URL connectionUrl){
         ApiResponse<T> apiResponse = new ApiResponse<>();
 
         String rawResponse = "";
@@ -113,6 +116,8 @@ public abstract class BaseRemoteService
             }
 
             reader.close();
+
+            conn.disconnect();
         }
         catch(IOException e) {
             e.printStackTrace();
@@ -121,28 +126,93 @@ public abstract class BaseRemoteService
         return apiResponse.setRawResponse(rawResponse);
     }
 
-    <T extends Object> ApiResponse<T> performPutRequest(URL connectionUrl, JSONObject jsonObject)
+    <T extends Object> ApiResponse<T> putRequest(URL connectionUrl, JSONObject jsonObject)
     {
-        return this.performUploadRequest(PUT_REQUEST_METHOD, connectionUrl, jsonObject);
+        return this.uploadRequest(PUT_REQUEST_METHOD, connectionUrl, jsonObject);
     }
 
-    <T extends Object> ApiResponse<T> performPostRequest(URL connectionUrl, JSONObject jsonObject)
+    <T extends Object> ApiResponse<T> postRequest(URL connectionUrl, JSONObject jsonObject)
     {
-        return this.performUploadRequest(POST_REQUEST_METHOD, connectionUrl, jsonObject);
+        return this.uploadRequest(POST_REQUEST_METHOD, connectionUrl, jsonObject);
     }
+
 
     // Perform Upload Request
-    private <T extends Object> ApiResponse<T> performUploadRequest(String requestType, URL connectionURL,
-                                                                   JSONObject jsonObject)
-    {
+    private <T extends Object> ApiResponse<T> uploadRequest(String requestType, URL connectionURL,
+                                                                   JSONObject jsonObject) {
         ApiResponse<T> apiResponse = new ApiResponse<>();
+
+
+        if (connectionURL == null) {
+            apiResponse.setMessage("Invalid URL");
+            apiResponse.setValidResponse(false);
+            return apiResponse;
+        }
+
+        try {
+            HttpURLConnection conn = (HttpURLConnection) connectionURL.openConnection();
+
+            conn.setDoOutput(true);
+
+            conn.setRequestMethod(requestType);
+
+            OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
+
+            out.write(jsonObject.toString());
+
+            out.close();
+
+            conn.disconnect();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            apiResponse.setMessage(e.getMessage());
+            apiResponse.setValidResponse(false);
+        }
 
         return apiResponse;
     }
 
     // perform Delete Request
+    public <T extends Object> ApiResponse<T> deleteRequest(URL connectionURL)
+    {
+        ApiResponse<T> apiResponse = new ApiResponse<>();
 
-    // rawResponse to JSON object
+        if(connectionURL == null)
+        {
+            apiResponse.setMessage("Invalid URL");
+            apiResponse.setValidResponse(false);
+
+            return apiResponse;
+        }
+
+        try {
+            HttpURLConnection conn = (HttpURLConnection) connectionURL.openConnection();
+
+            conn.setDoOutput(true);
+
+            conn.setRequestMethod(DELETE_REQUEST_METHOD);
+
+            //***********
+            //Not done yet.
+            //***********
+
+            conn.disconnect();
+
+
+        } catch(IOException e)
+        {
+            e.printStackTrace();
+            apiResponse.setMessage(e.getMessage());
+            apiResponse.setValidResponse(false);
+
+        }
+
+        return apiResponse;
+    }
+
+
     JSONObject rawResponseToJSONObject(String rawResponse)
     {
         JSONObject jsonObject = null;
@@ -160,7 +230,6 @@ public abstract class BaseRemoteService
         return jsonObject;
     }
 
-    // rawResponse to JSON array
     JSONArray rawResponseToJSONArray(String rawResponse)
     {
         JSONArray jsonArray = null;

@@ -4,7 +4,7 @@ import com.example.safetravelsclient.models.interfaces.PathElementInterface;
 
 public enum ApiObject implements PathElementInterface {
     NONE(""),
-    WEATHER("routeWeatherInformation/");
+    MARKERS("markers/");
 
     private String value;
 
