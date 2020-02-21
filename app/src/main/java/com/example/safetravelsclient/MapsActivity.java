@@ -1,5 +1,6 @@
 package com.example.safetravelsclient;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 //import android.support.annotation.Nullable;
@@ -15,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.safetravelsclient.models.HttpDataHandler;
 import com.example.safetravelsclient.models.TaskLoadedCallback;
+import com.example.safetravelsclient.models.WeatherListActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -42,6 +44,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private GoogleMap mMap;
     private MarkerOptions place1, place2;
     Button getDirection;
+    Button to_weather_list;
 
     Button getCords;
     EditText getFrom;
@@ -56,6 +59,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         getFrom = findViewById(R.id.plain_text_input);
         getTo = findViewById(R.id.plain_text_input2);
         getDirection = findViewById(R.id.button);
+        this.to_weather_list = findViewById(R.id.button_to_weather_list);
 
         getCords.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,9 +78,24 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
+        this.to_weather_list.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                //this.startActivity(new Intent(getApplicationContext(), WeatherListActivity.class));
+                startActivityOnClick(view);
+            }
+        });
+
                     SupportMapFragment mapFragment = (SupportMapFragment)getSupportFragmentManager()
                     .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+    }
+
+    public void startActivityOnClick(View view)
+    {
+        this.startActivity(new Intent(this.getApplicationContext(), WeatherListActivity.class));
     }
 
     @Override
