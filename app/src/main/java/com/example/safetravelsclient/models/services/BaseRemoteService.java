@@ -40,9 +40,9 @@ public abstract class BaseRemoteService
         return this.buildPath(new PathElementInterface[0], "");
     }
 
-    URL buildPath(UUID routeID)
+    URL buildPath(UUID userID)
     {
-        return this.buildPath(new PathElementInterface[0], routeID.toString());
+        return this.buildPath(new PathElementInterface[0], userID.toString());
     }
 
     URL buildPath(String parameterValue)

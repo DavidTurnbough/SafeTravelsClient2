@@ -12,15 +12,15 @@ public class RouteService extends BaseRemoteService {
 
     // Returns weather conditions about all markers along the given route.
     // Buildpath = baseurl/markers/{route id}
-    public <T extends Object> ApiResponse<T> getRoute(UUID routeID)
+    public <T extends Object> ApiResponse<T> getRoute(UUID userID)
     {
-        return this.getRequest(this.buildPath(routeID));
+        return this.getRequest(this.buildPath(userID));
     }
 
     // Returns weather conditions about a given marker on a given route.
     // Buildpath = baseurl/markers?id={route id}&markerID={route marker id}
-    public <T extends Object> ApiResponse<T> getMarker(UUID routeID, int markerID) {
-        String parameters = ("%id=" + routeID.toString() + "&markerID" + markerID);
+    public <T extends Object> ApiResponse<T> getMarker(UUID userID, int markerID) {
+        String parameters = ("?id=" + userID.toString() + "&markerID" + markerID);
 
         return this.getRequest(this.buildPath(parameters));
     }
@@ -48,21 +48,17 @@ public class RouteService extends BaseRemoteService {
 
     // Delete route
     // Buildpath = baseURL/markers/{route ID}
-    public <T extends Object> ApiResponse<T> deleteRoute(UUID routeID)
+    public <T extends Object> ApiResponse<T> deleteRoute(UUID userID)
     {
-        return this.deleteRequest(this.buildPath(routeID));
+        return this.deleteRequest(this.buildPath(userID));
     }
 
     //Delete marker
     // Buildpath = baseURL/markers?id={route id}&markerID={marker id}
-    public <T extends Object> ApiResponse<T> deleteMarker(UUID routeID, int markerID)
+    public <T extends Object> ApiResponse<T> deleteMarker(UUID userID, int markerID)
     {
-        String parameters = ("%id=" + routeID.toString() + "&markerID=" + markerID);
+        String parameters = ("?id=" + userID.toString() + "&markerID=" + markerID);
 
         return this.deleteRequest(this.buildPath(parameters));
     }
-
-    // Buildpath = baseURL/markers/{route ID}/markerID/{markerID value}
-
-
 }

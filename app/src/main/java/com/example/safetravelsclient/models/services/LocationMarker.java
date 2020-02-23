@@ -13,7 +13,7 @@ import java.util.UUID;
 
 class LocationMarker {
 
-    UUID routeID;
+    UUID userID;
     Date arrivalTime;
     String location;
     int markerID;
@@ -27,7 +27,7 @@ class LocationMarker {
     //**********
     LocationMarker()
     {
-        this.routeID = new UUID(0,0);
+        this.userID = new UUID(0,0);
         this.markerID = 0;
         this.latitude = 0;
         this.longitude = 0;
@@ -40,9 +40,9 @@ class LocationMarker {
     //**********
     // Getter Methods.
     //**********
-    public UUID getRouteID()
+    public UUID getUserID()
     {
-        return this.routeID;
+        return this.userID;
     }
 
     public int getMarkerID()
@@ -83,9 +83,9 @@ class LocationMarker {
     //**********
     // Setter Methods.
     //**********
-    public void setRouteID(UUID routeID)
+    public void setRouteID(UUID userID)
     {
-        this.routeID = routeID;
+        this.userID = userID;
     }
 
     public void setMarkerID(int markerID)
@@ -132,7 +132,7 @@ class LocationMarker {
 
         try
         {
-            jsonObject.put(LocationMarkerInformation.ROUTE_ID.getInformation(), this.routeID.toString());
+            jsonObject.put(LocationMarkerInformation.USER_ID.getInformation(), this.userID.toString());
             jsonObject.put(LocationMarkerInformation.MARKER_ID.getInformation(), this.markerID);
             jsonObject.put(LocationMarkerInformation.ARRIVAL_TIME.getInformation(), (new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S", Locale.US)).format(this.arrivalTime));
             jsonObject.put(LocationMarkerInformation.LATITUDE.getInformation(), this.latitude);
@@ -148,11 +148,11 @@ class LocationMarker {
 
     public LocationMarker loadFromJson(JSONObject rawJsonObject)
     {
-        String temp = rawJsonObject.optString(LocationMarkerInformation.ROUTE_ID.getInformation());
+        String temp = rawJsonObject.optString(LocationMarkerInformation.USER_ID.getInformation());
 
         if(temp.length() > 0)
         {
-            this.routeID = UUID.fromString(temp);
+            this.userID = UUID.fromString(temp);
         }
 
         try {

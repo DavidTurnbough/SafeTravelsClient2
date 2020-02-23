@@ -1,7 +1,7 @@
 package com.example.safetravelsclient.models.fields;
 
 public enum LocationMarkerInformation{
-    ROUTE_ID("id"),
+    USER_ID("id"),
     ARRIVAL_TIME("arrivalTime"),
     MARKER_ID("markerID"),
     LATITUDE("latitude"),
