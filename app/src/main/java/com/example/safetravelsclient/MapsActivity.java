@@ -1,12 +1,13 @@
 package com.example.safetravelsclient;
 
+
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
-import android.location.LocationManager;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ import androidx.core.app.ActivityCompat;
 
 import com.example.safetravelsclient.models.HttpDataHandler;
 import com.example.safetravelsclient.models.TaskLoadedCallback;
+import com.example.safetravelsclient.models.WeatherListActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -56,11 +58,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     int destCheck = 0;
     private GoogleMap mMap;
     private MarkerOptions place1, place2;
+
     private LocationManager locationManager;
     private String provider;
 
 //private FusedLocationProviderClient mFused;
     private final int FINE_LOCATION_PERMISSION = 9999;
+
+    Button to_weather_list;
+
 
     Button getDirection;
     EditText getFrom;
@@ -75,9 +81,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        this.to_weather_list = findViewById(R.id.button_to_weather_list);
+
 
         button = findViewById(R.id.directionButton);
 
+        this.to_weather_list.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                //this.startActivity(new Intent(getApplicationContext(), WeatherListActivity.class));
+                startActivityOnClick(view);
+            }
+        });
+      
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -163,6 +181,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
 
 
+    public void startActivityOnClick(View view)
+    {
+        this.startActivity(new Intent(this.getApplicationContext(), WeatherListActivity.class));
     }
 
     @Override

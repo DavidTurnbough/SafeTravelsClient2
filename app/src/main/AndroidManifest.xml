@@ -69,6 +69,15 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".models.WeatherListActivity"
+            android:label="WeatherList"
+            android:parentActivityName=".MapsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.safetravelsclient.MapsActivity"/>
+        </activity>
+
 
     </application>
 
