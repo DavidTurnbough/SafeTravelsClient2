@@ -11,9 +11,9 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
 
-class LocationMarker {
+public class LocationMarker {
 
-    UUID routeID;
+    UUID getUserId;
     Date arrivalTime;
     String location;
     int markerID;
@@ -25,9 +25,9 @@ class LocationMarker {
     //**********
     // Constructors.
     //**********
-    LocationMarker()
+    public LocationMarker()
     {
-        this.routeID = new UUID(0,0);
+        this.getUserId = new UUID(0,0);
         this.markerID = 0;
         this.latitude = 0;
         this.longitude = 0;
@@ -40,9 +40,9 @@ class LocationMarker {
     //**********
     // Getter Methods.
     //**********
-    public UUID getRouteID()
+    public UUID getUserId()
     {
-        return this.routeID;
+        return this.getUserId;
     }
 
     public int getMarkerID()
@@ -83,9 +83,9 @@ class LocationMarker {
     //**********
     // Setter Methods.
     //**********
-    public void setRouteID(UUID routeID)
+    public void setRouteID(UUID getUserId)
     {
-        this.routeID = routeID;
+        this.getUserId = getUserId;
     }
 
     public void setMarkerID(int markerID)
@@ -132,7 +132,7 @@ class LocationMarker {
 
         try
         {
-            jsonObject.put(LocationMarkerInformation.ROUTE_ID.getInformation(), this.routeID.toString());
+            jsonObject.put(LocationMarkerInformation.ROUTE_ID.getInformation(), this.getUserId.toString());
             jsonObject.put(LocationMarkerInformation.MARKER_ID.getInformation(), this.markerID);
             jsonObject.put(LocationMarkerInformation.ARRIVAL_TIME.getInformation(), (new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S", Locale.US)).format(this.arrivalTime));
             jsonObject.put(LocationMarkerInformation.LATITUDE.getInformation(), this.latitude);
@@ -152,7 +152,7 @@ class LocationMarker {
 
         if(temp.length() > 0)
         {
-            this.routeID = UUID.fromString(temp);
+            this.getUserId = UUID.fromString(temp);
         }
 
         try {

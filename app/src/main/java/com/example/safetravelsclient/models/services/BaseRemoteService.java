@@ -28,6 +28,8 @@ public abstract class BaseRemoteService
     private static final String CONTENT_TYPE_REQUEST_PROPERTY = "Content-Type";
     private static final String BASE_URL = "https://weatherways-server.herokuapp.com/api/";
 
+    //Connection String
+    //mysql://ds0giyzsu2lme81v:f3rntabi1we2rxp2@m7wltxurw8d2n21q.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/v2cc5qriyyp1kpxv
     private ApiObject apiObject;
 
     BaseRemoteService(ApiObject apiObject)

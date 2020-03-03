@@ -20,13 +20,18 @@
         android:layout_height="50dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:text="@string/activity_maps_to_weather_list"
-        android:onClick="startActivityOnClick"></Button>
+        android:elevation="10dp"
+        android:onClick="inDepthViewOnClick"
+        android:padding="10dp"
+        android:shadowColor="@color/colorPrimary"
+        android:text="@string/activity_maps_to_weather_list"></Button>
 
 
     <Button
         android:id="@+id/button3"
-        android:layout_width="58dp"
+        android:elevation="10dp"
+        android:padding="10dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
@@ -34,7 +39,14 @@
         android:layout_marginEnd="68dp"
         android:background="@drawable/get_directions_button"
         android:onClick="onDirectionButtonClick"
+        android:shadowColor="@color/colorPrimary"
         android:text="Directions"></Button>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
 
 
 </RelativeLayout>

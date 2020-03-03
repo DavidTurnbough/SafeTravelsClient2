@@ -60,7 +60,7 @@ public class WeatherDataTransition implements Parcelable
 
 
     //temp, prec, humid, desc, windvelocity, winddirection
-    /*String time;
+    String time;
     public String getTime() {return this.time;}
     public WeatherDataTransition setTime(String t) {this.time = t; return this;}
 
@@ -94,7 +94,7 @@ public class WeatherDataTransition implements Parcelable
 
     String wind_direction;
     public String getWindDirection() {return this.wind_direction;}
-    public WeatherDataTransition setWindDirection(String w_d) {this.wind_direction = w_d; return this;}*/
+    public WeatherDataTransition setWindDirection(String w_d) {this.wind_direction = w_d; return this;}
 
     @Override
     public int describeContents() {return 0;}
@@ -114,7 +114,7 @@ public class WeatherDataTransition implements Parcelable
     }
 
 
-    final Parcelable.Creator<WeatherDataTransition> CREATOR = new Parcelable.Creator<WeatherDataTransition>()
+    public static final Parcelable.Creator<WeatherDataTransition> CREATOR = new Parcelable.Creator<WeatherDataTransition>()
     {
         public WeatherDataTransition createFromParcel(Parcel weatherDataTransitionParcel)
         {

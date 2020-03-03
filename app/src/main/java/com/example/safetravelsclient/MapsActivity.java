@@ -8,6 +8,7 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.content.Intent;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -31,30 +33,33 @@ import androidx.core.app.ActivityCompat;
 
 import com.example.safetravelsclient.models.HttpDataHandler;
 import com.example.safetravelsclient.models.TaskLoadedCallback;
-import com.example.safetravelsclient.models.WeatherListActivity;
+import com.example.safetravelsclient.models.services.ApiResponse;
+import com.example.safetravelsclient.models.services.LocationMarker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.example.safetravelsclient.models.FetchURL;
+import com.example.safetravelsclient.models.services.LocationMarker;
+
+import com.example.safetravelsclient.models.transition.WeatherDataTransition;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, TaskLoadedCallback, LocationListener {
 
+    private WeatherDataTransition weatherDataTransition;
     int destCheck = 0;
     private GoogleMap mMap;
     private MarkerOptions place1, place2;
@@ -62,12 +67,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private LocationManager locationManager;
     private String provider;
 
-//private FusedLocationProviderClient mFused;
+    //private FusedLocationProviderClient mFused;
     private final int FINE_LOCATION_PERMISSION = 9999;
 
     Button to_weather_list;
 
-
+    int markerId = 1;
     Button getDirection;
     EditText getFrom;
     EditText getTo;
@@ -83,19 +88,30 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_maps);
         this.to_weather_list = findViewById(R.id.button_to_weather_list);
 
+     //   this.weatherDataTransition = this.getIntent().getParcelableExtra(this.getString(R.string.intent_extra_product));
 
-        button = findViewById(R.id.directionButton);
+//        this.getExampleData().setText(this.weatherDataTransition.getMarkerId());
 
-        this.to_weather_list.setOnClickListener(new View.OnClickListener()
+        button = findViewById(R.id.directions);
+
+       /* this.to_weather_list.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                //this.startActivity(new Intent(getApplicationContext(), WeatherListActivity.class));
+                Intent intent = new Intent(getApplicationContext(), InDepthViewActivity.class);
+
+                intent.putExtra(
+                        getString(R.string.intent_extra_product),
+                        new WeatherDataTransition()
+                );
+
                 startActivityOnClick(view);
+                //this.startActivity(new Intent(getApplicationContext(), WeatherListActivity.class));
+               // startActivityOnClick(view);
             }
         });
-      
+*/
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -126,6 +142,22 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             Log.i("Log info", "Location not found");
     }
 
+
+    public void inDepthViewOnClick(View view) {
+
+        this.startActivity(new Intent(getApplicationContext(), WeatherListActivity.class));
+
+        /*Intent intent = new Intent(getApplicationContext(), InDepthViewActivity.class);
+
+        intent.putExtra(
+                getString(R.string.intent_extra_product),
+                new WeatherDataTransition()
+        );
+
+        this.startActivity(intent);*/
+    }
+
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -141,6 +173,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
+    private TextView getExampleData() {
+        return (TextView) this.findViewById(R.id.textView);
+    }
 
     public void onDirectionButtonClick(View view) {
 
@@ -180,227 +215,248 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         });
 
-
-    public void startActivityOnClick(View view)
-    {
-        this.startActivity(new Intent(this.getApplicationContext(), WeatherListActivity.class));
     }
-
-    @Override
-    public void onLocationChanged(Location location) {
-
-        Double lat;
-        Double lng;
-
-        lat = location.getLatitude();
-        lng = location.getLongitude();
-        LatLng latLng = new LatLng(lat, lng);
-       // mMap.addMarker(new MarkerOptions().position(latLng).title("My position"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        locationManager.removeUpdates(this);
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        locationManager.requestLocationUpdates(provider, 400, 1, this);
-    }
-
-    private class GetCoordinates extends AsyncTask<String,Void,String> {
-        ProgressBar bar = new ProgressBar(MapsActivity.this);
-
-        @Override
-        protected String doInBackground(String... strings) {
-            String response;
-            try {
-                String address = strings[0];
-                HttpDataHandler http = new HttpDataHandler();
-                String url = String.format("https://maps.googleapis.com/maps/api/geocode/json?address=%s",address + "&key=" + getString(R.string.google_maps_key));
-                response = http.getaHttpData(url);
-                return response;
-            }
-
-            catch (Exception ex) {
-            }
-        return null;
+        public void startActivityOnClick(View view)
+        {
+            this.startActivity(new Intent(this.getApplicationContext(), InDepthViewActivity.class));
         }
 
         @Override
-        protected void onPreExecute()
-        {
-            super.onPreExecute();
-           // bar.set
+        public void onLocationChanged(Location location) {
+
+            Double lat;
+            Double lng;
+
+            lat = location.getLatitude();
+            lng = location.getLongitude();
+            LatLng latLng = new LatLng(lat, lng);
+            // mMap.addMarker(new MarkerOptions().position(latLng).title("My position"));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         }
-
-
 
         @Override
-        protected void onPostExecute(String s)
-        {
+        public void onStatusChanged(String provider, int status, Bundle extras) {
 
-            try {
-                JSONObject jsonObject = new JSONObject(s);
-
-                String lat = ((JSONArray)jsonObject.get("results")).getJSONObject(0).getJSONObject("geometry")
-                        .getJSONObject("location").get("lat").toString();
-                String lng = ((JSONArray)jsonObject.get("results")).getJSONObject(0).getJSONObject("geometry")
-                        .getJSONObject("location").get("lng").toString();
-
-                if (destCheck == 0)
-                {
-
-                    place1 = new MarkerOptions().position(new LatLng(Double.parseDouble(lat),Double.parseDouble(lng))).title("Location 1");
-                    mMap.addMarker(place1);
-                    destCheck++;
-
-                }
-                else
-                {
-                    place2 = new MarkerOptions().position(new LatLng(Double.parseDouble(lat),Double.parseDouble(lng))).title("Location 2");
-                    mMap.addMarker(place2);
-
-
-
-                }
-
-                if (!place1.equals(null) && !place2.equals(null))
-                {
-                    new FetchURL(MapsActivity.this).execute(getUrl(place1.getPosition(), place2.getPosition(), "driving"), "driving");
-
-                }
-
-                System.out.println("Cooridnates: " + lat + ", " + lng);
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
         }
 
-    }
+        @Override
+        public void onProviderEnabled(String provider) {
 
-    public void onClick(View v)
-    {
-        new FetchURL(MapsActivity.this).execute(getUrl(place1.getPosition(), place2.getPosition(), "driving"), "driving");
-        new GetCoordinates().execute(getFrom.getText().toString().replace(" ", "+"));
-        new GetCoordinates().execute(getTo.getText().toString().replace(" ", "+"));
-        //new FetchURL(MapsActivity.this).execute(getUrl(place1.getPosition(),place2.getPosition(), "driving"), "driving");
-    }
+        }
 
-    private String getUrl(LatLng origin, LatLng dest, String directionMode) {
-        // Origin of route
-        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
-        // Destination of route
-        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
-        // Mode
-        String mode = "mode=" + directionMode;
-        // Building the parameters to the web service
-        String parameters = str_origin + "&" + str_dest + "&" + mode;
-        // Output format
-        String output = "json";
-        // Building the url to the web service
-        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters + "&key=" + getString(R.string.google_maps_key);
-        return url;
-    }
+        @Override
+        public void onProviderDisabled(String provider) {
 
-    @Override
-    public void onTaskDone(Object... values) {
+        }
 
-        List<LatLng> points;
+        @Override
+        public void onPause() {
+            super.onPause();
+            locationManager.removeUpdates(this);
+        }
 
-        if (currentPolyline != null)
-            currentPolyline.remove();
+        @RequiresApi(api = Build.VERSION_CODES.M)
+        @Override
+        public void onResume() {
+            super.onResume();
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+            locationManager.requestLocationUpdates(provider, 400, 1, this);
+        }
 
-        currentPolyline = mMap.addPolyline((PolylineOptions) values[0]);
-        points = currentPolyline.getPoints();
-        GetMarkers(points);
-        System.out.println(points.get(0));
-    }
+        private class GetCoordinates extends AsyncTask<String,Void,String> {
+            ProgressBar bar = new ProgressBar(MapsActivity.this);
 
-    public void GetMarkers(List<LatLng> points)
-    {
-        double totalDistance = 0;
-        for (int i = 0; i < points.size() - 1; i++)
-        {
-            String stringOne = points.get(i).toString();
-            String stringTwo = points.get(i+1).toString();
+            @Override
+            protected String doInBackground(String... strings) {
+                String response;
+                try {
+                    String address = strings[0];
+                    HttpDataHandler http = new HttpDataHandler();
+                    String url = String.format("https://maps.googleapis.com/maps/api/geocode/json?address=%s",address + "&key=" + getString(R.string.google_maps_key));
+                    response = http.getaHttpData(url);
+                    return response;
+                }
 
-            LatLng valueOne = parseString(stringOne);
-            LatLng valueTwo = parseString(stringTwo);
+                catch (Exception ex) {
+                }
+                return null;
+            }
 
-            totalDistance = totalDistance + calculationByDistance(valueOne,valueTwo);
-            if (totalDistance >= 96.5606)
+            @Override
+            protected void onPreExecute()
             {
-                MarkerOptions location = new MarkerOptions().position(valueTwo).title("Location");
-                mMap.addMarker(location);
-                totalDistance = 0;
+                super.onPreExecute();
+                // bar.set
             }
+
+
+
+            @Override
+            protected void onPostExecute(String s)
+            {
+
+                try {
+                    JSONObject jsonObject = new JSONObject(s);
+
+                    String lat = ((JSONArray)jsonObject.get("results")).getJSONObject(0).getJSONObject("geometry")
+                            .getJSONObject("location").get("lat").toString();
+                    String lng = ((JSONArray)jsonObject.get("results")).getJSONObject(0).getJSONObject("geometry")
+                            .getJSONObject("location").get("lng").toString();
+
+                    if (destCheck == 0)
+                    {
+
+                        place1 = new MarkerOptions().position(new LatLng(Double.parseDouble(lat),Double.parseDouble(lng))).title("Location 1");
+                        mMap.addMarker(place1);
+                        destCheck++;
+
+                    }
+                    else
+                    {
+                        place2 = new MarkerOptions().position(new LatLng(Double.parseDouble(lat),Double.parseDouble(lng))).title("Location 2");
+                        mMap.addMarker(place2);
+
+
+
+                    }
+
+                    if (!place1.equals(null) && !place2.equals(null))
+                    {
+                        new FetchURL(MapsActivity.this).execute(getUrl(place1.getPosition(), place2.getPosition(), "driving"), "driving");
+
+                    }
+
+                    System.out.println("Cooridnates: " + lat + ", " + lng);
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
         }
 
-        System.out.println("The total distance is: " + totalDistance);
+
+        private String getUrl(LatLng origin, LatLng dest, String directionMode) {
+            // Origin of route
+            String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
+            // Destination of route
+            String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
+            // Mode
+            String mode = "mode=" + directionMode;
+            // Building the parameters to the web service
+            String parameters = str_origin + "&" + str_dest + "&" + mode;
+            // Output format
+            String output = "json";
+            // Building the url to the web service
+            String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters + "&key=" + getString(R.string.google_maps_key);
+            return url;
+        }
+
+        @Override
+        public void onTaskDone(Object... values) {
+
+            List<LatLng> points;
+
+            if (currentPolyline != null)
+                currentPolyline.remove();
+
+            currentPolyline = mMap.addPolyline((PolylineOptions) values[0]);
+            points = currentPolyline.getPoints();
+            GetMarkers(points);
+            System.out.println(points.get(0));
+            ArrayList responseArray = new ArrayList<ApiResponse>();
+           ApiResponse apiResponse = new ApiResponse<LocationMarker>();
+
+           for (int i = 0; i < points.size(); i++)
+           {
+              LocationMarker locationMarker = createMarkerObject(points.get(i));
+
+             /*  ApiResponse<LocationMarker> apiResponse = (
+                       (locationMarker.getUserId().equals(new UUIS(0, 0)))//g().equals(new UUID(0, 0)))
+                               ? (new LocationMarker()).createProduct(product)
+                               : (new ProductService()).updateProduct(product)
+               );
+             // apiResponse = */
+               markerId++;
+           }
+
+        }
+
+        public LocationMarker createMarkerObject(LatLng latLng)
+        {
+            LocationMarker locationMarker = new LocationMarker();
+            locationMarker.setLatitude(latLng.latitude);
+            locationMarker.setLongitude(latLng.longitude);
+            locationMarker.setMarkerID(markerId);
+
+            return locationMarker;
+
+
+        }
+
+        public void GetMarkers(List<LatLng> points)
+        {
+            double totalDistance = 0;
+            for (int i = 0; i < points.size() - 1; i++)
+            {
+                String stringOne = points.get(i).toString();
+                String stringTwo = points.get(i+1).toString();
+
+                LatLng valueOne = parseString(stringOne);
+                LatLng valueTwo = parseString(stringTwo);
+
+                totalDistance = totalDistance + calculationByDistance(valueOne,valueTwo);
+                if (totalDistance >= 96.5606)
+                {
+                    MarkerOptions location = new MarkerOptions().position(valueTwo).title("Location");
+                    mMap.addMarker(location);
+                    totalDistance = 0;
+                }
+            }
+
+            System.out.println("The total distance is: " + totalDistance);
+        }
+
+        public LatLng parseString(String value)
+        {
+            String values[];
+
+            value = value.replace("lat/lng: (","");
+            value = value.replace(")","");
+
+            values = value.split(",");
+
+            LatLng marker = new LatLng(Double.parseDouble(values[0]), Double.parseDouble(values[1]));
+
+            return marker;
+        }
+
+
+        public double calculationByDistance(LatLng StartP, LatLng EndP) {
+            int Radius = 6371;// radius of earth in Km
+            double lat1 = StartP.latitude;
+            double lat2 = EndP.latitude;
+            double lon1 = StartP.longitude;
+            double lon2 = EndP.longitude;
+            double dLat = Math.toRadians(lat2 - lat1);
+            double dLon = Math.toRadians(lon2 - lon1);
+            double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+                    + Math.cos(Math.toRadians(lat1))
+                    * Math.cos(Math.toRadians(lat2)) * Math.sin(dLon / 2)
+                    * Math.sin(dLon / 2);
+            double c = 2 * Math.asin(Math.sqrt(a));
+            double valueResult = Radius * c;
+            double km = valueResult / 1;
+            DecimalFormat newFormat = new DecimalFormat("####");
+            //DecimalFormat newFormat = new DecimalFormat("####");
+            int kmInDec = Integer.valueOf(newFormat.format(km));
+            double meter = valueResult % 1000;
+            int meterInDec = Integer.valueOf(newFormat.format(meter));
+            Log.i("Radius Value", "" + valueResult + "   KM  " + kmInDec
+                    + " Meter   " + meterInDec);
+
+            return Radius * c;
+        }
     }
-
-    public LatLng parseString(String value)
-    {
-        String values[];
-
-        value = value.replace("lat/lng: (","");
-        value = value.replace(")","");
-
-        values = value.split(",");
-
-        LatLng marker = new LatLng(Double.parseDouble(values[0]), Double.parseDouble(values[1]));
-
-        return marker;
-    }
-
-
-    public double calculationByDistance(LatLng StartP, LatLng EndP) {
-        int Radius = 6371;// radius of earth in Km
-        double lat1 = StartP.latitude;
-        double lat2 = EndP.latitude;
-        double lon1 = StartP.longitude;
-        double lon2 = EndP.longitude;
-        double dLat = Math.toRadians(lat2 - lat1);
-        double dLon = Math.toRadians(lon2 - lon1);
-        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
-                + Math.cos(Math.toRadians(lat1))
-                * Math.cos(Math.toRadians(lat2)) * Math.sin(dLon / 2)
-                * Math.sin(dLon / 2);
-        double c = 2 * Math.asin(Math.sqrt(a));
-        double valueResult = Radius * c;
-        double km = valueResult / 1;
-        DecimalFormat newFormat = new DecimalFormat("####");
-        //DecimalFormat newFormat = new DecimalFormat("####");
-        int kmInDec = Integer.valueOf(newFormat.format(km));
-        double meter = valueResult % 1000;
-        int meterInDec = Integer.valueOf(newFormat.format(meter));
-        Log.i("Radius Value", "" + valueResult + "   KM  " + kmInDec
-                + " Meter   " + meterInDec);
-
-        return Radius * c;
-    }
-}

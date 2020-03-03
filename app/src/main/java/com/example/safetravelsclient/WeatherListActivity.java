@@ -1,4 +1,4 @@
-package com.example.safetravelsclient.models;
+package com.example.safetravelsclient;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import com.example.safetravelsclient.R;
 import com.example.safetravelsclient.models.adapter.WeatherListAdapter;
@@ -27,6 +28,7 @@ public class WeatherListActivity extends AppCompatActivity
     private List<WeatherListSubjectData> weather_list;
     private ListView list_view;
 
+    private WeatherDataTransition weatherDataTransition;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -41,24 +43,28 @@ public class WeatherListActivity extends AppCompatActivity
             this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }*/
 
+        this.weatherDataTransition = this.getIntent().getParcelableExtra(this.getString(R.string.intent_extra_product));
+
         this.list_view = this.getWeatherListView();
+
         this.weather_list = new ArrayList<WeatherListSubjectData>();
         this.weather_list_adapter = new WeatherListAdapter(this, R.layout.weather_list_entry_layout, this.weather_list);
         this.weather_list.add(new WeatherListSubjectData(0, "i", "j", "k", "l"));
         this.list_view.setAdapter(weather_list_adapter);
-        /*this.getWeatherListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+        this.getWeatherListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                /*Intent intent = new Intent(getApplicationContext(), ProductViewActivity.class);
+                Intent intent = new Intent(getApplicationContext(), ProductViewActivity.class);
 
                 intent.putExtra(
                         getString(R.string.intent_extra_product),
-                        new ProductTransition((Product) getProductsListView().getItemAtPosition(position))
-                //);
+                        new WeatherDataTransition((Product) getProductsListView().getItemAtPosition(position))
+                );
 
                 //startActivity(intent);
             }
-        });*/
+        });
         //this.weather_list.setA
         //this.getWeatherListView().setAdapter(this.weather_list_adapter);
         log("HERE");
@@ -109,6 +115,19 @@ public class WeatherListActivity extends AppCompatActivity
         return out;
     }
 
+  /*  @Override
+    protected void onResume()
+    {
+        super.onResume();
+
+
+        this.getProductLookupCodeEditText().setText(this.productTransition.getLookupCode());
+        this.getProductCountEditText().setText(String.format(Locale.getDefault(), "%d", this.productTransition.getCount()));
+        this.getProductCreatedOnEditText().setText(
+                (new SimpleDateFormat("MM/dd/yyyy", Locale.US)).format(this.productTransition.getCreatedOn())
+        );
+    }
+*/
     private ListView getWeatherListView()
     {
         return (ListView) this.findViewById(R.id.content_weather_listing);

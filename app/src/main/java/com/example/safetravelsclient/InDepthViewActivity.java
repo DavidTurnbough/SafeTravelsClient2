@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.example.safetravelsclient.models.transition.WeatherDataTransition;
+
 public class InDepthViewActivity extends AppCompatActivity {
 
     String myLocation = "Springdale, AR";
@@ -17,13 +19,14 @@ public class InDepthViewActivity extends AppCompatActivity {
     String myTemperatureHigh = "95";
     String myTemperatureLow = "8";
 
+    private WeatherDataTransition weatherDataTransition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_in_depth_view);
 
-        setLocation(myLocation);
+/*        setLocation(myLocation);
         setWeatherDescription(myDescription);
         setWind(myWindValue);
         setPrecipitation(myPrecipitation);
@@ -32,17 +35,32 @@ public class InDepthViewActivity extends AppCompatActivity {
         setTemperature(myTemperature);
         setTemperatureHigh(myTemperatureHigh);
         setTemperatureLow(myTemperatureLow);
+        */
+       // this.weatherDataTransition = this.getIntent().getParcelableExtra(this.getString(R.string.intent_extra_product));
+
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+
+        //this.getProductLookupCodeEditText().setText(this.productTransition.getLookupCode());
+        //this.setWeatherDescription().setText(this.weatherDataTransition.getDescription());
+        //this.getProductCountEditText().setText(String.format(Locale.getDefault(), "%d", this.productTransition.getCount()));
+       // this.getProductCreatedOnEditText().setText(
+              //  (new SimpleDateFormat("MM/dd/yyyy", Locale.US)).format(this.productTransition.getCreatedOn())
+       // );
+    }
 
     public void setLocation(String myLocation){
         TextView location = findViewById(R.id.location);
         location.setText(myLocation);
     }
 
-    public void setWeatherDescription(String myDescription){
-        TextView weatherDescription = findViewById(R.id.weatherDescription);
-        weatherDescription.setText(myDescription);
+    public TextView setWeatherDescription(){
+        return (TextView) this.findViewById(R.id.weatherDescription);
+
     }
 
     public void setWind(String myWind){
