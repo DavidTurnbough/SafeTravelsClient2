@@ -2,13 +2,14 @@ package com.example.safetravelsclient.models.services;
 
 import com.example.safetravelsclient.models.interfaces.PathElementInterface;
 
-public enum ApiObject implements PathElementInterface {
+public enum MarkerApiMethod implements PathElementInterface {
     NONE(""),
-    MARKERS("markers/");
+    ARRIVAL_TIME("ArrivalTime/"),
+    MARKER_ID("MarkerID/");
 
     private String value;
 
-    ApiObject(String value)
+    MarkerApiMethod(String value)
     {
         this.value = value;
     }
@@ -16,7 +17,7 @@ public enum ApiObject implements PathElementInterface {
     @Override
     public String getPathValue()
     {
-        return this.value;
+        return value;
     }
 
 }

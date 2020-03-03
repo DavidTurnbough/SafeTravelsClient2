@@ -1,14 +1,19 @@
 package com.example.safetravelsclient.models.fields;
 
 public enum LocationMarkerInformation{
-    ROUTE_ID("id"),
-    ARRIVAL_TIME("arrivalTime"),
-    MARKER_ID("markerID"),
-    LATITUDE("latitude"),
-    LONGITUDE("longitude"),
-    LOCATION("location"),
-    TEMPERATURE("temperature"),
-    PRECIPITATION_CHANCE("precipitationChance");
+    USER_ID("id"),
+    ARRIVAL_TIME("ArrivalTime"),
+    MARKER_ID("MarkerID"),
+    LATITUDE("Latitude"),
+    LONGITUDE("Longitude"),
+    LOCATION("Location"),
+    TEMPERATURE("Temperature"),
+    PRECIPITATION_CHANCE("precipChance"),
+    WEATHER_DESCRIPTION("weatherDescription"),
+    WIND_VELOCITY("windVelocity"),
+    HUMIDITY("humidity"),
+    TEMPERATURE_HIGH("temperatureHigh"),
+    TEMPERATURE_LOW("temperatureLow");
 
     private String information;
 
