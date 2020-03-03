@@ -9,14 +9,14 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.UUID;
 
-import com.example.safetravelsclient.models.interfaces.PathElementInterface;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.example.safetravelsclient.models.interfaces.PathElementInterface;
+
 public abstract class BaseRemoteService
 {
+
     private static final String URL_JOIN = "/";
     private static final String GET_REQUEST_METHOD = "GET";
     private static final String PUT_REQUEST_METHOD = "PUT";
@@ -30,199 +30,238 @@ public abstract class BaseRemoteService
 
     private ApiObject apiObject;
 
+    //**********
+    // Constructors.
+    //**********
     BaseRemoteService(ApiObject apiObject)
     {
         this.apiObject = apiObject;
     }
 
-    URL buildPath()
+    // URL: baseURL/markers
+    public URL buildPath()
     {
         return this.buildPath(new PathElementInterface[0], "");
     }
 
-    URL buildPath(UUID routeID)
+    // URL: baseURL/markers/{userID}
+    public URL buildPath(UUID userID)
     {
-        return this.buildPath(new PathElementInterface[0], routeID.toString());
+        return this.buildPath(new PathElementInterface[0], userID.toString());
     }
 
-    URL buildPath(String parameterValue)
+    // URL: baseURL/markers?{parameterValues}
+    public URL buildPath(String parameterValue)
     {
         return this.buildPath(new PathElementInterface[0], parameterValue);
     }
 
-    URL buildPath(PathElementInterface[] pathElements)
+    // URL: baseURL/markers/{pathElements}
+    public URL buildPath(PathElementInterface[] pathElements)
     {
         return this.buildPath(pathElements, "");
     }
 
-    URL buildPath(PathElementInterface[] pathElements, String parameterValue)
+    // URL: baseURL/markers/{pathElements}{paramaters}
+    public URL buildPath(PathElementInterface[] pathElements, String parameterValue)
     {
         String completePath = BASE_URL + this.apiObject.getPathValue();
 
-        for(PathElementInterface pathElement : pathElements)
+        for (PathElementInterface pathElement : pathElements)
         {
             String pathEntry = pathElement.getPathValue();
 
-            if(pathEntry.length() > 0)
+            if (pathEntry.length() > 0)
             {
                 completePath += pathEntry + URL_JOIN;
             }
         }
 
-        if(parameterValue.length() > 0)
+        // Parameters are added to the URL, if they exist.
+        if (parameterValue.length() > 0)
         {
             completePath += parameterValue;
         }
 
-        URL connectionUrl;
+        URL url;
+
         try
         {
-            connectionUrl = new URL(completePath);
+            url = new URL(completePath);
         }
-        catch(MalformedURLException e)
+        catch (MalformedURLException e)
         {
             e.printStackTrace();
-            connectionUrl = null;
+            url = null;
         }
 
-        return connectionUrl;
-
+        return url;
     }
 
-    <T extends Object> ApiResponse<T> getRequest(URL connectionUrl){
+    // Get request, response from the given URL, saved into the apiResponse rawResponse.
+    public <T extends Object> ApiResponse<T> getRequest(URL url){
+
         ApiResponse<T> apiResponse = new ApiResponse<>();
+
+        if(url == null)
+        {
+            apiResponse.setValidResponse(false);
+            apiResponse.setErrorMessage("Invalid URL sent to get request method.");
+            return apiResponse;
+        }
 
         String rawResponse = "";
 
-        if(connectionUrl == null)
-        {
-            return apiResponse.setValidResponse(false).setMessage("Invalid network path provided.");
-        }
-
         try {
-            HttpURLConnection conn = (HttpURLConnection) connectionUrl.openConnection();
 
-            conn.setRequestMethod(GET_REQUEST_METHOD);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
-            conn.addRequestProperty(ACCEPT_REQUEST_PROPERTY, JSON_PAYLOAD_TYPE);
+            int responseCode = conn.getResponseCode();
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            if(this.isValidResponse(responseCode)) {
 
-            String line = "";
+                apiResponse.setValidResponse(true);
 
-            while((line = reader.readLine()) != null)
-            {
-                rawResponse += line;
+                conn.setRequestMethod(GET_REQUEST_METHOD);
+
+                conn.addRequestProperty(ACCEPT_REQUEST_PROPERTY, JSON_PAYLOAD_TYPE);
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+                String line = "";
+
+                while ((line = reader.readLine()) != null) {
+                    rawResponse += line;
+                }
+
+                reader.close();
+                conn.disconnect();
+
+                apiResponse.setRawResponse(rawResponse);
             }
-
-            reader.close();
-
-            conn.disconnect();
+            else
+            {
+                apiResponse.setValidResponse(false);
+                apiResponse.setErrorMessage("Invalid response code in get request method.");
+            }
         }
-        catch(IOException e) {
-            e.printStackTrace();
-        }
-
-        return apiResponse.setRawResponse(rawResponse);
-    }
-
-    <T extends Object> ApiResponse<T> putRequest(URL connectionUrl, JSONObject jsonObject)
-    {
-        return this.uploadRequest(PUT_REQUEST_METHOD, connectionUrl, jsonObject);
-    }
-
-    <T extends Object> ApiResponse<T> postRequest(URL connectionUrl, JSONObject jsonObject)
-    {
-        return this.uploadRequest(POST_REQUEST_METHOD, connectionUrl, jsonObject);
-    }
-
-
-    // Perform Upload Request
-    private <T extends Object> ApiResponse<T> uploadRequest(String requestType, URL connectionURL,
-                                                                   JSONObject jsonObject) {
-        ApiResponse<T> apiResponse = new ApiResponse<>();
-
-
-        if (connectionURL == null) {
-            apiResponse.setMessage("Invalid URL");
-            apiResponse.setValidResponse(false);
-            return apiResponse;
-        }
-
-        try {
-            HttpURLConnection conn = (HttpURLConnection) connectionURL.openConnection();
-
-            conn.setDoOutput(true);
-
-            conn.setRequestMethod(requestType);
-
-            OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
-
-            out.write(jsonObject.toString());
-
-            out.close();
-
-            conn.disconnect();
-        }
-        catch(Exception e)
+        catch(IOException e)
         {
             e.printStackTrace();
-            apiResponse.setMessage(e.getMessage());
+
             apiResponse.setValidResponse(false);
+            apiResponse.setErrorMessage("IOException in guest request method: " + e.getMessage());
         }
 
         return apiResponse;
     }
 
-    // perform Delete Request
-    public <T extends Object> ApiResponse<T> deleteRequest(URL connectionURL)
+    // Put request, sends JSON data to the given URL.
+    public <T extends Object> ApiResponse<T> putRequest(URL url, JSONObject jsonObject)
     {
         ApiResponse<T> apiResponse = new ApiResponse<>();
 
-        if(connectionURL == null)
+        if(url == null)
         {
-            apiResponse.setMessage("Invalid URL");
             apiResponse.setValidResponse(false);
-
+            apiResponse.setErrorMessage("Invalid URL sent to putRequest.");
             return apiResponse;
         }
 
-        try {
-            HttpURLConnection conn = (HttpURLConnection) connectionURL.openConnection();
+        try
+        {
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
-            conn.setDoOutput(true);
+            int responseCode = conn.getResponseCode();
 
-            conn.setRequestMethod(DELETE_REQUEST_METHOD);
+            if(this.isValidResponse(responseCode)) {
 
-            //***********
-            //Not done yet.
-            //***********
+                apiResponse.setValidResponse(true);
 
-            conn.disconnect();
+                conn.setDoOutput(true);
 
+                conn.setRequestMethod(PUT_REQUEST_METHOD);
 
-        } catch(IOException e)
+                OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
+
+                out.write(jsonObject.toString());
+
+                out.close();
+                conn.disconnect();
+            }
+            else
+            {
+                apiResponse.setValidResponse(false);
+                apiResponse.setErrorMessage("Invalid response code in putRequest.");
+            }
+        }
+        catch (IOException e)
         {
             e.printStackTrace();
-            apiResponse.setMessage(e.getMessage());
-            apiResponse.setValidResponse(false);
 
+            apiResponse.setValidResponse(false);
+            apiResponse.setErrorMessage("IOException in putRequest: " + e.getMessage());
         }
 
         return apiResponse;
     }
 
+    public ApiResponse<String> deleteRequest(URL url){
 
-    JSONObject rawResponseToJSONObject(String rawResponse)
+        ApiResponse<String> apiResponse = new ApiResponse<>();
+
+        if(url == null)
+        {
+            apiResponse.setErrorMessage("Invalid URL in deleteRequest.");
+            apiResponse.setValidResponse(false);
+            return apiResponse;
+        }
+
+        try {
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            int responseCode = conn.getResponseCode();
+
+            if(this.isValidResponse(responseCode))
+            {
+                apiResponse.setValidResponse(true);
+
+                conn.setRequestMethod(DELETE_REQUEST_METHOD);
+                conn.setDoOutput(true);
+
+                conn.connect();
+
+                //***********
+                // Not finished yet.
+                //**********
+
+                conn.disconnect();
+            }
+            else
+            {
+                apiResponse.setValidResponse(false);
+                apiResponse.setErrorMessage("Invalid response code in delete request method.");
+            }
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        return apiResponse;
+    }
+
+    public JSONObject rawResponseToJSONObject(String rawResponse)
     {
-        JSONObject jsonObject = null;
+        JSONObject jsonObject = new JSONObject();
 
         if(rawResponse.length() > 0)
         {
-            try {
+            try
+            {
                 jsonObject = new JSONObject(rawResponse);
             }
-            catch(JSONException e) {
+            catch (JSONException e) {
                 e.printStackTrace();
             }
         }
@@ -230,29 +269,12 @@ public abstract class BaseRemoteService
         return jsonObject;
     }
 
-    JSONArray rawResponseToJSONArray(String rawResponse)
-    {
-        JSONArray jsonArray = null;
-
-        if(rawResponse.length() > 0)
-        {
-            try{
-                jsonArray = new JSONArray(rawResponse);
-            }
-            catch(JSONException e)
-            {
-                e.printStackTrace();
-            }
-        }
-
-        return jsonArray;
-    }
-
+    // Ensure the response code from the URL is valid.
     private boolean isValidResponse(int responseCode)
     {
-        return( (responseCode == HttpURLConnection.HTTP_OK) ||
-                (responseCode == HttpURLConnection.HTTP_CREATED) ||
-                (responseCode == HttpURLConnection.HTTP_ACCEPTED) ||
-                (responseCode == HttpURLConnection.HTTP_NO_CONTENT));
+        return (   (responseCode == HttpURLConnection.HTTP_OK)
+                || (responseCode == HttpURLConnection.HTTP_CREATED)
+                || (responseCode == HttpURLConnection.HTTP_ACCEPTED)
+                || (responseCode == HttpURLConnection.HTTP_NO_CONTENT));
     }
 }

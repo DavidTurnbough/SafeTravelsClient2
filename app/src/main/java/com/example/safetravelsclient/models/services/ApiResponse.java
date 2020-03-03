@@ -6,7 +6,7 @@ public class ApiResponse<T> {
     // Variable Declarations.
     //**********
     private boolean isValidResponse;
-    private String message;
+    private String errorMessage;
     private String rawResponse;
     private T data;
 
@@ -16,7 +16,7 @@ public class ApiResponse<T> {
     public ApiResponse()
     {
         this.isValidResponse = true;
-        this.message = "";
+        this.errorMessage = "";
         this.rawResponse = "";
         this.data = null;
     }
@@ -24,9 +24,9 @@ public class ApiResponse<T> {
     //**********
     // Getter Methods.
     //**********
-    public String getMessage()
+    public String getErrorMessage()
     {
-        return this.message;
+        return this.errorMessage;
     }
 
     public String getRawResponse()
@@ -42,21 +42,21 @@ public class ApiResponse<T> {
     //**********
     // Setter Methods.
     //**********
-    public ApiResponse<T> setValidResponse(boolean isValidResponse)
+    public ApiResponse<T> setErrorMessage(String errorMessage)
     {
-        this.isValidResponse = isValidResponse;
-        return this;
-    }
-
-    public ApiResponse<T> setMessage(String message)
-    {
-        this.message = message;
+        this.errorMessage = errorMessage;
         return this;
     }
 
     public ApiResponse<T> setRawResponse(String rawResponse)
     {
         this.rawResponse = rawResponse;
+        return this;
+    }
+
+    public ApiResponse<T> setValidResponse(boolean isValidResponse)
+    {
+        this.isValidResponse = isValidResponse;
         return this;
     }
 
