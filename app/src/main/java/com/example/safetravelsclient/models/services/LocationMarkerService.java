@@ -53,7 +53,6 @@ public class LocationMarkerService extends BaseRemoteService
         return apiResponse;
     }
 
-
     // Sends the single given location marker in json format to the database.
     // URL = baseURL/markers
     //**********
@@ -63,6 +62,15 @@ public class LocationMarkerService extends BaseRemoteService
     // LocationMarker myMarker = new LocationMarker();
     // myMarker = (LocationMarker) myResponse.getData();
     //**********
+    public ApiResponse<LocationMarker> getLocationMarker(int userID) //Should be UUID, needs to be changed.
+    {
+        return this.readLocationMarkerDetailsFromRawResponse(
+                this.<LocationMarker>getRequest(
+                        this.buildPath(String.valueOf(userID))
+                )
+        );
+    }
+
     public ApiResponse<LocationMarker> addLocationMarker(LocationMarker locationMarker)
     {
         return this.readLocationMarkerDetailsFromRawResponse(
