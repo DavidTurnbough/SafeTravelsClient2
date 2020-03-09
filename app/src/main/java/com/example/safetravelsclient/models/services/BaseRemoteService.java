@@ -9,6 +9,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.UUID;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -16,7 +17,6 @@ import com.example.safetravelsclient.models.interfaces.PathElementInterface;
 
 public abstract class BaseRemoteService
 {
-
     private static final String URL_JOIN = "/";
     private static final String GET_REQUEST_METHOD = "GET";
     private static final String PUT_REQUEST_METHOD = "PUT";
@@ -156,7 +156,7 @@ public abstract class BaseRemoteService
         return apiResponse;
     }
 
-    // Put request, sends JSON data to the given URL.
+    // Put request, sends JSON object to the given URL.
     public <T extends Object> ApiResponse<T> putRequest(URL url, JSONObject jsonObject)
     {
         ApiResponse<T> apiResponse = new ApiResponse<>();
@@ -267,6 +267,24 @@ public abstract class BaseRemoteService
         }
 
         return jsonObject;
+    }
+
+    public JSONArray rawResponseToJSONArray(String rawResponse)
+    {
+        JSONArray jsonArray = null;
+
+        if(!rawResponse.isEmpty())
+        {
+            try
+            {
+                jsonArray = new JSONArray(rawResponse);
+            }
+            catch(JSONException e)
+            {
+                e.printStackTrace();
+            }
+        }
+        return jsonArray;
     }
 
     // Ensure the response code from the URL is valid.
