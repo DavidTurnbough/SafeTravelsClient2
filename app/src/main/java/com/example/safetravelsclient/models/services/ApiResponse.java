@@ -10,6 +10,10 @@ public class ApiResponse<T> {
     private String rawResponse;
     private T data;
 
+
+    ApiResponse myResponse = new ApiResponse<LocationMarker>();
+
+
     //**********
     // Constructors.
     //**********

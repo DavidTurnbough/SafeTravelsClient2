@@ -47,15 +47,15 @@ class LocationMarker {
         this.arrivalTime = new Date();
     }
 
-    /*
+/*
     LocationMarker(LocationMarkerTransition locationMarkerTransition)
     {
-        this.userID = locationMarkerTransition.getID();
+        this.userID = new UUID(0,0);
         this.markerID = locationMarkerTransition.getMarkerID();
         this.latitude = locationMarkerTransition.getLatitude();
         this.longitude = locationMarkerTransition.getLongitude();
         this.location = locationMarkerTransition.getLocation();
-        this.arrivalTime = locationMarkerTransition.getArrivalTime();
+        this.arrivalTime = new Date();
         this.temperature = 0;
         this.humidity = 0;
         this.temperatureHigh = 0;
@@ -64,7 +64,8 @@ class LocationMarker {
         this.weatherDescription = "";
         this.windVelocity = "";
     }
-    */
+ */
+
 
     //**********
     // Getter Methods.
@@ -231,5 +232,20 @@ class LocationMarker {
         }
 
         return this;
+    }
+
+    public void printLocationMarker()
+    {
+        System.out.println("ID : " + this.userID.toString());
+        System.out.println("Arrival Time : " + this.arrivalTime);
+        System.out.printf(""
+                + "Location : %s%n"
+                + "Marker ID : %d%n"
+                + "Temperature : %d%n"
+                + "Precipitation : %d%n"
+                + "Latitude : %f%n"
+                + "Longitude : %f%n",
+                this.location, this.markerID, this.temperature,
+                this.precipitationChance, this.latitude, this.longitude);
     }
 }
