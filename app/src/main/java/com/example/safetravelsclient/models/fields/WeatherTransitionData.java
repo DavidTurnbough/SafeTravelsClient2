@@ -2,8 +2,10 @@ package com.example.safetravelsclient.models.fields;
 
 import com.example.safetravelsclient.models.transition.WeatherDataTransition;
 
-public class WeatherTransitionData {
+public class WeatherTransitionData
+{
 
+    private int marker_id;
     private String location;
     private String temperature;
     private String temperature_high;
@@ -29,8 +31,18 @@ public class WeatherTransitionData {
         this.image = "";
     }
 
-    public WeatherTransitionData(String loc, String temp, String temp_high, String temp_low, String prec, String humi, String desc, String wind_v, String wind_d)
+    public WeatherTransitionData(int id, String loc, String temp, String prec, String wind)
     {
+        this.marker_id = id;
+        this.location = loc;
+        this.temperature = temp;
+        this.precipitation = prec;
+        this.wind_velocity = wind;
+    }
+
+    public WeatherTransitionData(int id, String loc, String temp, String temp_high, String temp_low, String prec, String humi, String desc, String wind_v, String wind_d)
+    {
+        this.marker_id = id;
         this.location = loc;
         this.temperature = temp;
         this.temperature_high = temp_high;
@@ -52,6 +64,7 @@ public class WeatherTransitionData {
 
     public WeatherTransitionData(WeatherListSubjectData copy)
     {
+        this.marker_id = copy.getMarkerId();
         this.location = copy.getLocation();
         this.temperature = copy.getTemperature();
         this.precipitation = copy.getPrecipitation();
@@ -77,6 +90,7 @@ public class WeatherTransitionData {
     public String packageStrings()
     {
         String out = "";
+        out = out + Integer.toString(this.marker_id) + ", ";
         out = out + this.location + ", ";
         out = out + this.temperature + ", ";
         out = out + this.temperature_high + ", ";
@@ -100,6 +114,9 @@ public class WeatherTransitionData {
         }
         return out;
     }
+
+    public int getMarkerId() {return this.marker_id;}
+    public void setMarkerId(int id) {this.marker_id = id;}
 
     public String getLocation() {return this.location;}
     public void setLocation(String loc) {this.location = loc;}

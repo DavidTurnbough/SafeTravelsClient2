@@ -78,6 +78,15 @@
                 android:value="com.example.safetravelsclient.MapsActivity"/>
         </activity>
 
+        <activity android:name=".InDepthViewActivity"
+            android:label="InDepthView"
+            android:parentActivityName=".models.WeatherListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.safetravelsclient.models.WeatherListActivity"/>
+        </activity>
+
 
     </application>
 

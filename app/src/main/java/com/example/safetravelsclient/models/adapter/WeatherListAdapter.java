@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.safetravelsclient.R;
 import com.example.safetravelsclient.models.fields.WeatherListSubjectData;
+import com.example.safetravelsclient.models.fields.WeatherTransitionData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,11 +21,14 @@ import java.util.Locale;
 
 import androidx.annotation.NonNull;
 
-public class WeatherListAdapter extends ArrayAdapter<WeatherListSubjectData>
+import static com.example.safetravelsclient.R.layout.weather_list_entry_layout;
+
+public class WeatherListAdapter extends ArrayAdapter<WeatherTransitionData>
 {
     private static final String TAG = "WeatherListArrayAdapter";
     //List<WeatherListSubjectData> weather_list = new ArrayList<WeatherListSubjectData>();
-    List<WeatherListSubjectData> weather_list;
+    //List<WeatherListSubjectData> weather_list;
+    List<WeatherTransitionData> weather_list;
     Context context;
 
     /*static class WeatherViewHolder
@@ -33,7 +37,7 @@ public class WeatherListAdapter extends ArrayAdapter<WeatherListSubjectData>
         TextView location;
     }*/
 
-    public WeatherListAdapter(Context context, int textViewResourceId, List<WeatherListSubjectData> w_list)
+    public WeatherListAdapter(Context context, int textViewResourceId, List<WeatherTransitionData> w_list)
     {
         //super(context, textViewResourceId, w_list);
         super(context, R.layout.weather_list_entry_layout, w_list);
@@ -55,13 +59,14 @@ public class WeatherListAdapter extends ArrayAdapter<WeatherListSubjectData>
     public int getCount()
     {
         return this.weather_list.size();
-    }
+    }*/
 
     @Override
-    public WeatherListSubjectData getItem(int pos)
+    public WeatherTransitionData getItem(int pos)
     {
         return this.weather_list.get(pos);
-    }*/
+    }
+
     /*
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -99,11 +104,12 @@ public class WeatherListAdapter extends ArrayAdapter<WeatherListSubjectData>
         if (view == null)
         {
             LayoutInflater inflater = LayoutInflater.from(this.getContext());
-            view = inflater.inflate(R.layout.weather_list_entry_layout, parent, false);
+            view = inflater.inflate(weather_list_entry_layout, parent, false);
         }
 
         //Product product = this.getItem(position);
-        WeatherListSubjectData subj = this.getItem(position);
+        //WeatherListSubjectData subj = this.getItem(position);
+        WeatherTransitionData subj = this.getItem(position);
         if (subj != null)
         {
             TextView markerIdTextView = (TextView) view.findViewById(R.id.list_entry_id);

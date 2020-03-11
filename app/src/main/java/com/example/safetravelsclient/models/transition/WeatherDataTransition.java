@@ -48,9 +48,25 @@ public class WeatherDataTransition implements Parcelable
 
     public WeatherDataTransition(Parcel weatherDataParcel)
     {
-        //this.data_array = new ArrayList<WeatherTransitionData>();
-        //Iterator<WeatherTransitionData> iter = weatherDataParcel.
-        //this.data_array = weatherDataParcel.readArrayList();
+        /*destination.writeInt(marker_id);
+        destination.writeString(marker_data.getLocation());
+        destination.writeString(marker_data.getTemperature());
+        destination.writeString(marker_data.getTemperatureHigh());
+        destination.writeString(marker_data.getTemperatureLow());
+        destination.writeString(marker_data.getHumidity());
+        destination.writeString(marker_data.getDescription());
+        destination.writeString(marker_data.getWindVelocity());
+        destination.writeString(marker_data.getWindDirection());*/
+        this.marker_data = new WeatherTransitionData();
+        this.marker_id = weatherDataParcel.readInt();
+        this.marker_data.setLocation(weatherDataParcel.readString());
+        this.marker_data.setTemperature(weatherDataParcel.readString());
+        this.marker_data.setTemperatureHigh(weatherDataParcel.readString());
+        this.marker_data.setTemperatureLow(weatherDataParcel.readString());
+        this.marker_data.setHumidity(weatherDataParcel.readString());
+        this.marker_data.setDescription(weatherDataParcel.readString());
+        this.marker_data.setWindVelocity(weatherDataParcel.readString());
+        this.marker_data.setWindDirection(weatherDataParcel.readString());
     }
 
     public WeatherTransitionData getMarkerData() {return this.marker_data;}
@@ -114,7 +130,7 @@ public class WeatherDataTransition implements Parcelable
     }
 
 
-    final Parcelable.Creator<WeatherDataTransition> CREATOR = new Parcelable.Creator<WeatherDataTransition>()
+    public static final Parcelable.Creator<WeatherDataTransition> CREATOR = new Parcelable.Creator<WeatherDataTransition>()
     {
         public WeatherDataTransition createFromParcel(Parcel weatherDataTransitionParcel)
         {
