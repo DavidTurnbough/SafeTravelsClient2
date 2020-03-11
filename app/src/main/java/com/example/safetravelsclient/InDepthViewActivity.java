@@ -2,8 +2,15 @@ package com.example.safetravelsclient;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+
+import com.example.safetravelsclient.models.WeatherListActivity;
+import com.example.safetravelsclient.models.fields.WeatherTransitionData;
+import com.example.safetravelsclient.models.transition.WeatherDataTransition;
 
 public class InDepthViewActivity extends AppCompatActivity {
 
@@ -16,22 +23,43 @@ public class InDepthViewActivity extends AppCompatActivity {
     String myTemperature = "74";
     String myTemperatureHigh = "95";
     String myTemperatureLow = "8";
+    WeatherTransitionData weather_data;
+    WeatherDataTransition weather_transition;
+
+    Button back_button;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_in_depth_view);
+        this.back_button = findViewById(R.id.backButton);
 
-        setLocation(myLocation);
-        setWeatherDescription(myDescription);
-        setWind(myWindValue);
-        setPrecipitation(myPrecipitation);
-        setHumidity(myHumidity);
-        setDate(myDate);
-        setTemperature(myTemperature);
-        setTemperatureHigh(myTemperatureHigh);
-        setTemperatureLow(myTemperatureLow);
+
+        //button = findViewById(R.id.directionButton);
+
+        this.back_button.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                startActivity(new Intent(getApplicationContext(), WeatherListActivity.class));
+                //startActivityOnClick(view);
+            }
+        });
+        //this.weather_data = this.getIntent().getParcelableExtra(this.getString(R.string.intent_weather_data));
+        this.weather_transition = this.getIntent().getParcelableExtra(this.getString(R.string.intent_weather_data));
+        this.weather_data = this.weather_transition.getMarkerData();
+        this.setLocation(this.weather_data.getLocation());
+        this.setWeatherDescription(this.weather_data.getDescription());
+        this.setWind(this.weather_data.getWindVelocity());
+        this.setPrecipitation(this.weather_data.getPrecipitation());
+        this.setHumidity(this.weather_data.getHumidity());
+        this.setDate(myDate);
+        this.setTemperature(this.weather_data.getTemperature());
+        this.setTemperatureHigh(this.weather_data.getTemperatureHigh());
+        this.setTemperatureLow(this.weather_data.getTemperatureLow());
+
     }
 
 

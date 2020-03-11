@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">SafeTravelsClient</string>
+    <string name="intent_weather_data">intent_weather_data</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_landing_activity">LandingActivity</string>
     <string name="activity_maps_to_weather_list">List</string>

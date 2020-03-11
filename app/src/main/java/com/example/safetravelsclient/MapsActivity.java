@@ -8,6 +8,7 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.content.Intent;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -84,15 +85,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         this.to_weather_list = findViewById(R.id.button_to_weather_list);
 
 
-        button = findViewById(R.id.directionButton);
+        //button = findViewById(R.id.directionButton);
 
         this.to_weather_list.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                //this.startActivity(new Intent(getApplicationContext(), WeatherListActivity.class));
-                startActivityOnClick(view);
+                startActivity(new Intent(getApplicationContext(), WeatherListActivity.class));
+                //startActivityOnClick(view);
             }
         });
       
@@ -168,7 +169,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         });
 
-        getDirection.setOnClickListener(new View.OnClickListener() {
+        /*getDirection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 new GetCoordinates().execute(getFrom.getText().toString().replace(" ", "+"));
@@ -176,9 +177,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 //   new FetchURL(MapsActivity.this).execute(getUrl(place1.getPosition(), place2.getPosition(), "driving"), "driving");
 
 
-            }
+            }*/
 
-        });
+        }
 
 
     public void startActivityOnClick(View view)
@@ -196,7 +197,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         lng = location.getLongitude();
         LatLng latLng = new LatLng(lat, lng);
        // mMap.addMarker(new MarkerOptions().position(latLng).title("My position"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        //mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
     }
 
     @Override
