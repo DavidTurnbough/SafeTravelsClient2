@@ -2,11 +2,14 @@ package com.example.safetravelsclient.models.services;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Date;
 import java.util.UUID;
 
 import org.json.JSONException;
@@ -158,54 +161,87 @@ public abstract class BaseRemoteService
         return apiResponse;
     }
 
-    // Put request, sends JSON data to the given URL.
-    public <T extends Object> ApiResponse<T> putRequest(URL url, JSONObject jsonObject)
-    {
+    <T extends Object> ApiResponse<T> performPutRequest(URL connectionUrl, JSONObject jsonObject) {
+        return this.performUploadRequest(PUT_REQUEST_METHOD, connectionUrl, jsonObject);
+    }
+
+    <T extends Object> ApiResponse<T> performPostRequest(URL connectionUrl, JSONObject jsonObject) {
+        return this.performUploadRequest(POST_REQUEST_METHOD, connectionUrl, jsonObject);
+    }
+
+    private <T extends Object> ApiResponse<T> performUploadRequest(String requestType, URL connectionUrl, JSONObject jsonObject) {
         ApiResponse<T> apiResponse = new ApiResponse<>();
 
-        if(url == null)
-        {
-            apiResponse.setValidResponse(false);
-            apiResponse.setErrorMessage("Invalid URL sent to putRequest.");
-            return apiResponse;
+        if (connectionUrl == null) {
+            return apiResponse
+                    .setValidResponse(false);
+                   // .setMessage("Invalid network path provided.");
         }
 
-        try
-        {
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        HttpURLConnection httpURLConnection = null;
+        StringBuilder rawResponse = new StringBuilder();
 
-            int responseCode = conn.getResponseCode();
+        try {
+            byte[] serializedRequestObject = jsonObject.toString().getBytes(UTF8_CHARACTER_ENCODING);
 
-            if(this.isValidResponse(responseCode)) {
+            httpURLConnection = (HttpURLConnection) connectionUrl.openConnection();
+            //httpURLConnection.setDoInput(true);
+            httpURLConnection.setDoOutput(true);
+            httpURLConnection.setFixedLengthStreamingMode(serializedRequestObject.length);
+            httpURLConnection.setRequestMethod(requestType);
+            httpURLConnection.addRequestProperty(ACCEPT_REQUEST_PROPERTY, JSON_PAYLOAD_TYPE);
+            httpURLConnection.addRequestProperty(CONTENT_TYPE_REQUEST_PROPERTY, JSON_PAYLOAD_TYPE);
+            httpURLConnection.setRequestProperty("User-Agent","Mozilla/5.0 ( compatible ) ");
+            httpURLConnection.setRequestProperty("Accept","*/*");
 
-                apiResponse.setValidResponse(true);
+            OutputStream outputStream = httpURLConnection.getOutputStream();
+            outputStream.write(serializedRequestObject);
+            outputStream.flush();
+            System.out.println(httpURLConnection.getResponseCode());
 
-                conn.setDoOutput(true);
+            httpURLConnection.getInputStream();
 
-                conn.setRequestMethod(PUT_REQUEST_METHOD);
+           // System.out.println("Response Code: " + httpURLConnection.getErrorStream());
+           // InputStream response = httpURLConnection.getErrorStream();
+            //String result =
+            //InputStream response = httpURLConnection.getInputStream();
+           // int status = httpURLConnection.getResponseCode();
+          //  if (response == null)
+          //  {
+           //     response = httpURLConnection.getInputStream();
+          //  }
 
-                OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
+            /*BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(httpURLConnection.getErrorStream()));
 
-                out.write(jsonObject.toString());
-
-                out.close();
-                conn.disconnect();
+            char[] buffer = new char[1024];
+            int readCharacters = bufferedReader.read(buffer, 0, buffer.length);
+            while (readCharacters > 0) {
+                rawResponse.append(buffer, 0, readCharacters);
+                readCharacters = bufferedReader.read(buffer, 0, buffer.length);
             }
-            else
-            {
-                apiResponse.setValidResponse(false);
-                apiResponse.setErrorMessage("Invalid response code in putRequest.");
-            }
-        }
-        catch (IOException e)
-        {
+
+            apiResponse.setValidResponse(
+                    this.isValidResponse(
+                            httpURLConnection.getResponseCode()
+                    )
+            );
+
+            bufferedReader.close();
+            */
+
+        } catch (IOException e) {
             e.printStackTrace();
 
-            apiResponse.setValidResponse(false);
-            apiResponse.setErrorMessage("IOException in putRequest: " + e.getMessage());
+            apiResponse
+                    .setValidResponse(false);
+                   // .setMessage(e.getMessage());
+        } finally {
+            if (httpURLConnection != null) {
+                httpURLConnection.disconnect();
+            }
         }
 
-        return apiResponse;
+        return apiResponse.setRawResponse(rawResponse.toString());
     }
 
     public ApiResponse<String> deleteRequest(URL url){

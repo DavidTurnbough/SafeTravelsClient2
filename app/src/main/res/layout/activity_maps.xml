@@ -29,24 +29,18 @@
 
     <Button
         android:id="@+id/button3"
-        android:elevation="10dp"
-        android:padding="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="9dp"
-        android:layout_marginEnd="68dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="18dp"
         android:background="@drawable/get_directions_button"
+        android:elevation="10dp"
         android:onClick="onDirectionButtonClick"
+        android:padding="10dp"
         android:shadowColor="@color/colorPrimary"
         android:text="Directions"></Button>
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
 
 
 </RelativeLayout>

@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.Bundle;
 //import android.support.annotation.Nullable;
 //import android.support.v7.app.AppCompatActivity;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -35,6 +36,7 @@ import com.example.safetravelsclient.models.HttpDataHandler;
 import com.example.safetravelsclient.models.TaskLoadedCallback;
 import com.example.safetravelsclient.models.services.ApiResponse;
 import com.example.safetravelsclient.models.services.LocationMarker;
+import com.example.safetravelsclient.models.services.LocationMarkerService;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -58,6 +60,7 @@ import java.util.UUID;
 
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, TaskLoadedCallback, LocationListener {
+    ArrayList <LatLng> markers = new ArrayList<>();
 
     private WeatherDataTransition weatherDataTransition;
     int destCheck = 0;
@@ -86,6 +89,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
         this.to_weather_list = findViewById(R.id.button_to_weather_list);
 
      //   this.weatherDataTransition = this.getIntent().getParcelableExtra(this.getString(R.string.intent_extra_product));
@@ -118,7 +125,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, FINE_LOCATION_PERMISSION);
-            mMap.setMyLocationEnabled(true);
+           // mMap.setMyLocationEnabled(true);
 
         }
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -163,6 +170,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap = googleMap;
         mMap.setMyLocationEnabled(true);
 
+        //mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         Log.d("mylog", "Added Markers");
 
     }
@@ -173,9 +181,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
-    private TextView getExampleData() {
-        return (TextView) this.findViewById(R.id.textView);
-    }
+   // private TextView getExampleData() {
+      //  return (TextView) this.findViewById(R.id.textView);
+    //}
 
     public void onDirectionButtonClick(View view) {
 
@@ -208,8 +216,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onClick(View view) {
                 new GetCoordinates().execute(getFrom.getText().toString().replace(" ", "+"));
                 new GetCoordinates().execute(getTo.getText().toString().replace(" ", "+"));
-                //   new FetchURL(MapsActivity.this).execute(getUrl(place1.getPosition(), place2.getPosition(), "driving"), "driving");
-
 
             }
 
@@ -317,18 +323,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     {
                         place2 = new MarkerOptions().position(new LatLng(Double.parseDouble(lat),Double.parseDouble(lng))).title("Location 2");
                         mMap.addMarker(place2);
+                        destCheck++;
 
 
 
                     }
 
-                    if (!place1.equals(null) && !place2.equals(null))
+                    if (destCheck == 2)
                     {
                         new FetchURL(MapsActivity.this).execute(getUrl(place1.getPosition(), place2.getPosition(), "driving"), "driving");
 
                     }
 
-                    System.out.println("Cooridnates: " + lat + ", " + lng);
+                   // System.out.println("Cooridnates: " + lat + ", " + lng);
                 }
                 catch (Exception e) {
                     e.printStackTrace();
@@ -365,20 +372,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             currentPolyline = mMap.addPolyline((PolylineOptions) values[0]);
             points = currentPolyline.getPoints();
             GetMarkers(points);
-            System.out.println(points.get(0));
+            //System.out.println(points.get(0));
             ArrayList responseArray = new ArrayList<ApiResponse>();
-           ApiResponse apiResponse = new ApiResponse<LocationMarker>();
+          // ApiResponse apiResponse = new ApiResponse<LocationMarker>();
 
-           for (int i = 0; i < points.size(); i++)
+           for (int i = 0; i < markers.size(); i++)
            {
-              LocationMarker locationMarker = createMarkerObject(points.get(i));
+              LocationMarker locationMarker = createMarkerObject(markers.get(i));
 
-             /*  ApiResponse<LocationMarker> apiResponse = (
-                       (locationMarker.getUserId().equals(new UUIS(0, 0)))//g().equals(new UUID(0, 0)))
-                               ? (new LocationMarker()).createProduct(product)
-                               : (new ProductService()).updateProduct(product)
+               ApiResponse<LocationMarker> apiResponse = (
+                      new LocationMarkerService().addLocationMarker(locationMarker)
+
                );
-             // apiResponse = */
                markerId++;
            }
 
@@ -387,16 +392,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         public LocationMarker createMarkerObject(LatLng latLng)
         {
             LocationMarker locationMarker = new LocationMarker();
-            locationMarker.setLatitude(latLng.latitude);
-            locationMarker.setLongitude(latLng.longitude);
+            locationMarker.setLatitude((float)latLng.latitude);
+            locationMarker.setLongitude((float)latLng.longitude);
             locationMarker.setMarkerID(markerId);
+            //locationMarker.setUserID();
 
             return locationMarker;
 
 
         }
 
-        public void GetMarkers(List<LatLng> points)
+        public ArrayList<LatLng> GetMarkers(List<LatLng> points)
         {
             double totalDistance = 0;
             for (int i = 0; i < points.size() - 1; i++)
@@ -410,13 +416,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 totalDistance = totalDistance + calculationByDistance(valueOne,valueTwo);
                 if (totalDistance >= 96.5606)
                 {
+                    markers.add(valueTwo);
                     MarkerOptions location = new MarkerOptions().position(valueTwo).title("Location");
                     mMap.addMarker(location);
                     totalDistance = 0;
                 }
             }
 
-            System.out.println("The total distance is: " + totalDistance);
+            return markers;
+            //System.out.println("The total distance is: " + totalDistance);
         }
 
         public LatLng parseString(String value)
@@ -454,8 +462,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             int kmInDec = Integer.valueOf(newFormat.format(km));
             double meter = valueResult % 1000;
             int meterInDec = Integer.valueOf(newFormat.format(meter));
-            Log.i("Radius Value", "" + valueResult + "   KM  " + kmInDec
-                    + " Meter   " + meterInDec);
+           // Log.i("Radius Value", "" + valueResult + "   KM  " + kmInDec
+                   // + " Meter   " + meterInDec);
 
             return Radius * c;
         }

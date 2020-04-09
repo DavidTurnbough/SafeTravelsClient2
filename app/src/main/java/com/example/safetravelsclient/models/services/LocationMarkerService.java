@@ -8,7 +8,7 @@ import org.json.JSONObject;
 public class LocationMarkerService extends BaseRemoteService
 {
     // Adds 'markers' to the URL path.
-    LocationMarkerService()
+    public LocationMarkerService()
     {
         super(ApiObject.MARKERS);
     }
@@ -42,11 +42,12 @@ public class LocationMarkerService extends BaseRemoteService
     public ApiResponse<LocationMarker> addLocationMarker(LocationMarker locationMarker)
     {
         return this.readLocationMarkerDetailsFromRawResponse(
-                this.<LocationMarker>putRequest(
-                        this.buildPath(), locationMarker.convertToJson()
+                this.<LocationMarker>performPutRequest(
+                        this.buildPath(locationMarker.getUserID()), locationMarker.convertToJson()
                 )
         );
     }
+
 
     // Deletes a single marker along the route with the give userID and markerID.
     // URL = baseURL/markers?id={userID}&MarkerID={markerID}

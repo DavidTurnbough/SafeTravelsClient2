@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
 
-class LocationMarker {
+public class LocationMarker {
 
     private UUID userID;
     private Date arrivalTime;
@@ -24,14 +24,15 @@ class LocationMarker {
     private int humidity;
     private int temperatureHigh;
     private int temperatureLow;
-    private double latitude;
-    private double longitude;
+    private float latitude;
+    private float longitude;
 
     //**********
     // Constructors.
     //**********
-    LocationMarker()
+  public  LocationMarker()
     {
+       // this.userID = 1;
         this.userID = new UUID(0,0);
         this.markerID = 0;
         this.latitude = 0;
@@ -89,7 +90,7 @@ class LocationMarker {
 
     public int getPrecipitationChance() { return this.precipitationChance; }
 
-    public String getLocation() { return this.location; }
+    public String getLocation() { return "fayetteville"; }
 
     public String getWeatherDescription() { return this.weatherDescription; }
 
@@ -108,12 +109,12 @@ class LocationMarker {
         this.markerID = markerID;
     }
 
-    public void setLatitude(double latitude)
+    public void setLatitude(float latitude)
     {
         this.latitude = latitude;
     }
 
-    public void setLongitude(double longitude)
+    public void setLongitude(float longitude)
     {
         this.longitude = longitude;
     }
@@ -172,11 +173,13 @@ class LocationMarker {
 
         try
         {
-            jsonObject.put(LocationMarkerInformation.USER_ID.getInformation(), this.userID.toString());
+            jsonObject.put(LocationMarkerInformation.USER_ID.getInformation(), this.userID);//.toString());
             jsonObject.put(LocationMarkerInformation.MARKER_ID.getInformation(), this.markerID);
             jsonObject.put(LocationMarkerInformation.ARRIVAL_TIME.getInformation(), (new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S", Locale.US)).format(this.arrivalTime));
             jsonObject.put(LocationMarkerInformation.LATITUDE.getInformation(), this.latitude);
             jsonObject.put(LocationMarkerInformation.LONGITUDE.getInformation(), this.longitude);
+            jsonObject.put(LocationMarkerInformation.LOCATION.getInformation(), "Fayetteville");
+
         }
         catch(JSONException e)
         {
@@ -192,43 +195,38 @@ class LocationMarker {
 
         if(temp.length() > 0)
         {
-            this.userID = UUID.fromString(temp);
+            Integer.parseInt(temp);
         }
 
-        try {
-            this.markerID = rawJsonObject.optInt(LocationMarkerInformation.MARKER_ID.getInformation());
+        this.markerID = rawJsonObject.optInt(LocationMarkerInformation.MARKER_ID.getInformation());
 
 
-            temp = rawJsonObject.optString(LocationMarkerInformation.ARRIVAL_TIME.getInformation());
+        temp = rawJsonObject.optString(LocationMarkerInformation.ARRIVAL_TIME.getInformation());
 
-            if(temp.length() > 0) {
-                try {
-                    this.arrivalTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S", Locale.US).parse(temp);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+        if(temp.length() > 0) {
+            try {
+                this.arrivalTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S", Locale.US).parse(temp);
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
-
-            this.longitude = rawJsonObject.getDouble(LocationMarkerInformation.LONGITUDE.getInformation());
-            this.latitude = rawJsonObject.getDouble(LocationMarkerInformation.LATITUDE.getInformation());
-
-
-            //**********
-            // Not currently passed from the server.
-            //**********
-            //this.location = rawJsonObject.optString(LocationMarkerInformation.LOCATION.getInformation());
-            //this.temperature = rawJsonObject.optInt(LocationMarkerInformation.TEMPERATURE.getInformation());
-            //this.precipitationChance = rawJsonObject.getInt(LocationMarkerInformation.PRECIPITATION_CHANCE.getInformation());
-            //this.temperatureHigh = rawJsonObject.getInt(LocationMarkerInformation.TEMPERATURE_HIGH.getInformation());
-            //this.temperatureLow = rawJsonObject.getInt(LocationMarkerInformation.TEMPERATURE_LOW.getInformation());
-            //this.weatherDescription = rawJsonObject.getString(LocationMarkerInformation.WEATHER_DESCRIPTION.getInformation());
-            //this.windVelocity = rawJsonObject.getString(LocationMarkerInformation.WIND_VELOCITY.getInformation());
-            //this.precipitationChance = rawJsonObject.getInt(LocationMarkerInformation.PRECIPITATION_CHANCE.getInformation());
-            //this.humidity = rawJsonObject.getInt(LocationMarkerInformation.HUMIDITY.getInformation());
-
-        }catch (JSONException e) {
-            e.printStackTrace();
         }
+
+        this.longitude = (float) 33.3; // (float)rawJsonObject.getDouble(LocationMarkerInformation.LONGITUDE.getInformation());
+        this.latitude = (float) 15.4; //rawJsonObject.getDouble(LocationMarkerInformation.LATITUDE.getInformation());
+
+
+        //**********
+        // Not currently passed from the server.
+        //**********
+        //this.location = rawJsonObject.optString(LocationMarkerInformation.LOCATION.getInformation());
+        //this.temperature = rawJsonObject.optInt(LocationMarkerInformation.TEMPERATURE.getInformation());
+        //this.precipitationChance = rawJsonObject.getInt(LocationMarkerInformation.PRECIPITATION_CHANCE.getInformation());
+        //this.temperatureHigh = rawJsonObject.getInt(LocationMarkerInformation.TEMPERATURE_HIGH.getInformation());
+        //this.temperatureLow = rawJsonObject.getInt(LocationMarkerInformation.TEMPERATURE_LOW.getInformation());
+        //this.weatherDescription = rawJsonObject.getString(LocationMarkerInformation.WEATHER_DESCRIPTION.getInformation());
+        //this.windVelocity = rawJsonObject.getString(LocationMarkerInformation.WIND_VELOCITY.getInformation());
+        //this.precipitationChance = rawJsonObject.getInt(LocationMarkerInformation.PRECIPITATION_CHANCE.getInformation());
+        //this.humidity = rawJsonObject.getInt(LocationMarkerInformation.HUMIDITY.getInformation());
 
         return this;
     }

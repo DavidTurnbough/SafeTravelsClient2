@@ -52,19 +52,21 @@ public class WeatherListActivity extends AppCompatActivity
         this.weather_list.add(new WeatherListSubjectData(0, "i", "j", "k", "l"));
         this.list_view.setAdapter(weather_list_adapter);
 
-        this.getWeatherListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+     /*   this.getWeatherListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getApplicationContext(), ProductViewActivity.class);
 
                 intent.putExtra(
                         getString(R.string.intent_extra_product),
-                        new WeatherDataTransition((Product) getProductsListView().getItemAtPosition(position))
+                       // new WeatherDataTransition((Product) getProductsListView().getItemAtPosition(position))
                 );
 
                 //startActivity(intent);
             }
         });
+
+      */
         //this.weather_list.setA
         //this.getWeatherListView().setAdapter(this.weather_list_adapter);
         log("HERE");
