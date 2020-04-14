@@ -10,11 +10,13 @@ import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.example.safetravelsclient.InDepthViewActivity;
+import com.example.safetravelsclient.MapsActivity;
 import com.example.safetravelsclient.R;
 import com.example.safetravelsclient.models.adapter.WeatherListAdapter;
 import com.example.safetravelsclient.models.fields.WeatherTransitionData;
@@ -30,6 +32,8 @@ public class WeatherListActivity extends AppCompatActivity
     private List<WeatherTransitionData> weather_list;
     //private List<WeatherTransitionData> transition_data;
     private ListView list_view;
+    Button back_button;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -37,6 +41,17 @@ public class WeatherListActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         Log.d("MyApp", "HERE WE GO");
         this.setContentView(R.layout.content_weather_list);
+        this.back_button = findViewById(R.id.back_button_weather_list);
+
+        this.back_button.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+                //startActivityOnClick(view);
+            }
+        });
 
         this.list_view = this.getWeatherListView();
         //this.weather_list = new ArrayList<WeatherListSubjectData>();
