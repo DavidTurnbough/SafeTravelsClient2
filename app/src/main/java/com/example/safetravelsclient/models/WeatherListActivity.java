@@ -98,10 +98,6 @@ public class WeatherListActivity extends AppCompatActivity
                 startActivity(intent);
             }
         });
-        //this.list_view.
-        //this.weather_list.setA
-        //this.getWeatherListView().setAda pter(this.weather_list_adapter);
-        //log("HERE");
         List<String[]> test_entries = populateListTest();
         //for(String[] entry:test_entries)
         for(int i = 0; i < test_entries.size(); i++)
@@ -113,7 +109,7 @@ public class WeatherListActivity extends AppCompatActivity
             //System.out.println(loc + ", " + temp + ", " + prec + ", " + wind);
             WeatherTransitionData add = new WeatherTransitionData(i, loc, temp, prec, wind);
             this.weather_list.add(add);
-            this.weather_list_adapter.add(add);
+            //this.weather_list_adapter.add(add);
             //_adapter.add(add);
         }
 
