@@ -20,6 +20,7 @@
         android:layout_height="50dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
+        android:background="@drawable/button_theme"
         android:text="@string/activity_maps_to_weather_list"
         android:onClick="startActivityOnClick"></Button>
 
