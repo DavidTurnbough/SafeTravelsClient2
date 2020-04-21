@@ -88,7 +88,7 @@ public class WeatherListAdapter extends ArrayAdapter<WeatherTransitionData>
         }
         WeatherListSubjectData entry = getItem(position);
         viewHolder.getTvMarkerId().setText(entry.getMarkerId());
-        viewHolder.getTvLocation().setText(entry.getLocation());
+        viewHolder.getTvLocation().setText(entry.getlocation());
         viewHolder.getTvTemperature().setText(entry.getTemperature());
         viewHolder.getTvPrecipitation().setText(entry.getPrecipitation());
         viewHolder.getTvWindVelocity().setText(entry.getWindVelocity());

@@ -82,7 +82,7 @@ public class WeatherListActivity extends AppCompatActivity
                 this.marker_data.setWindDirection(weatherDataParcel.readString());*/
                 /*intent.p
                 intent.putExtra("Id", at_pos.getMarkerId());
-                intent.putExtra("Loc", at_pos.getLocation());
+                intent.putExtra("Loc", at_pos.getlocation());
                 intent.putExtra("Temp", at_pos.getTemperature());
                 intent.putExtra("TempHigh", at_pos.getTemperatureHigh());
                 intent.putExtra("TempLow", at_pos.getTemperatureLow());
@@ -139,7 +139,7 @@ public class WeatherListActivity extends AppCompatActivity
                 this.marker_data.setWindDirection(weatherDataParcel.readString());*/
                 /*intent.p
                 intent.putExtra("Id", at_pos.getMarkerId());
-                intent.putExtra("Loc", at_pos.getLocation());
+                intent.putExtra("Loc", at_pos.getlocation());
                 intent.putExtra("Temp", at_pos.getTemperature());
                 intent.putExtra("TempHigh", at_pos.getTemperatureHigh());
                 intent.putExtra("TempLow", at_pos.getTemperatureLow());
