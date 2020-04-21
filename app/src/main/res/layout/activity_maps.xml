@@ -14,28 +14,78 @@
         android:layout_height="match_parent"
         tools:context=".MapsActivity" />
 
-    <Button
-        android:id="@+id/button_to_weather_list"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar1"
+        android:layout_width="match_parent"
+        android:elevation="10dp"
+        android:layout_height="100dp"
+        android:background="@drawable/get_directions_button"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        map:contentInsetEnd="16dp"
+        map:contentInsetEndWithActions="72dp">
+
+        <ImageView
+            android:id="@+id/directionsbutton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="10dp"
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            android:clickable="true"
+            android:onClick="onDirectionButtonClick"
+            android:src="@drawable/logo" />
+
+
+        <ImageView
+            android:id="@+id/weathertype"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:elevation="10dp"
+            android:layout_gravity="left"
+            android:adjustViewBounds="true"
+            android:onClick="inDepthViewOnClick"
+            android:src="@drawable/sunny1" />
+
+        <TextView
+            android:id="@+id/degrees"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:layout_gravity="right"
+            android:elevation="10dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/attempt1"
+            android:text="76°"
+            android:textColor="@android:color/background_light"
+            android:textSize="56sp" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <ImageButton
+        android:id="@+id/goToLocationButton"
+        android:layout_width="135dp"
+        android:layout_height="67dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/button_theme"
-        android:text="@string/activity_maps_to_weather_list"
-        android:onClick="startActivityOnClick"></Button>
+        android:layout_marginEnd="-40dp"
+        android:layout_marginBottom="3dp"
+        android:clickable="true"
+        android:elevation="10dp"
+        android:background="@drawable/getlocation" />
 
-
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="58dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+    <ImageButton
+        android:id="@+id/infoButton"
+        android:layout_width="135dp"
+        android:layout_height="67dp"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="9dp"
-        android:layout_marginEnd="68dp"
-        android:background="@drawable/get_directions_button"
-        android:onClick="onDirectionButtonClick"
-        android:text="Directions"></Button>
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="-40dp"
+        android:layout_marginBottom="60dp"
+        android:background="@drawable/info"
+        android:clickable="true"
+        android:elevation="10dp" />
 
 
 </RelativeLayout>
