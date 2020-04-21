@@ -38,7 +38,7 @@ public class WeatherDataTransition implements Parcelable
         while(iter.hasNext())
         {
             WeatherTransitionData next = iter.next();
-            this.data_array.add(new WeatherTransitionData(next.getlocation(), next.getTemperature(), next.getTemperatureHigh(), next.getTemperatureLow(), next.getPrecipitation(), next.getHumidity(), next.getDescription(), next.getWindVelocity(), next.getWindDirection()));
+            this.data_array.add(new WeatherTransitionData(next.getLocation(), next.getTemperature(), next.getTemperatureHigh(), next.getTemperatureLow(), next.getPrecipitation(), next.getHumidity(), next.getDescription(), next.getWindVelocity(), next.getWindDirection()));
         }*/
         this.marker_data = new WeatherTransitionData(copy.getMarkerData());
         this.marker_id = copy.getMarkerId();
@@ -49,7 +49,7 @@ public class WeatherDataTransition implements Parcelable
     public WeatherDataTransition(Parcel weatherDataParcel)
     {
         /*destination.writeInt(marker_id);
-        destination.writeString(marker_data.getlocation());
+        destination.writeString(marker_data.getLocation());
         destination.writeString(marker_data.getTemperature());
         destination.writeString(marker_data.getTemperatureHigh());
         destination.writeString(marker_data.getTemperatureLow());
@@ -81,7 +81,7 @@ public class WeatherDataTransition implements Parcelable
     public WeatherDataTransition setTime(String t) {this.time = t; return this;}
 
     String location;
-    public String getlocation() {return this.location;}
+    public String getLocation() {return this.location;}
     public WeatherDataTransition setLocation(String loc) {this.location = loc; return this;}
 
     String temperature_high;

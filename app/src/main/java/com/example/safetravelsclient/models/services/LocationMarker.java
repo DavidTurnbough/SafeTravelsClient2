@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
 
-public class LocationMarker {
+class LocationMarker {
 
     private UUID userID;
     private Date arrivalTime;
@@ -30,7 +30,7 @@ public class LocationMarker {
     //**********
     // Constructors.
     //**********
-    public LocationMarker()
+    LocationMarker()
     {
         this.userID = new UUID(0,0);
         this.markerID = 0;
@@ -54,7 +54,7 @@ public class LocationMarker {
         this.markerID = locationMarkerTransition.getMarkerID();
         this.latitude = locationMarkerTransition.getLatitude();
         this.longitude = locationMarkerTransition.getLongitude();
-        this.location = locationMarkerTransition.getlocation();
+        this.location = locationMarkerTransition.getLocation();
         this.arrivalTime = new Date();
         this.temperature = 0;
         this.humidity = 0;
