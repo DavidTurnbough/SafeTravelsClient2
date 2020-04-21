@@ -1,10 +1,14 @@
 package com.example.safetravelsclient.models;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import androidx.core.content.res.ResourcesCompat;
+
+import com.example.safetravelsclient.R;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -79,8 +83,8 @@ public class PointsParser extends AsyncTask<String, Integer, List<List<HashMap<S
                 lineOptions.width(10);
                 lineOptions.color(Color.MAGENTA);
             } else {
-                lineOptions.width(20);
-                lineOptions.color(Color.BLUE);
+                lineOptions.width(15);
+                lineOptions.color(Color.rgb(81,105,219));
             }
             Log.d("mylog", "onPostExecute lineoptions decoded");
         }

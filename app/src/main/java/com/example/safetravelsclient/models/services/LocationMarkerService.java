@@ -13,7 +13,7 @@ import org.json.JSONObject;
 public class LocationMarkerService extends BaseRemoteService
 {
     // Adds 'markers' to the URL path.
-    LocationMarkerService()
+    public LocationMarkerService()
     {
         super(ApiObject.MARKERS);
     }
