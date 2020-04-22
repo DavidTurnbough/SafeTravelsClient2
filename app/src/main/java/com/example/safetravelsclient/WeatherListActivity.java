@@ -1,4 +1,4 @@
-package com.example.safetravelsclient.models;
+package com.example.safetravelsclient;
 
 import android.content.Intent;
 import android.os.Bundle;
