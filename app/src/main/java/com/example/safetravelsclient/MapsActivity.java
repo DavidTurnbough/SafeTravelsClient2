@@ -37,7 +37,7 @@ import androidx.core.app.ActivityCompat;
 
 import com.example.safetravelsclient.models.HttpDataHandler;
 import com.example.safetravelsclient.models.TaskLoadedCallback;
-import com.example.safetravelsclient.models.WeatherListActivity;
+import com.example.safetravelsclient.WeatherListActivity;
 import com.example.safetravelsclient.models.services.ApiResponse;
 import com.example.safetravelsclient.models.services.LocationMarker;
 import com.example.safetravelsclient.models.services.LocationMarkerService;
@@ -422,7 +422,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         ArrayList responseArray = new ArrayList<ApiResponse>();
         // ApiResponse apiResponse = new ApiResponse<LocationMarker>();
 
-       /* for (int i = 0; i < markers.size(); i++)
+        for (int i = 0; i < markers.size(); i++)
         {
             LocationMarker locationMarker = createMarkerObject(markers.get(i));
 
@@ -432,7 +432,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             );
             markerId++;
         }
-*/
+
     }
 
     public LocationMarker createMarkerObject(LatLng latLng)

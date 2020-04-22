@@ -41,7 +41,7 @@ public class LocationMarker {
         this.temperatureHigh = 0;
         this.temperatureLow = 0;
         this.precipitationChance = 0;
-        this.location = "";
+        this.location = "location";
         this.weatherDescription = "";
         this.windVelocity = "";
         this.arrivalTime = new Date();
@@ -178,6 +178,9 @@ public class LocationMarker {
             jsonObject.put(LocationMarkerInformation.ARRIVAL_TIME.getInformation(), (new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S", Locale.US)).format(this.arrivalTime));
             jsonObject.put(LocationMarkerInformation.LATITUDE.getInformation(), this.latitude);
             jsonObject.put(LocationMarkerInformation.LONGITUDE.getInformation(), this.longitude);
+            //jsonObject.put(LocationMarkerInformation.TEMPERATURE.getInformation(), this.temperature);
+            jsonObject.put(LocationMarkerInformation.LOCATION.getInformation(), this.location);
+            //jsonObject.put(LocationMarkerInformation.PRECIPITATION_CHANCE.getInformation(), this.precipitationChance);
         }
         catch(JSONException e)
         {
@@ -212,7 +215,7 @@ public class LocationMarker {
 
             this.longitude = rawJsonObject.getDouble(LocationMarkerInformation.LONGITUDE.getInformation());
             this.latitude = rawJsonObject.getDouble(LocationMarkerInformation.LATITUDE.getInformation());
-
+            this.location = rawJsonObject.getString(LocationMarkerInformation.LOCATION.getInformation());
 
             //**********
             // Not currently passed from the server.

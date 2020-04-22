@@ -11,9 +11,6 @@ public class ApiResponse<T> {
     private T data;
 
 
-    ApiResponse myResponse = new ApiResponse<LocationMarker>();
-
-
     //**********
     // Constructors.
     //**********

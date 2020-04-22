@@ -2,15 +2,10 @@ package com.example.safetravelsclient.models.services;
 
 import com.example.safetravelsclient.models.interfaces.PathElementInterface;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-public class LocationMarkerService extends BaseRemoteService
+public class  LocationMarkerService extends BaseRemoteService
 {
     // Adds 'markers' to the URL path.
     public LocationMarkerService()
@@ -18,79 +13,53 @@ public class LocationMarkerService extends BaseRemoteService
         super(ApiObject.MARKERS);
     }
 
-    public ApiResponse<List<LocationMarker>> getRoute(UUID userID)
+    // Gets a single location marker along the route with the given userID and markerID.
+    // URL = baseURL/markers?id={userID}&MarkerID={markerID}
+    public ApiResponse<LocationMarker> getLocationMarker(UUID userID, int markerID)
     {
-        // Gets the raw response list of all location markers with the given user id.
-        ApiResponse<List<LocationMarker>> apiResponse = this.getRequest(
-                this.buildPath(userID.toString())
-        );
+        String parameters = ("?id=" + userID.toString() + "&MarkerID=" + markerID);
 
-        // Converts the raw response from the get request into an array list of location markers.
-        JSONArray rawJsonArray = this.rawResponseToJSONArray(apiResponse.getRawResponse());
-
-        if(rawJsonArray != null)
-        {
-            ArrayList<LocationMarker> locationMarkers = new ArrayList<>(rawJsonArray.length());
-
-            for(int i = 0; i < rawJsonArray.length(); ++i)
-            {
-                try{
-                    locationMarkers.add((new LocationMarker()).loadFromJson(rawJsonArray.getJSONObject(i)));
-                }
-                catch(JSONException e)
-                {
-                    apiResponse.setErrorMessage(e.getMessage());
-                }
-            }
-
-            apiResponse.setData(locationMarkers);
-        }
-        else
-        {
-            apiResponse.setData(new ArrayList<LocationMarker>(0));
-        }
-
-        return apiResponse;
-    }
-
-    // Sends the single given location marker in json format to the database.
-    // URL = baseURL/markers
-    //**********
-    // ApiResponse myResponse = new ApiResponse<LocationMarker>();
-    // LocationMarkerService myService = new LocationMarkerService();
-    // myResponse = myService.getLocationMarker(userID);
-    // LocationMarker myMarker = new LocationMarker();
-    // myMarker = (LocationMarker) myResponse.getData();
-    //**********
-    public ApiResponse<LocationMarker> getLocationMarker(int userID) //Should be UUID, needs to be changed.
-    {
         return this.readLocationMarkerDetailsFromRawResponse(
                 this.<LocationMarker>getRequest(
-                        this.buildPath(String.valueOf(userID))
+                        this.buildPath(parameters)
                 )
         );
     }
 
-    public ApiResponse<LocationMarker> addLocationMarker(LocationMarker locationMarker)
+    // Gets a single location marker along the route with the given markerID.
+    // URL = baseURL/markers/MarkerID/{markerID}
+    public ApiResponse<LocationMarker> getLocationMarker(int markerID)
     {
         return this.readLocationMarkerDetailsFromRawResponse(
-                this.<LocationMarker>putRequest(
+                this.<LocationMarker>getRequest(
+                        this.buildPath(new PathElementInterface[]{MarkerApiMethod.MARKER_ID}, String.valueOf(markerID))
+                )
+        );
+    }
+
+    // Sends the single given location marker to the database.
+    // URL = baseURL/markers
+    public ApiResponse<LocationMarker> addLocationMarker(LocationMarker locationMarker)
+    {
+        //locationMarker.getUserID(
+        return this.readLocationMarkerDetailsFromRawResponse(
+                this.<LocationMarker>performPostRequest(
                         this.buildPath(), locationMarker.convertToJson()
                 )
         );
     }
 
-    /*
-    // Deletes the given location marker from the database.
-    // URL: baseURL/markers
-    public ApiResponse<LocationMarker> deleteLocationMarker(LocationMarker locationMarker)
+
+    // Deletes a single marker along the route with the give userID and markerID.
+    // URL = baseURL/markers?id={userID}&MarkerID={markerID}
+    public ApiResponse<String> deleteLocationMarker(UUID userID, int markerID)
     {
-        return this.<LocationMarker>deleteRequest(
-                this.buildPath(), locationMarker.convertToJson()
+        String parameters = ("?id=" + userID.toString() + "&MarkerID=" + markerID);
+
+        return this.<String>deleteRequest(
+                this.buildPath(parameters)
         );
     }
-     */
-
 
     // Reads the raw response data of the api response, from the get method, into the location marker of the api response.
     private ApiResponse<LocationMarker> readLocationMarkerDetailsFromRawResponse(ApiResponse<LocationMarker> apiResponse)

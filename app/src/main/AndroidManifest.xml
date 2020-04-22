@@ -70,7 +70,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".models.WeatherListActivity"
+        <activity android:name=".WeatherListActivity"
             android:label="WeatherList"
             android:parentActivityName=".MapsActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -81,11 +81,11 @@
 
         <activity android:name=".InDepthViewActivity"
             android:label="InDepthView"
-            android:parentActivityName=".models.WeatherListActivity"
+            android:parentActivityName=".WeatherListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.safetravelsclient.models.WeatherListActivity"/>
+                android:value="com.example.safetravelsclient.WeatherListActivity"/>
         </activity>
 
 

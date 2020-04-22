@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.safetravelsclient.models.WeatherListActivity;
+import com.example.safetravelsclient.WeatherListActivity;
 import com.example.safetravelsclient.models.fields.WeatherTransitionData;
 import com.example.safetravelsclient.models.transition.WeatherDataTransition;
 
