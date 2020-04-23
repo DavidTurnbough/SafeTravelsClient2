@@ -1,5 +1,7 @@
 package com.example.safetravelsclient.models.services;
 
+import android.util.Log;
+
 import com.example.safetravelsclient.models.fields.LocationMarkerInformation;
 
 import org.json.JSONException;
@@ -178,20 +180,23 @@ public class LocationMarker {
             jsonObject.put(LocationMarkerInformation.ARRIVAL_TIME.getInformation(), (new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S", Locale.US)).format(this.arrivalTime));
             jsonObject.put(LocationMarkerInformation.LATITUDE.getInformation(), this.latitude);
             jsonObject.put(LocationMarkerInformation.LONGITUDE.getInformation(), this.longitude);
-            //jsonObject.put(LocationMarkerInformation.TEMPERATURE.getInformation(), this.temperature);
             jsonObject.put(LocationMarkerInformation.LOCATION.getInformation(), this.location);
-            //jsonObject.put(LocationMarkerInformation.PRECIPITATION_CHANCE.getInformation(), this.precipitationChance);
         }
         catch(JSONException e)
         {
             e.printStackTrace();
         }
 
+        Log.d("JSON", jsonObject.toString());
+
+
+
         return jsonObject;
     }
 
     public LocationMarker loadFromJson(JSONObject rawJsonObject)
     {
+
         String temp = rawJsonObject.optString(LocationMarkerInformation.USER_ID.getInformation());
 
         if(temp.length() > 0)
