@@ -1,5 +1,7 @@
 package com.example.safetravelsclient.models.services;
 
+import android.util.Log;
+
 import com.example.safetravelsclient.models.interfaces.PathElementInterface;
 
 import java.util.UUID;
@@ -65,6 +67,7 @@ public class  LocationMarkerService extends BaseRemoteService
     private ApiResponse<LocationMarker> readLocationMarkerDetailsFromRawResponse(ApiResponse<LocationMarker> apiResponse)
     {
         String rawResponse = apiResponse.getRawResponse();
+        Log.d("LOG: ", "rawResponse in readLocationMarkerDetailsFromRawResponse: " + rawResponse);
 
         if(rawResponse.length() > 0) {
             JSONObject jsonObject = this.rawResponseToJSONObject(rawResponse);
