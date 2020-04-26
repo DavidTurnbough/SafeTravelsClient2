@@ -25,11 +25,15 @@ import com.example.safetravelsclient.models.fields.WeatherListSubjectData;
 
 public class WeatherListActivity extends AppCompatActivity
 {
+    WeatherTransitionData weather_data;
+    WeatherDataTransition weather_transition;
+
     private static final String TAG = "WeatherListActivity";
     private static final int NUM_VALUES = 4;
     private WeatherListAdapter weather_list_adapter;
     //private List<WeatherListSubjectData> weather_list;
     private List<WeatherTransitionData> weather_list;
+     ArrayList<WeatherDataTransition> incoming_list;
     //private List<WeatherTransitionData> transition_data;
     private ListView list_view;
     Button back_button;
@@ -40,6 +44,15 @@ public class WeatherListActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         Log.d("MyApp", "HERE WE GO");
+
+        incoming_list = getIntent().getParcelableArrayListExtra("WeatherData");
+
+
+        System.out.println("Lsit Size: " + incoming_list.size());
+        this.weather_transition = this.getIntent().getParcelableExtra(this.getString(R.string.intent_weather_data));
+
+        //    = bundle.getParcelable("WeatherData");
+
         this.setContentView(R.layout.content_weather_list);
         this.back_button = findViewById(R.id.back_button_weather_list);
 
@@ -90,10 +103,11 @@ public class WeatherListActivity extends AppCompatActivity
                 intent.putExtra("Desc", at_pos.getHumidity());
                 intent.putExtra("WindV", at_pos.getWindVelocity());
                 intent.putExtra("WindD", at_pos.getWindDirection());*/
+                WeatherDataTransition weatherDataTransition = new WeatherDataTransition((WeatherTransitionData)getWeatherListView().getItemAtPosition(position));
                 intent.putExtra
                         (
                                 getString(R.string.intent_weather_data),
-                                new WeatherDataTransition((WeatherTransitionData)getWeatherListView().getItemAtPosition(position))
+                                weatherDataTransition
                         );
                 startActivity(intent);
             }

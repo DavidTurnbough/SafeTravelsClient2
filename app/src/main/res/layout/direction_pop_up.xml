@@ -1,45 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/get_directions_button">
+    android:background="@drawable/get_directions_button"
+    android:gravity="center_horizontal">
 
-
-    <EditText
-        android:id="@+id/editText"
-        android:elevation="10dp"
-        android:padding="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="52dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="7dp"
-        android:layout_marginTop="51dp"
-        android:background="@drawable/edittext_bg"
-        android:ems="10"
-        android:hint="Current Location"
-        android:textColorHint="#000000"
-        android:textColor="#000000"
-        android:inputType="textPersonName|textPostalAddress" />
-
-    <EditText
-        android:id="@+id/editText2"
-        android:layout_width="wrap_content"
-        android:layout_height="53dp"
-        android:layout_below="@+id/editText"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="7dp"
-        android:layout_marginTop="93dp"
-        android:layout_marginBottom="51dp"
-        android:background="@drawable/edittext_bg"
-        android:elevation="10dp"
-        android:ems="10"
-        android:hint="Destination"
-        android:textColorHint="#000000"
-        android:inputType="textPersonName"
-        android:padding="10dp"
-        android:textColor="#000000" />
 
     <Button
         android:id="@+id/directions"
@@ -57,14 +22,49 @@
         android:padding="10dp"
         android:text="GO" />
 
+    <EditText
+        android:id="@+id/editText2"
+        android:layout_width="wrap_content"
+        android:layout_height="53dp"
+        android:layout_below="@+id/editText"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="7dp"
+        android:layout_marginTop="93dp"
+        android:layout_marginBottom="51dp"
+        android:background="@drawable/edittext_bg"
+        android:elevation="10dp"
+        android:ems="10"
+        android:hint="Destination"
+        android:inputType="textPersonName"
+        android:padding="10dp"
+        android:textColor="#000000"
+        android:textColorHint="#000000" />
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="wrap_content"
+        android:layout_height="52dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="7dp"
+        android:layout_marginTop="51dp"
+        android:background="@drawable/edittext_bg"
+        android:elevation="10dp"
+        android:ems="10"
+        android:hint="Current Location"
+        android:inputType="textPersonName|textPostalAddress"
+        android:padding="10dp"
+        android:textColor="#000000"
+        android:textColorHint="#000000" />
+
     <Switch
         android:id="@+id/switch1"
         android:layout_width="wrap_content"
-        android:elevation="10dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginStart="-212dp"
         android:layout_marginTop="110dp"
         android:layout_toEndOf="@+id/editText"
+        android:elevation="10dp"
         android:text="Current Location" />
 </RelativeLayout>

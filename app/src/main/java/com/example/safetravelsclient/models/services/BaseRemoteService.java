@@ -9,6 +9,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 import org.json.JSONArray;
@@ -175,10 +176,10 @@ public abstract class BaseRemoteService
         StringBuilder rawResponse = new StringBuilder();
 
         try {
-            byte[] serializedRequestObject = jsonObject.toString().getBytes(UTF8_CHARACTER_ENCODING);
+            byte[] serializedRequestObject = jsonObject.toString().getBytes(StandardCharsets.UTF_8);
 
             httpURLConnection = (HttpURLConnection) connectionUrl.openConnection();
-            //httpURLConnection.setDoInput(true);
+            httpURLConnection.setDoInput(true);
             httpURLConnection.setDoOutput(true);
             httpURLConnection.setFixedLengthStreamingMode(serializedRequestObject.length);
             httpURLConnection.setRequestMethod(requestType);
@@ -197,16 +198,16 @@ public abstract class BaseRemoteService
 
 
             // System.out.println("Response Code: " + httpURLConnection.getErrorStream());
-             InputStream response = httpURLConnection.getErrorStream();
+             //InputStream response = httpURLConnection.getErrorStream();
             //String result =
-            //InputStream response = httpURLConnection.getInputStream();
+            InputStream response = httpURLConnection.getInputStream();
             // int status = httpURLConnection.getResponseCode();
             //  if (response == null)
             //  {
             //     response = httpURLConnection.getInputStream();
             //  }
 
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(httpURLConnection.getErrorStream()));
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response));
 
             char[] buffer = new char[1024];
             int readCharacters = bufferedReader.read(buffer, 0, buffer.length);
@@ -291,13 +292,13 @@ public abstract class BaseRemoteService
 
         if(rawResponse.length() > 0)
         {
-            try
-            {
-                jsonObject = new JSONObject(rawResponse);
-            }
-            catch (JSONException e) {
-                e.printStackTrace();
-            }
+           // try
+           // {
+                //jsonObject = new JSONObject(rawResponse);
+           // }
+            //catch (JSONException e) {
+            //    e.printStackTrace();
+           // }
         }
 
         return jsonObject;

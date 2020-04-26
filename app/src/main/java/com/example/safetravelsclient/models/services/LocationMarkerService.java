@@ -56,7 +56,7 @@ public class  LocationMarkerService extends BaseRemoteService
     {
         String parameters = ("?id=" + userID.toString() + "&MarkerID=" + markerID);
 
-        return this.<String>deleteRequest(
+        return this.deleteRequest(
                 this.buildPath(parameters)
         );
     }
@@ -64,27 +64,28 @@ public class  LocationMarkerService extends BaseRemoteService
     // Reads the raw response data of the api response, from the get method, into the location marker of the api response.
     private ApiResponse<LocationMarker> readLocationMarkerDetailsFromRawResponse(ApiResponse<LocationMarker> apiResponse)
     {
-        String rawResponse = apiResponse.getRawResponse();
+        JSONObject rawJsonObject = this.rawResponseToJSONObject(apiResponse.getRawResponse());
+        //String rawResponse = apiResponse.getRawResponse();
 
-        if(rawResponse.length() > 0) {
-            JSONObject jsonObject = this.rawResponseToJSONObject(rawResponse);
+      //  if(rawResponse.length() > 0) {
+           // JSONObject jsonObject = this.rawResponseToJSONObject(rawResponse);
 
-            if(jsonObject != null)
+            if(rawJsonObject != null)
             {
-                apiResponse.setValidResponse(true);
-                apiResponse.setData(new LocationMarker().loadFromJson(jsonObject));
+                //apiResponse.setValidResponse(true);
+                apiResponse.setData(new LocationMarker().loadFromJson(rawJsonObject));
             }
-            else
-            {
-                apiResponse.setErrorMessage("JSONObject == null, in read location marker details from raw response method.");
-                apiResponse.setValidResponse(false);
-            }
-        }
-        else
-        {
-            apiResponse.setErrorMessage("Raw response is empty, in read location marker details from raw response method");
-            apiResponse.setValidResponse(false);
-        }
+          //  else
+          //  {
+          //      apiResponse.setErrorMessage("JSONObject == null, in read location marker details from raw response method.");
+           //     apiResponse.setValidResponse(false);
+           // }
+        //}
+      //  else
+       // {
+          //  apiResponse.setErrorMessage("Raw response is empty, in read location marker details from raw response method");
+           // apiResponse.setValidResponse(false);
+       // }
 
         return apiResponse;
     }
