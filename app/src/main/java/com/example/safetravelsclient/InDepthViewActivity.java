@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.safetravelsclient.WeatherListActivity;
@@ -64,7 +65,6 @@ public class InDepthViewActivity extends AppCompatActivity {
         this.setTemperatureHigh("91" + (char) 0x00B0 + "H"); // **********************************************************Delete This - Hardcoded value
         //this.setTemperatureLow(this.weather_data.getTemperatureLow() + (char) 0x00B0 + "L"); //*************************Uncomment This
         this.setTemperatureLow("32" + (char) 0x00B0 + "L"); // ***********************************************************Delete This - Hardcoded Value
-
     }
 
 
@@ -112,6 +112,7 @@ public class InDepthViewActivity extends AppCompatActivity {
         TextView temperatureLow = findViewById(R.id.lowTemperature);
         temperatureLow.setText(myTemperature);
     }
+
 }
 
 
