@@ -112,29 +112,29 @@ public class WeatherListAdapter extends ArrayAdapter<WeatherTransitionData>
         WeatherTransitionData subj = this.getItem(position);
         if (subj != null)
         {
-            TextView markerIdTextView = (TextView) view.findViewById(R.id.list_entry_id);
+            TextView markerIdTextView = view.findViewById(R.id.list_entry_id);
             if (markerIdTextView != null)
             {
                 markerIdTextView.setText(Integer.toString(subj.getMarkerId()));
             }
 
-            TextView locationTextView = (TextView) view.findViewById(R.id.list_entry_location);
+            TextView locationTextView = view.findViewById(R.id.list_entry_location);
             if (locationTextView != null)
             {
                 locationTextView.setText(subj.getLocation());
             }
 
-            TextView tempTextView = (TextView) view.findViewById(R.id.list_entry_temperature);
+            TextView tempTextView = view.findViewById(R.id.list_entry_temperature);
             if (tempTextView != null)
             {
                 tempTextView.setText(subj.getTemperature());
             }
-            TextView precTextView = (TextView) view.findViewById(R.id.list_entry_precipitation);
+            TextView precTextView = view.findViewById(R.id.list_entry_precipitation);
             if (precTextView != null)
             {
                 precTextView.setText(subj.getPrecipitation());
             }
-            TextView windTextView = (TextView) view.findViewById(R.id.list_entry_wind_velocity);
+            TextView windTextView = view.findViewById(R.id.list_entry_wind_velocity);
             if (windTextView != null)
             {
                 windTextView.setText(subj.getWindVelocity());

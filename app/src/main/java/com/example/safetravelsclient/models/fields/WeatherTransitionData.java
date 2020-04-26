@@ -105,7 +105,7 @@ public class WeatherTransitionData
     public String packageStrings()
     {
         String out = "";
-        out = out + Integer.toString(this.marker_id) + ", ";
+        out = out + this.marker_id + ", ";
         out = out + this.location + ", ";
         out = out + this.temperature + ", ";
         out = out + this.temperature_high + ", ";
