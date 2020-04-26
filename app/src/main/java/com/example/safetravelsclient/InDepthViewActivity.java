@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -16,7 +17,7 @@ import com.example.safetravelsclient.models.transition.WeatherDataTransition;
 public class InDepthViewActivity extends AppCompatActivity {
 
     String myLocation = "Springdale, AR";
-    String myDescription = "Sunny";
+    String myDescription = "Cloudy";
     String myWindValue = "NNW 15mph";
     String myPrecipitation = "23%";
     String myHumidity = "24%";
@@ -52,7 +53,7 @@ public class InDepthViewActivity extends AppCompatActivity {
         this.weather_data = this.weather_transition.getMarkerData();
         this.setLocation(this.weather_data.getLocation());
         //this.setWeatherDescription(this.weather_data.getDescription()); // ***********************Uncomment this
-        this.setWeatherDescription("Partly Cloudy"); // ****************************************************Delete This - Hardcoded value
+        this.setWeatherDescription("Thunderstorm"); // ****************************************************Delete This - Hardcoded value
         //this.setWind(this.weather_data.getWindVelocity() + "mph"); //*************************************Uncomment This
         this.setWind("15 mph");//********************************************************************Delete This - Hardcoded value
         //this.setPrecipitation(this.weather_data.getPrecipitation() + "%"); //*****************************Uncomment This
@@ -76,6 +77,7 @@ public class InDepthViewActivity extends AppCompatActivity {
     public void setWeatherDescription(String myDescription){
         TextView weatherDescription = findViewById(R.id.weatherDescription);
         weatherDescription.setText(myDescription);
+        this.setWeatherImage(myDescription);
     }
 
     public void setWind(String myWind){
@@ -111,6 +113,51 @@ public class InDepthViewActivity extends AppCompatActivity {
     public void setTemperatureLow(String myTemperature){
         TextView temperatureLow = findViewById(R.id.lowTemperature);
         temperatureLow.setText(myTemperature);
+    }
+
+    public void setWeatherImage(String weatherDescription)
+    {
+        ImageView weatherImage = (ImageView) findViewById(R.id.weatherImage);
+
+        if(weatherDescription == "Cloudy")
+        {
+            weatherImage.setImageResource(R.drawable.cloudy);
+
+        }
+        else if(weatherDescription == "Fog")
+        {
+            weatherImage.setImageResource(R.drawable.fog);
+
+        }
+        else if(weatherDescription == "Partly Cloudy")
+        {
+            weatherImage.setImageResource(R.drawable.partly_cloudy);
+
+        }
+        else if(weatherDescription == "Rainy")
+        {
+            weatherImage.setImageResource(R.drawable.rainy);
+
+        }
+        else if(weatherDescription == "Snowy")
+        {
+            weatherImage.setImageResource(R.drawable.snowy);
+
+        }
+        else if(weatherDescription == "Sunny")
+        {
+            weatherImage.setImageResource(R.drawable.sunny1);
+
+        }
+        else if(weatherDescription == "Thunderstorm")
+        {
+            weatherImage.setImageResource(R.drawable.thunderstorm);
+        }
+        else
+        {
+            weatherImage.setImageResource(R.drawable.logo);
+        }
+
     }
 
 }
