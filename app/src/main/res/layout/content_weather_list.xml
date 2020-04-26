@@ -11,8 +11,14 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:focusable="false"
     android:focusableInTouchMode="false"
-    tools:context="com.example.safetravelsclient.models.WeatherListActivity"
+    tools:context="com.example.safetravelsclient.WeatherListActivity"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <TextView
+        android:layout_below="@id/content_weather_listing"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        />
 
     <ListView
         android:id="@+id/content_weather_listing"
@@ -22,9 +28,11 @@
         android:headerDividersEnabled="false"
         android:footerDividersEnabled="true"
         android:divider="@drawable/list_view_divider"
-        android:dividerHeight="1px"
+        android:dividerHeight="3dp"
         android:focusable="false"
         android:focusableInTouchMode="false"
+        android:background="#2b2b2b"
+
         android:descendantFocusability="blocksDescendants">
     </ListView>
 

@@ -1,8 +1,10 @@
 package com.example.safetravelsclient;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -14,12 +16,15 @@ import android.widget.Button;
 import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import com.example.safetravelsclient.InDepthViewActivity;
 import com.example.safetravelsclient.MapsActivity;
 import com.example.safetravelsclient.R;
 import com.example.safetravelsclient.models.adapter.WeatherListAdapter;
 import com.example.safetravelsclient.models.fields.WeatherTransitionData;
+import com.example.safetravelsclient.models.services.LocationMarker;
+import com.example.safetravelsclient.models.services.LocationMarkerService;
 import com.example.safetravelsclient.models.transition.WeatherDataTransition;
 import com.example.safetravelsclient.models.fields.WeatherListSubjectData;
 
@@ -31,6 +36,7 @@ public class WeatherListActivity extends AppCompatActivity
     private static final String TAG = "WeatherListActivity";
     private static final int NUM_VALUES = 4;
     private WeatherListAdapter weather_list_adapter;
+    private LocationMarkerService location_service;
     //private List<WeatherListSubjectData> weather_list;
     private List<WeatherTransitionData> weather_list;
      ArrayList<WeatherDataTransition> incoming_list;
@@ -39,6 +45,7 @@ public class WeatherListActivity extends AppCompatActivity
     Button back_button;
 
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -65,8 +72,9 @@ public class WeatherListActivity extends AppCompatActivity
                 //startActivityOnClick(view);
             }
         });
-
+        this.location_service = new LocationMarkerService();
         this.list_view = this.getWeatherListView();
+        this.list_view.setBackgroundColor(getColor(R.color.colorListView));
         //this.weather_list = new ArrayList<WeatherListSubjectData>();
         this.weather_list = new ArrayList<WeatherTransitionData>();
         //this.transition_data = new ArrayList<WeatherTransitionData>();
@@ -114,18 +122,19 @@ public class WeatherListActivity extends AppCompatActivity
         });
         List<String[]> test_entries = populateListTest();
         //for(String[] entry:test_entries)
-        for(int i = 0; i < test_entries.size(); i++)
+        /*for(int i = 0; i < test_entries.size(); i++)
         {
             String loc = test_entries.get(i)[0];
-            String temp = test_entries.get(i)[1];
-            String prec = test_entries.get(i)[2];
-            String wind =  test_entries.get(i)[3];
+            String temp = test_entries.get(i)[1] + " \u2109";
+            String prec = test_entries.get(i)[2] + "%";
+            String wind =  test_entries.get(i)[3] + "mph";
             //System.out.println(loc + ", " + temp + ", " + prec + ", " + wind);
             WeatherTransitionData add = new WeatherTransitionData(i, loc, temp, prec, wind);
             this.weather_list.add(add);
             //this.weather_list_adapter.add(add);
             //_adapter.add(add);
-        }
+        }*/
+        this.fetchFromServer();
 
         //Log.d("MyApp", "HERE END");
         this.weather_list_adapter.notifyDataSetChanged();
@@ -169,6 +178,21 @@ public class WeatherListActivity extends AppCompatActivity
                 startActivity(intent);
             }
         });*/
+    }
+
+    public List<String[]> fetchFromServer()
+    {
+        List<String[]> out = new ArrayList<String[]>();
+        LocationMarker marker = new LocationMarker();
+        String id = "00000000000000000000000000000000";
+        //String id = "1";
+        UUID userID = new UUID(Long.parseLong(id.substring(0,16)),Long.parseLong(id.substring(16,32)));
+        //userID.
+        marker = this.location_service.getLocationMarker(userID ,50).getData();
+        //marker = this.location_service.getLocationMarker(1).getData();
+        //if(marker.getTemperature() == null) {Log.d("log: ", "Temperature- null" );}
+        this.weather_list.add(new WeatherTransitionData(marker));
+        return out;
     }
 
     public List<String[]> populateListTest()

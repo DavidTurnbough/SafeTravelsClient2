@@ -1,5 +1,6 @@
 package com.example.safetravelsclient.models.fields;
 
+import com.example.safetravelsclient.models.services.LocationMarker;
 import com.example.safetravelsclient.models.transition.WeatherDataTransition;
 
 public class WeatherTransitionData
@@ -29,6 +30,20 @@ public class WeatherTransitionData
         this.wind_velocity = "";
         this.wind_direction = "";
         this.image = "";
+    }
+
+    public WeatherTransitionData(LocationMarker marker)
+    {
+        this.marker_id = marker.getMarkerID();
+        this.location = marker.getLocation();
+        this.temperature = Integer.toString(marker.getTemperature());
+        this.temperature_high = Integer.toString(marker.getTemperatureHigh());
+        this.temperature_low = Integer.toString(marker.getTemperatureLow());
+        this.precipitation = Integer.toString(marker.getPrecipitationChance());
+        this.humidity = Integer.toString(marker.getHumidity());
+        this.description = marker.getWeatherDescription();
+        this.wind_velocity = marker.getWindVelocity();
+        this.wind_direction = "";
     }
 
     public WeatherTransitionData(int id, String loc, String temp, String prec, String wind)

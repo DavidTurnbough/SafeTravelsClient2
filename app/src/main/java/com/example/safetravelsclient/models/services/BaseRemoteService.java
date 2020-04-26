@@ -118,16 +118,21 @@ public abstract class BaseRemoteService
         try {
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
+            conn.setDoInput(true);
+            conn.setRequestMethod(GET_REQUEST_METHOD);
+            conn.setRequestProperty(ACCEPT_REQUEST_PROPERTY, JSON_PAYLOAD_TYPE);
             int responseCode = conn.getResponseCode();
 
             if(this.isValidResponse(responseCode)) {
 
                 apiResponse.setValidResponse(true);
 
-                conn.setRequestMethod(GET_REQUEST_METHOD);
+                /*conn.setRequestMethod(GET_REQUEST_METHOD);
+                //conn.setRequestMethod(GET_REQUEST_METHOD);
 
-                conn.addRequestProperty(ACCEPT_REQUEST_PROPERTY, JSON_PAYLOAD_TYPE);
+                //conn.addRequestProperty(ACCEPT_REQUEST_PROPERTY, JSON_PAYLOAD_TYPE);
+                conn.setRequestProperty(ACCEPT_REQUEST_PROPERTY, JSON_PAYLOAD_TYPE);
+                //conn.setRequestProperty(CONTENT_TYPE_REQUEST_PROPERTY, JSON_PAYLOAD_TYPE);*/
 
                 BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
