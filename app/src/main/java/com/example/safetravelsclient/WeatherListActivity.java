@@ -9,6 +9,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -40,8 +41,9 @@ public class WeatherListActivity extends AppCompatActivity
     private LocationMarkerService location_service;
     //private List<WeatherListSubjectData> weather_list;
     private List<WeatherTransitionData> weather_list;
+  //  public WeatherDataTransition weatherDataTransition[]
      ArrayList<WeatherDataTransition> incoming_list;
-    //private List<WeatherTransitionData> transition_data;
+    public Parcelable[] transition_data = new WeatherDataTransition[10];
     private ListView list_view;
     Button back_button;
 
@@ -53,10 +55,16 @@ public class WeatherListActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         Log.d("MyApp", "HERE WE GO");
 
-        incoming_list = getIntent().getParcelableArrayListExtra("WeatherData");
+        Bundle bundle = this.getIntent().getExtras();
+        if (bundle != null)
+        {
+            transition_data = bundle.getParcelableArray("WeatherData");
+        }
+        //incoming_list = getIntent().getParcelableExtra("WeatherData");
+       // this.weather_transition = getIntent().getParcelableArrayListExtra("WeatherData");
+       // incoming_list = getIntent().getBundleExtra("WeatherData");
 
-
-        System.out.println("Lsit Size: " + incoming_list.size());
+        //System.out.println("Lsit Size: " + incoming_list.size());
         this.weather_transition = this.getIntent().getParcelableExtra(this.getString(R.string.intent_weather_data));
 
         //    = bundle.getParcelable("WeatherData");

@@ -203,9 +203,9 @@ public abstract class BaseRemoteService
 
 
             // System.out.println("Response Code: " + httpURLConnection.getErrorStream());
-             //InputStream response = httpURLConnection.getErrorStream();
+             InputStream response = httpURLConnection.getErrorStream();
             //String result =
-            InputStream response = httpURLConnection.getInputStream();
+           // InputStream response = httpURLConnection.getInputStream();
             // int status = httpURLConnection.getResponseCode();
             //  if (response == null)
             //  {
