@@ -1,22 +1,23 @@
 package com.example.safetravelsclient.models.services;
 
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import com.example.safetravelsclient.models.interfaces.PathElementInterface;
+
 
 public abstract class BaseRemoteService
 {
@@ -257,38 +258,49 @@ public abstract class BaseRemoteService
             return apiResponse;
         }
 
+        HttpURLConnection httpURLConnection = null;
+        StringBuilder rawResponse = new StringBuilder();
+
         try {
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
-            int responseCode = conn.getResponseCode();
+            httpURLConnection = (HttpURLConnection) url.openConnection();
+            httpURLConnection.setRequestMethod(DELETE_REQUEST_METHOD);
 
-            if(this.isValidResponse(responseCode))
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
+
+            char[] buffer = new char[1024];
+            int readCharacters = bufferedReader.read(buffer, 0, buffer.length);
+
+            while(readCharacters > 0)
             {
-                apiResponse.setValidResponse(true);
-
-                conn.setRequestMethod(DELETE_REQUEST_METHOD);
-                conn.setDoOutput(true);
-
-                conn.connect();
-
-                //***********
-                // Not finished yet.
-                //**********
-
-                conn.disconnect();
+                rawResponse.append(buffer, 0, readCharacters);
+                readCharacters = bufferedReader.read(buffer, 0, buffer.length);
             }
-            else
-            {
-                apiResponse.setValidResponse(false);
-                apiResponse.setErrorMessage("Invalid response code in delete request method.");
-            }
+
+            apiResponse.setValidResponse(
+                    this.isValidResponse(
+                            httpURLConnection.getResponseCode()
+                    )
+            );
+
+            bufferedReader.close();
         }
         catch(IOException e)
         {
             e.printStackTrace();
+
+            apiResponse.setValidResponse(false);
+            apiResponse.setErrorMessage(e.getMessage());
+        }
+        finally
+        {
+            if(httpURLConnection != null)
+            {
+                httpURLConnection.disconnect();
+            }
         }
 
-        return apiResponse;
+        return apiResponse.setRawResponse(rawResponse.toString());
     }
 
     public JSONObject rawResponseToJSONObject(String rawResponse)
