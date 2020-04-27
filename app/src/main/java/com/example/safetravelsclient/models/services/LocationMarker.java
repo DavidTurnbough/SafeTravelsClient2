@@ -32,16 +32,16 @@ public class LocationMarker {
     //**********
     public LocationMarker()
     {
-        this.userID = new UUID(3,4);
+        this.userID =  UUID.randomUUID();
         //this.userID = "00000000-0000-0000-0000-000000000001";
         this.markerID = 0;
         this.latitude = 0;
         this.longitude = 0;
-      //  this.temperature = 0;
+        this.temperature = 0;
        // this.humidity = 0;
         //this.temperatureHigh = 0;
       //  this.temperatureLow = 0;
-        //this.precipitationChance = 0;
+        this.precipitationChance = 0;
         this.location = "location";
       //  this.weatherDescription = "";
      //   this.windVelocity = "";
@@ -120,20 +120,20 @@ public class LocationMarker {
         this.longitude = longitude;
     }
 
-   // public void setTemperature(int temperature)
-   // {
-    //    this.temperature = temperature;
-   // }
+   public void setTemperature(int temperature)
+    {
+        this.temperature = temperature;
+    }
 
     public void setArrivalTime(Date arrivalTime)
     {
         this.arrivalTime = arrivalTime;
     }
 
-  //  public void setPrecipitationChance(int precipitationChance)
-    //{
-     //   this.precipitationChance = precipitationChance;
-   // }
+    public void setPrecipitationChance(int precipitationChance)
+    {
+        this.precipitationChance = precipitationChance;
+    }
 
     public void setLocation(String location)
     {
@@ -179,9 +179,9 @@ public class LocationMarker {
             jsonObject.put(LocationMarkerInformation.ARRIVAL_TIME.getInformation(), (new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S", Locale.US)).format(this.arrivalTime));
             jsonObject.put(LocationMarkerInformation.LATITUDE.getInformation(), this.latitude);
             jsonObject.put(LocationMarkerInformation.LONGITUDE.getInformation(), this.longitude);
-            //jsonObject.put(LocationMarkerInformation.TEMPERATURE.getInformation(), this.temperature);
+           // jsonObject.put(LocationMarkerInformation.TEMPERATURE.getInformation(), this.temperature);
             jsonObject.put(LocationMarkerInformation.LOCATION.getInformation(), this.location);
-            //jsonObject.put(LocationMarkerInformation.PRECIPITATION_CHANCE.getInformation(), this.precipitationChance);
+           // jsonObject.put(LocationMarkerInformation.PRECIPITATION_CHANCE.getInformation(), this.precipitationChance);
         }
         catch(JSONException e)
         {
