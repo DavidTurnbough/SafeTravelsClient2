@@ -26,6 +26,13 @@ public class WeatherDataTransition implements Parcelable
         //this.marker_id = -1;
     }
 
+    public WeatherDataTransition(UUID u_id, WeatherTransitionData weather_data)
+    {
+        this.user_id = u_id;
+        this.marker_data = new WeatherTransitionData(weather_data);
+        this.marker_id = -1;
+    }
+
     public WeatherDataTransition(WeatherTransitionData weather_data)
     {
         this.user_id = new UUID(0,0);
@@ -73,6 +80,7 @@ public class WeatherDataTransition implements Parcelable
         this.marker_data.setWindVelocity(weatherDataParcel.readString());
         this.marker_data.setWindDirection(weatherDataParcel.readString());
         this.marker_data.setArrivalTime(weatherDataParcel.readString());
+        this.marker_data.setImage(weatherDataParcel.readString());
     }
 
     public WeatherTransitionData getMarkerData() {return this.marker_data;}
@@ -135,6 +143,7 @@ public class WeatherDataTransition implements Parcelable
         destination.writeString(marker_data.getWindVelocity());
         destination.writeString(marker_data.getWindDirection());
         destination.writeString(marker_data.getArrivalTime());
+        destination.writeString(marker_data.getImage());
     }
 
 

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
@@ -112,10 +113,55 @@ public class WeatherListAdapter extends ArrayAdapter<WeatherTransitionData>
         WeatherTransitionData subj = this.getItem(position);
         if (subj != null)
         {
-            TextView markerIdTextView = view.findViewById(R.id.list_entry_id);
-            if (markerIdTextView != null)
+            //TextView markerIdTextView = view.findViewById(R.id.list_entry_id);
+            ImageView image_view = view.findViewById(R.id.list_entry_img);
+            //if (markerIdTextView != null)
+            String weatherDescription = subj.getImage();
+            if(image_view != null)
             {
-                markerIdTextView.setText(Integer.toString(subj.getMarkerId()));
+
+                if(weatherDescription == "Cloudy")
+                {
+                    image_view.setImageResource(R.drawable.cloudy);
+
+                }
+                else if(weatherDescription == "Fog")
+                {
+                    image_view.setImageResource(R.drawable.fog);
+
+                }
+                else if(weatherDescription == "Partly Cloudy")
+                {
+                    image_view.setImageResource(R.drawable.partly_cloudy);
+
+                }
+                else if(weatherDescription == "Rainy")
+                {
+                    image_view.setImageResource(R.drawable.rainy);
+
+                }
+                else if(weatherDescription == "Snowy")
+                {
+                    image_view.setImageResource(R.drawable.snowy);
+
+                }
+                else if(weatherDescription == "Sunny")
+                {
+                    image_view.setImageResource(R.drawable.sunny1);
+
+                }
+                else if(weatherDescription == "Thunderstorm")
+                {
+                    image_view.setImageResource(R.drawable.thunderstorm);
+                }
+                else
+                {
+                    image_view.setImageResource(R.drawable.logo);
+                }
+                //markerIdTextView.setText(Integer.toString(subj.getMarkerId()));
+                //String image_name = subj.getImage();
+                //image_view.setImageDrawable(R.drawable.image_name);
+                //image_view.setImageResource()
             }
 
             TextView locationTextView = view.findViewById(R.id.list_entry_location);
