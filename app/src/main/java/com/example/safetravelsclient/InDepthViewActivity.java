@@ -21,7 +21,7 @@ public class InDepthViewActivity extends AppCompatActivity {
     String myWindValue = "NNW 15mph";
     String myPrecipitation = "23%";
     String myHumidity = "24%";
-    String myDate = "Mon Feb 02, 2020";
+    String myDate = "Mon Feb 04, 2020";
     String myTemperature = "74";
     String myTemperatureHigh = "95";
     String myTemperatureLow = "8";
