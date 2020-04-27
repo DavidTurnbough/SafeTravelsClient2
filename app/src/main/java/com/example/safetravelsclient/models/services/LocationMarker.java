@@ -34,18 +34,19 @@ public class LocationMarker {
     //**********
     public LocationMarker()
     {
-        this.userID = new UUID(0,0);
+        this.userID = new UUID(3,4);
+        //this.userID = "00000000-0000-0000-0000-000000000001";
         this.markerID = 0;
         this.latitude = 0;
         this.longitude = 0;
-        this.temperature = 0;
-        this.humidity = 0;
-        this.temperatureHigh = 0;
-        this.temperatureLow = 0;
-        this.precipitationChance = 0;
+      //  this.temperature = 0;
+       // this.humidity = 0;
+        //this.temperatureHigh = 0;
+      //  this.temperatureLow = 0;
+        //this.precipitationChance = 0;
         this.location = "location";
-        this.weatherDescription = "";
-        this.windVelocity = "";
+      //  this.weatherDescription = "";
+     //   this.windVelocity = "";
         this.arrivalTime = new Date();
     }
 
@@ -121,50 +122,50 @@ public class LocationMarker {
         this.longitude = longitude;
     }
 
-    public void setTemperature(int temperature)
-    {
-        this.temperature = temperature;
-    }
+   // public void setTemperature(int temperature)
+   // {
+    //    this.temperature = temperature;
+   // }
 
     public void setArrivalTime(Date arrivalTime)
     {
         this.arrivalTime = arrivalTime;
     }
 
-    public void setPrecipitationChance(int precipitationChance)
-    {
-        this.precipitationChance = precipitationChance;
-    }
+  //  public void setPrecipitationChance(int precipitationChance)
+    //{
+     //   this.precipitationChance = precipitationChance;
+   // }
 
     public void setLocation(String location)
     {
         this.location = location;
     }
 
-    public void setHumidity(int humidity)
-    {
-        this.humidity = humidity;
-    }
+  //  public void setHumidity(int humidity)
+   // {
+    //    this.humidity = humidity;
+   // }
 
-    public void setTemperatureHigh(int temperatureHigh)
-    {
-        this.temperatureHigh = temperatureHigh;
-    }
+   // public void setTemperatureHigh(int temperatureHigh)
+  //  {
+   //     this.temperatureHigh = temperatureHigh;
+   // }
 
-    public void setTemperatureLow(int temperatureLow)
-    {
-        this.temperatureLow = temperatureLow;
-    }
+   // public void setTemperatureLow(int temperatureLow)
+   // {
+    //    this.temperatureLow = temperatureLow;
+    //}
 
-    public void setWeatherDescription(String weatherDescription)
-    {
-        this.weatherDescription = weatherDescription;
-    }
+ //   public void setWeatherDescription(String weatherDescription)
+  //  {
+   //     this.weatherDescription = weatherDescription;
+   // }
 
-    public void setWindVelocity(String windVelocity)
-    {
-        this.windVelocity = windVelocity;
-    }
+   // public void setWindVelocity(String windVelocity)
+   // {
+    //    this.windVelocity = windVelocity;
+   // }
 
     //**********
     // Other Methods.
@@ -218,10 +219,11 @@ public class LocationMarker {
                 }
             }
 
-            this.longitude = rawJsonObject.getDouble(LocationMarkerInformation.LONGITUDE.getInformation());
-            this.latitude = rawJsonObject.getDouble(LocationMarkerInformation.LATITUDE.getInformation());
-            this.location = rawJsonObject.getString(LocationMarkerInformation.LOCATION.getInformation());
-
+            if(temp.length() > 0) {
+                this.longitude = rawJsonObject.getDouble(LocationMarkerInformation.LONGITUDE.getInformation());
+                this.latitude = rawJsonObject.getDouble(LocationMarkerInformation.LATITUDE.getInformation());
+                this.location = rawJsonObject.getString(LocationMarkerInformation.LOCATION.getInformation());
+            }
             //**********
             // Not currently passed from the server.
             //**********

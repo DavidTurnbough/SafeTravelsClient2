@@ -4,7 +4,9 @@ package com.example.safetravelsclient;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Address;
 import android.location.Criteria;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.content.Intent;
@@ -12,8 +14,18 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import com.example.safetravelsclient.models.fields.WeatherTransitionData;
+//import com.android.volley.toolbox.Volley;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+//import com.android.volley.toolbox.JsonObjectRequest;
+
 //import android.support.annotation.Nullable;
 //import android.support.v7.app.AppCompatActivity;
+import android.os.Parcelable;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.Gravity;
@@ -25,53 +37,61 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 
+import com.android.volley.toolbox.Volley;
 import com.example.safetravelsclient.models.HttpDataHandler;
 import com.example.safetravelsclient.models.TaskLoadedCallback;
-import com.example.safetravelsclient.WeatherListActivity;
+import com.example.safetravelsclient.models.adapter.WeatherListAdapter;
+import com.example.safetravelsclient.models.fields.WeatherTransitionData;
 import com.example.safetravelsclient.models.services.ApiResponse;
 import com.example.safetravelsclient.models.services.LocationMarker;
 import com.example.safetravelsclient.models.services.LocationMarkerService;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.example.safetravelsclient.models.FetchURL;
-import com.example.safetravelsclient.models.services.LocationMarker;
 
 import com.example.safetravelsclient.models.transition.WeatherDataTransition;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.ListIterator;
+import java.util.Locale;
 import java.util.UUID;
 
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, TaskLoadedCallback, LocationListener {
-    ArrayList <LatLng> markers = new ArrayList<>();
+    ArrayList<LatLng> markers = new ArrayList<>();
 
     private WeatherDataTransition weatherDataTransition;
     int destCheck = 0;
     private GoogleMap mMap;
     private MarkerOptions place1, place2;
+
+    private Date arrivalTime;
+    private String location;
 
     private LocationManager locationManager;
     private String provider;
@@ -80,7 +100,134 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private final int FINE_LOCATION_PERMISSION = 9999;
 
     Button to_weather_list;
+    private WeatherListAdapter weather_list_adapter;
+    //private List<WeatherListSubjectData> weather_list;
+   //  ArrayList<WeatherDataTransition> weather_list;
+    ArrayList<WeatherDataTransition> transition_weather = new ArrayList<WeatherDataTransition>() {
+        @Override
+        public int size() {
+            return 0;
+        }
 
+        @Override
+        public boolean isEmpty() {
+            return false;
+        }
+
+        @Override
+        public boolean contains(@Nullable Object o) {
+            return false;
+        }
+
+        @NonNull
+        @Override
+        public Iterator<WeatherDataTransition> iterator() {
+            return null;
+        }
+
+        @Nullable
+        @Override
+        public Object[] toArray() {
+            return new Object[0];
+        }
+
+        @Override
+        public <T> T[] toArray(@Nullable T[] a) {
+            return null;
+        }
+
+        @Override
+        public boolean add(WeatherDataTransition weatherDataTransition) {
+            return false;
+        }
+
+        @Override
+        public boolean remove(@Nullable Object o) {
+            return false;
+        }
+
+        @Override
+        public boolean containsAll(@NonNull Collection<?> c) {
+            return false;
+        }
+
+        @Override
+        public boolean addAll(@NonNull Collection<? extends WeatherDataTransition> c) {
+            return false;
+        }
+
+        @Override
+        public boolean addAll(int index, @NonNull Collection<? extends WeatherDataTransition> c) {
+            return false;
+        }
+
+        @Override
+        public boolean removeAll(@NonNull Collection<?> c) {
+            return false;
+        }
+
+        @Override
+        public boolean retainAll(@NonNull Collection<?> c) {
+            return false;
+        }
+
+        @Override
+        public void clear() {
+
+        }
+
+        @Override
+        public WeatherDataTransition get(int index) {
+            return null;
+        }
+
+        @Override
+        public WeatherDataTransition set(int index, WeatherDataTransition element) {
+            return null;
+        }
+
+        @Override
+        public void add(int index, WeatherDataTransition element) {
+
+        }
+
+        @Override
+        public WeatherDataTransition remove(int index) {
+            return null;
+        }
+
+        @Override
+        public int indexOf(@Nullable Object o) {
+            return 0;
+        }
+
+        @Override
+        public int lastIndexOf(@Nullable Object o) {
+            return 0;
+        }
+
+        @NonNull
+        @Override
+        public ListIterator<WeatherDataTransition> listIterator() {
+            return null;
+        }
+
+        @NonNull
+        @Override
+        public ListIterator<WeatherDataTransition> listIterator(int index) {
+            return null;
+        }
+
+        @NonNull
+        @Override
+        public List<WeatherDataTransition> subList(int fromIndex, int toIndex) {
+            return null;
+        }
+    };
+
+
+    int markerPointer = 0;
+    TextView temp_text;
     Toolbar toolbar;
     int markerId = 1;
     Button getDirection;
@@ -103,10 +250,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
+        // new getWeather().execute();
 
 
-       // this.to_weather_list = findViewById(R.id.button_to_weather_list);
 
+
+
+        //this.weather_list = new ArrayList<WeatherDataTransition>();
+
+
+
+
+
+        // this.to_weather_list = findViewById(R.id.button_to_weather_list);
 
 
         //   this.weatherDataTransition = this.getIntent().getParcelableExtra(this.getString(R.string.intent_extra_product));
@@ -114,7 +270,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 //        this.getExampleData().setText(this.weatherDataTransition.getMarkerId());
 
         button = findViewById(R.id.directions);
-
+        temp_text = findViewById(R.id.temp_text);
        /* this.to_weather_list.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -166,16 +322,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public void inDepthViewOnClick(View view) {
 
-        this.startActivity(new Intent(getApplicationContext(), WeatherListActivity.class));
-
-        /*Intent intent = new Intent(getApplicationContext(), InDepthViewActivity.class);
-
-        intent.putExtra(
-                getString(R.string.intent_extra_product),
-                new WeatherDataTransition()
-        );
-
-        this.startActivity(intent);*/
+      //  this.startActivity(new Intent(getApplicationContext(), WeatherListActivity.class));
+        System.out.println(transition_weather.size());
+        Intent intent = new Intent(getApplicationContext(), WeatherListActivity.class);
+      //  intent.putExtras()
+        intent.putParcelableArrayListExtra("WeatherData", transition_weather);
+        this.startActivity(intent);
     }
 
 
@@ -184,7 +336,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap = googleMap;
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
-        toolbar = (Toolbar) findViewById(R.id.toolbar1);
+        toolbar = findViewById(R.id.toolbar1);
         setSupportActionBar(toolbar);
         toolbar.setTitle(null);
         toolbar.setBackground(getResources().getDrawable(R.drawable.rounded_corners));
@@ -194,8 +346,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
-    private void getDeviceLocation()
-    {
+    private void getDeviceLocation() {
 
     }
 
@@ -212,16 +363,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         //getCords = findViewById(R.id.button3);
         getFrom = popUp.findViewById(R.id.editText);
         getTo = popUp.findViewById(R.id.editText2);
-        getDirection = (Button) popUp.findViewById(R.id.directions);
+        getDirection = popUp.findViewById(R.id.directions);
         checkLocation = popUp.findViewById(R.id.switch1);
 
-        if (initialSetup.equals(true))
-        {
+        if (initialSetup.equals(true)) {
             checkLocation.setChecked(true);
-        }
-
-        else
-        {
+        } else {
             getFrom.setText(fromText);
             getTo.setText(toText);
         }
@@ -242,15 +389,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
 
         checkLocation.setOnClickListener(new View.OnClickListener() {
-                                             @Override
-                                             public void onClick(View view) {
-                                                 if (checkLocation.isChecked()) {
-                                                     getFrom.setClickable(false);
-                                                 } else {
-                                                     getFrom.setClickable(true);
-                                                 }
-                                             }
-                                         });
+            @Override
+            public void onClick(View view) {
+                if (checkLocation.isChecked()) {
+                    getFrom.setClickable(false);
+                    location = "Current Location";
+                } else {
+                    getFrom.setClickable(true);
+                }
+            }
+        });
         getDirection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -266,8 +414,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
 
     }
-    public void startActivityOnClick(View view)
-    {
+
+    public void startActivityOnClick(View view) {
         this.startActivity(new Intent(this.getApplicationContext(), InDepthViewActivity.class));
     }
 
@@ -281,7 +429,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         lng = location.getLongitude();
         LatLng latLng = new LatLng(lat, lng);
         // mMap.addMarker(new MarkerOptions().position(latLng).title("My position"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        //  mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
     }
 
     @Override
@@ -309,13 +457,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onResume() {
         super.onResume();
+
+        //-----
+        //Check user lcoation for marker update
+        //------
+
         if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
         locationManager.requestLocationUpdates(provider, 400, 1, this);
     }
 
-    private class GetCoordinates extends AsyncTask<String,Void,String> {
+    private class GetCoordinates extends AsyncTask<String, Void, String> {
         ProgressBar bar = new ProgressBar(MapsActivity.this);
 
         @Override
@@ -324,28 +477,23 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             try {
                 String address = strings[0];
                 HttpDataHandler http = new HttpDataHandler();
-                String url = String.format("https://maps.googleapis.com/maps/api/geocode/json?address=%s",address + "&key=" + getString(R.string.google_maps_key));
+                String url = String.format("https://maps.googleapis.com/maps/api/geocode/json?address=%s", address + "&key=" + getString(R.string.google_maps_key));
                 response = http.getaHttpData(url);
                 return response;
-            }
-
-            catch (Exception ex) {
+            } catch (Exception ex) {
             }
             return null;
         }
 
         @Override
-        protected void onPreExecute()
-        {
+        protected void onPreExecute() {
             super.onPreExecute();
             // bar.set
         }
 
 
-
         @Override
-        protected void onPostExecute(String s)
-        {
+        protected void onPostExecute(String s) {
 
             s = "{   \"results\" : [      {         \"address_components\" : [            {               \"long_name\" : \"Tulsa\",               \"short_name\" : \"Tulsa\",               \"types\" : [ \"locality\", \"political\" ]            },            {               \"long_name\" : \"Tulsa County\",               \"short_name\" : \"Tulsa County\",               \"types\" : [ \"administrative_area_level_2\", \"political\" ]            },            {               \"long_name\" : \"Oklahoma\",               \"short_name\" : \"OK\",               \"types\" : [ \"administrative_area_level_1\", \"political\" ]            },            {               \"long_name\" : \"United States\",               \"short_name\" : \"US\",               \"types\" : [ \"country\", \"political\" ]            }         ],         \"formatted_address\" : \"Tulsa, OK, USA\",         \"geometry\" : {            \"bounds\" : {               \"northeast\" : {                  \"lat\" : 36.336506,                  \"lng\" : -95.6815429               },               \"southwest\" : {                  \"lat\" : 35.968097,                  \"lng\" : -96.074478               }            },            \"location\" : {               \"lat\" : 36.1539816,               \"lng\" : -95.99277500000001            },            \"location_type\" : \"APPROXIMATE\",            \"viewport\" : {               \"northeast\" : {                  \"lat\" : 36.336506,                  \"lng\" : -95.6815429               },               \"southwest\" : {                  \"lat\" : 35.968097,                  \"lng\" : -96.074478               }            }         },         \"place_id\" : \"ChIJjy7R3biStocR92rZG8gQaec\",         \"types\" : [ \"locality\", \"political\" ]      }   ],   \"status\" : \"OK\"}";
 
@@ -355,38 +503,32 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             try {
                 JSONObject jsonObject = new JSONObject(s);
 
-                String lat = ((JSONArray)jsonObject.get("results")).getJSONObject(0).getJSONObject("geometry")
+                String lat = ((JSONArray) jsonObject.get("results")).getJSONObject(0).getJSONObject("geometry")
                         .getJSONObject("location").get("lat").toString();
-                String lng = ((JSONArray)jsonObject.get("results")).getJSONObject(0).getJSONObject("geometry")
+                String lng = ((JSONArray) jsonObject.get("results")).getJSONObject(0).getJSONObject("geometry")
                         .getJSONObject("location").get("lng").toString();
 
-                if (destCheck == 0)
-                {
+                if (destCheck == 0) {
 
-                    place1 = new MarkerOptions().position(new LatLng(Double.parseDouble(lat),Double.parseDouble(lng))).title("Location 1");
+                    place1 = new MarkerOptions().position(new LatLng(Double.parseDouble(lat), Double.parseDouble(lng))).title("Location 1");
                     mMap.addMarker(place1);
                     destCheck++;
 
-                }
-                else
-                {
-                    place2 = new MarkerOptions().position(new LatLng(Double.parseDouble(lat),Double.parseDouble(lng))).title("Location 2");
+                } else {
+                    place2 = new MarkerOptions().position(new LatLng(Double.parseDouble(lat), Double.parseDouble(lng))).title("Location 2");
                     mMap.addMarker(place2);
                     destCheck++;
 
 
-
                 }
 
-                if (destCheck == 2)
-                {
+                if (destCheck == 2) {
                     new FetchURL(MapsActivity.this).execute(getUrl(place1.getPosition(), place2.getPosition(), "driving"), "driving");
 
                 }
 
                 // System.out.println("Cooridnates: " + lat + ", " + lng);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -426,25 +568,42 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         ArrayList responseArray = new ArrayList<ApiResponse>();
         // ApiResponse apiResponse = new ApiResponse<LocationMarker>();
 
-        for (int i = 0; i < markers.size(); i++)
-        {
+        for (int i = 0; i < markers.size(); i++) {
             LocationMarker locationMarker = createMarkerObject(markers.get(i));
 
             ApiResponse<LocationMarker> apiResponse = (
                     new LocationMarkerService().addLocationMarker(locationMarker)
 
             );
+            System.out.println(apiResponse.getRawResponse());
+            getWeather(markers.get(i).latitude,markers.get(i).longitude);
             markerId++;
+            markerPointer++;
         }
+
+
 
     }
 
-    public LocationMarker createMarkerObject(LatLng latLng)
-    {
+
+    public LocationMarker createMarkerObject(LatLng latLng) {
         LocationMarker locationMarker = new LocationMarker();
-        locationMarker.setLatitude((float)latLng.latitude);
-        locationMarker.setLongitude((float)latLng.longitude);
+        locationMarker.setLatitude((float) latLng.latitude);
+        Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+        try {
+            List<Address> listAddresses = geocoder.getFromLocation((float) latLng.latitude, (float) latLng.longitude, 1);
+            if (null != listAddresses && listAddresses.size() > 0) {
+                String _Location = listAddresses.get(0).getAddressLine(0);
+                locationMarker.setLocation(_Location);
+                //System.out.println("Address: " + _Location);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        locationMarker.setLongitude((float) latLng.longitude);
         locationMarker.setMarkerID(markerId);
+        //locationMarker.setArrivalTime(arrivalTime);
         //locationMarker.setUserID();
 
         return locationMarker;
@@ -452,20 +611,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
-    public ArrayList<LatLng> GetMarkers(List<LatLng> points)
-    {
+    public ArrayList<LatLng> GetMarkers(List<LatLng> points) {
         double totalDistance = 0;
-        for (int i = 0; i < points.size() - 1; i++)
-        {
+        for (int i = 0; i < points.size() - 1; i++) {
             String stringOne = points.get(i).toString();
-            String stringTwo = points.get(i+1).toString();
+            String stringTwo = points.get(i + 1).toString();
 
             LatLng valueOne = parseString(stringOne);
             LatLng valueTwo = parseString(stringTwo);
 
-            totalDistance = totalDistance + calculationByDistance(valueOne,valueTwo);
-            if (totalDistance >= 96.5606)
-            {
+            totalDistance = totalDistance + calculationByDistance(valueOne, valueTwo);
+            if (totalDistance >= 96.5606) {
                 markers.add(valueTwo);
                 MarkerOptions location = new MarkerOptions().position(valueTwo).title("Location");
                 mMap.addMarker(location);
@@ -477,12 +633,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         //System.out.println("The total distance is: " + totalDistance);
     }
 
-    public LatLng parseString(String value)
-    {
-        String values[];
+    public LatLng parseString(String value) {
+        String[] values;
 
-        value = value.replace("lat/lng: (","");
-        value = value.replace(")","");
+        value = value.replace("lat/lng: (", "");
+        value = value.replace(")", "");
 
         values = value.split(",");
 
@@ -517,4 +672,73 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         return Radius * c;
     }
+
+//http://api.openweathermap.org/data/2.5/weather?zip=64804,us&appid=6ca4e03fef7b04c1fb154a6cd7770d0c
+    private void getWeather(Double latitude, Double longitude) {
+
+        String url = String.format("https://api.openweathermap.org/data/2.5/weather?lat="+latitude+"&lon="+longitude+"&appid="+"6ca4e03fef7b04c1fb154a6cd7770d0c");
+
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            //JSONArray array = response.getJSONArray("list");
+                            //JSONObject object = response.getJSONObject("coord");
+                            JSONObject main = response.getJSONObject("main");
+                            JSONArray weatherArray = response.getJSONArray("weather");
+                            JSONObject weatherObject = weatherArray.getJSONObject(0);
+                            JSONObject wind = response.getJSONObject("wind");
+
+                            String weatherDescription = weatherObject.getString("description");
+                            int temp = main.getInt("temp");
+                            int tempHigh = main.getInt("temp_max");
+                            int tempLow = main.getInt("temp_min");
+                            int windSpeed = wind.getInt("speed");
+                            //int windDeg = wind.getInt("deg");
+                            int humidity = main.getInt("humidity");
+
+                            WeatherTransitionData weatherTransitionData = new WeatherTransitionData();
+                            weatherTransitionData.setDescription(weatherDescription);
+                            weatherTransitionData.setHumidity(String.valueOf(humidity));
+                            weatherTransitionData.setLocation("Location");
+                            weatherTransitionData.setTemperatureHigh(String.valueOf(tempHigh));
+                            weatherTransitionData.setTemperatureLow(String.valueOf(tempLow));
+                            weatherTransitionData.setWindDirection(String.valueOf(2));
+                            weatherTransitionData.setWindVelocity(String.valueOf(windSpeed));
+
+                            weatherTransitionData.setPrecipitation(String.valueOf(0));
+                            UUID id = new UUID(0,0);
+                            //weatherTransitionData.setId(id);
+                            //weatherTransitionData.setTime(String.valueOf(2));
+                            WeatherDataTransition weatherDataTransition = new WeatherDataTransition(weatherTransitionData);
+                            transition_weather.add(weatherDataTransition);
+
+                            System.out.println("Hello");
+                            // weather_list.add(weatherDataTransition);
+                           // weather_list.add(weatherDataTransitio
+                           // weather_list.add(weatherTransitionData);
+                          //  weather_list.add(weatherDataTransition);
+                           // System.out.println(weather_list);
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                            Log.e("ERROR", "Error occurred ", error);
+
+                        }
+                });
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(jsonObjectRequest);
+    }
 }
+

@@ -13,6 +13,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 import com.example.safetravelsclient.models.interfaces.PathElementInterface;
@@ -118,16 +119,21 @@ public abstract class BaseRemoteService
         try {
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
+            conn.setDoInput(true);
+            conn.setRequestMethod(GET_REQUEST_METHOD);
+            conn.setRequestProperty(ACCEPT_REQUEST_PROPERTY, JSON_PAYLOAD_TYPE);
             int responseCode = conn.getResponseCode();
 
             if(this.isValidResponse(responseCode)) {
 
                 apiResponse.setValidResponse(true);
 
-                conn.setRequestMethod(GET_REQUEST_METHOD);
+                /*conn.setRequestMethod(GET_REQUEST_METHOD);
+                //conn.setRequestMethod(GET_REQUEST_METHOD);
 
-                conn.addRequestProperty(ACCEPT_REQUEST_PROPERTY, JSON_PAYLOAD_TYPE);
+                //conn.addRequestProperty(ACCEPT_REQUEST_PROPERTY, JSON_PAYLOAD_TYPE);
+                conn.setRequestProperty(ACCEPT_REQUEST_PROPERTY, JSON_PAYLOAD_TYPE);
+                //conn.setRequestProperty(CONTENT_TYPE_REQUEST_PROPERTY, JSON_PAYLOAD_TYPE);*/
 
                 BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
@@ -176,10 +182,10 @@ public abstract class BaseRemoteService
         StringBuilder rawResponse = new StringBuilder();
 
         try {
-            byte[] serializedRequestObject = jsonObject.toString().getBytes(UTF8_CHARACTER_ENCODING);
+            byte[] serializedRequestObject = jsonObject.toString().getBytes(StandardCharsets.UTF_8);
 
             httpURLConnection = (HttpURLConnection) connectionUrl.openConnection();
-            //httpURLConnection.setDoInput(true);
+            httpURLConnection.setDoInput(true);
             httpURLConnection.setDoOutput(true);
             httpURLConnection.setFixedLengthStreamingMode(serializedRequestObject.length);
             httpURLConnection.setRequestMethod(requestType);
@@ -198,16 +204,16 @@ public abstract class BaseRemoteService
 
 
             // System.out.println("Response Code: " + httpURLConnection.getErrorStream());
-             InputStream response = httpURLConnection.getErrorStream();
+             //InputStream response = httpURLConnection.getErrorStream();
             //String result =
-            //InputStream response = httpURLConnection.getInputStream();
+            InputStream response = httpURLConnection.getInputStream();
             // int status = httpURLConnection.getResponseCode();
             //  if (response == null)
             //  {
             //     response = httpURLConnection.getInputStream();
             //  }
 
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(httpURLConnection.getErrorStream()));
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response));
 
             char[] buffer = new char[1024];
             int readCharacters = bufferedReader.read(buffer, 0, buffer.length);
@@ -303,13 +309,13 @@ public abstract class BaseRemoteService
 
         if(rawResponse.length() > 0)
         {
-            try
-            {
-                jsonObject = new JSONObject(rawResponse);
-            }
-            catch (JSONException e) {
-                e.printStackTrace();
-            }
+           // try
+           // {
+                //jsonObject = new JSONObject(rawResponse);
+           // }
+            //catch (JSONException e) {
+            //    e.printStackTrace();
+           // }
         }
 
         return jsonObject;

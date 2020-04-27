@@ -13,18 +13,18 @@
     <item android:state_focused="true">
         <shape android:shape="rectangle"  >
             <corners android:radius="2dip" />
-            <stroke android:width="0dip" android:color="#5e7974" />
+            <stroke android:width="0dip" android:color="#5169db" />
             <solid android:color="#AA66CC"/>
         </shape>
     </item>
     <item >
         <shape android:shape="rectangle"  >
             <corners android:radius="2dip" />
-            <stroke android:width="0dip" android:color="#5e7974" />
+            <stroke android:width="0dip" android:color="#5169db" />
             <gradient
                 android:angle="-90"
-                android:startColor="#AA66CC"
-                android:endColor="#942AC9" />
+                android:startColor="#5169db"
+                android:endColor="#2b2b2b" />
         </shape>
     </item>
 </selector>
