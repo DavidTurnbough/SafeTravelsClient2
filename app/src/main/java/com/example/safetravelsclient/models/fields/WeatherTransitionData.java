@@ -47,6 +47,7 @@ public class WeatherTransitionData
         this.wind_velocity = marker.getWindVelocity();
         this.wind_direction = "";
         this.arrival_time = marker.getArrivalTime().toString();
+
     }
 
     public WeatherTransitionData(int id, String loc, String temp, String prec, String wind)
@@ -62,9 +63,10 @@ public class WeatherTransitionData
         this.wind_velocity = wind;
         this.wind_direction = "";
         this.arrival_time = "";
+        this.image = "";
     }
 
-    public WeatherTransitionData(int id, String loc, String temp, String temp_high, String temp_low, String prec, String humi, String desc, String wind_v, String wind_d, String time)
+    public WeatherTransitionData(int id, String loc, String temp, String temp_high, String temp_low, String prec, String humi, String desc, String wind_v, String wind_d, String time, String _image)
     {
         this.marker_id = id;
         this.location = loc;
@@ -77,6 +79,7 @@ public class WeatherTransitionData
         this.wind_velocity = wind_v;
         this.wind_direction = wind_d;
         this.arrival_time = time;
+        this.image = _image;
     }
 
     public WeatherTransitionData(String loc, String temp, String prec, String img)
@@ -111,6 +114,7 @@ public class WeatherTransitionData
         this.wind_velocity = copy.getWindVelocity();
         this.wind_direction = copy.getWindDirection();
         this.arrival_time = copy.getArrivalTime();
+        this.image = copy.getImage();
     }
 
     public String packageStrings()
@@ -174,4 +178,11 @@ public class WeatherTransitionData
 
     public String getArrivalTime() {return this.arrival_time;}
     public void setArrivalTime(String time) {this.arrival_time = time;}
+
+    public String getImage() {return this.image;}
+    public void setImage(String _image) {this.image = _image;}
+
+
 }
+
+

@@ -57,7 +57,6 @@
             android:elevation="10dp"
             android:adjustViewBounds="true"
             android:src="@drawable/attempt1"
-            android:text="76°"
             android:textColor="@android:color/background_light"
             android:textSize="56sp" />
 

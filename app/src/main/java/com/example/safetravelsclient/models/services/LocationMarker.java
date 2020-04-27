@@ -32,8 +32,8 @@ public class LocationMarker {
     //**********
     public LocationMarker()
     {
-        this.userID =  UUID.randomUUID();
-        //this.userID = "00000000-0000-0000-0000-000000000001";
+       // this.userID =  UUID.randomUUID();
+        this.userID = new UUID(0,0);
         this.markerID = 0;
         this.latitude = 0;
         this.longitude = 0;
