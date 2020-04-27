@@ -127,7 +127,11 @@ public class WeatherDataTransition implements Parcelable
     public WeatherDataTransition setWindDirection(String w_d) {this.wind_direction = w_d; return this;}*/
 
     @Override
-    public int describeContents() {return 0;}
+    public int describeContents()
+    {
+        //return this;
+        return 0;
+    }
 
     @Override
     public void writeToParcel(Parcel destination, int flags) {
