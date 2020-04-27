@@ -89,7 +89,7 @@ public class WeatherListActivity extends AppCompatActivity
         //this.transition_data = new ArrayList<WeatherTransitionData>();
         this.weather_list_adapter = new WeatherListAdapter(this, R.layout.weather_list_entry_layout, this.weather_list);
         //int id, String loc, String temp, String temp_high, String temp_low, String prec, String humi, String desc, String wind_v, String wind_d
-        this.weather_list.add(new WeatherTransitionData(0, "Loc", "Temp", "TempH", "TempL", "Prec", "Humi", "Desc", "WindV", "WindD", "Time"));
+        this.weather_list.add(new WeatherTransitionData(0, "Loc", "Temp", "TempH", "TempL", "Prec", "Humi", "Desc", "WindV", "WindD", "Time", "Image"));
         this.list_view.setAdapter(weather_list_adapter);
         this.list_view.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
