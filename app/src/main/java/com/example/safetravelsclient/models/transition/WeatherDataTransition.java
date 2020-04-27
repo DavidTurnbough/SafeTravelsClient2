@@ -11,9 +11,9 @@ import java.util.UUID;
 
 public class WeatherDataTransition implements Parcelable
 {
-    private UUID id;
-    public UUID getId() {return this.id;}
-    public WeatherDataTransition setId(UUID id) {this.id = id; return this;}
+    private UUID user_id;
+    public UUID getUserId() {return this.user_id;}
+    public WeatherDataTransition setUserId(UUID id) {this.user_id = id; return this;}
     ArrayList<WeatherTransitionData> data_array;
     WeatherTransitionData marker_data;
     int marker_id;
@@ -22,11 +22,13 @@ public class WeatherDataTransition implements Parcelable
     {
         //this.data_array = new ArrayList<WeatherTransitionData>();
         this.marker_data = new WeatherTransitionData();
-        this.marker_id = -1;
+        this.user_id = new UUID(0,0);
+        //this.marker_id = -1;
     }
 
     public WeatherDataTransition(WeatherTransitionData weather_data)
     {
+        this.user_id = new UUID(0,0);
         this.marker_data = new WeatherTransitionData(weather_data);
         this.marker_id = -1;
     }
@@ -40,8 +42,9 @@ public class WeatherDataTransition implements Parcelable
             WeatherTransitionData next = iter.next();
             this.data_array.add(new WeatherTransitionData(next.getlocation(), next.getTemperature(), next.getTemperatureHigh(), next.getTemperatureLow(), next.getPrecipitation(), next.getHumidity(), next.getDescription(), next.getWindVelocity(), next.getWindDirection()));
         }*/
+        this.user_id = copy.getUserId();
         this.marker_data = new WeatherTransitionData(copy.getMarkerData());
-        this.marker_id = copy.getMarkerId();
+        //this.marker_id = copy.getMarkerId();
     }
 
 
@@ -58,6 +61,8 @@ public class WeatherDataTransition implements Parcelable
         destination.writeString(marker_data.getWindVelocity());
         destination.writeString(marker_data.getWindDirection());*/
         this.marker_data = new WeatherTransitionData();
+        String u_id = weatherDataParcel.readString();
+        this.user_id = UUID.fromString(u_id);
         this.marker_id = weatherDataParcel.readInt();
         this.marker_data.setLocation(weatherDataParcel.readString());
         this.marker_data.setTemperature(weatherDataParcel.readString());
@@ -67,6 +72,7 @@ public class WeatherDataTransition implements Parcelable
         this.marker_data.setDescription(weatherDataParcel.readString());
         this.marker_data.setWindVelocity(weatherDataParcel.readString());
         this.marker_data.setWindDirection(weatherDataParcel.readString());
+        this.marker_data.setArrivalTime(weatherDataParcel.readString());
     }
 
     public WeatherTransitionData getMarkerData() {return this.marker_data;}
@@ -76,7 +82,7 @@ public class WeatherDataTransition implements Parcelable
 
 
     //temp, prec, humid, desc, windvelocity, winddirection
-    String time;
+    /*String time;
     public String getTime() {return this.time;}
     public WeatherDataTransition setTime(String t) {this.time = t; return this;}
 
@@ -110,7 +116,7 @@ public class WeatherDataTransition implements Parcelable
 
     String wind_direction;
     public String getWindDirection() {return this.wind_direction;}
-    public WeatherDataTransition setWindDirection(String w_d) {this.wind_direction = w_d; return this;}
+    public WeatherDataTransition setWindDirection(String w_d) {this.wind_direction = w_d; return this;}*/
 
     @Override
     public int describeContents() {return 0;}
@@ -118,6 +124,7 @@ public class WeatherDataTransition implements Parcelable
     @Override
     public void writeToParcel(Parcel destination, int flags) {
         //destination.writeByteArray(())
+        destination.writeString(this.user_id.toString());
         destination.writeInt(marker_id);
         destination.writeString(marker_data.getLocation());
         destination.writeString(marker_data.getTemperature());
@@ -127,6 +134,7 @@ public class WeatherDataTransition implements Parcelable
         destination.writeString(marker_data.getDescription());
         destination.writeString(marker_data.getWindVelocity());
         destination.writeString(marker_data.getWindDirection());
+        destination.writeString(marker_data.getArrivalTime());
     }
 
 
