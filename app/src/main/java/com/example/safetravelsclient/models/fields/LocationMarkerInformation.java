@@ -6,7 +6,7 @@ public enum LocationMarkerInformation{
     MARKER_ID("MarkerID"),
     LATITUDE("Latitude"),
     LONGITUDE("Longitude"),
-    LOCATION("Location"),
+    LOCATION("location"),
     TEMPERATURE("Temperature"),
     PRECIPITATION_CHANCE("precipChance"),
     WEATHER_DESCRIPTION("weatherDescription"),

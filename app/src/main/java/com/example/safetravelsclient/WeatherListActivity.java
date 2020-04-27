@@ -23,6 +23,7 @@ import com.example.safetravelsclient.MapsActivity;
 import com.example.safetravelsclient.R;
 import com.example.safetravelsclient.models.adapter.WeatherListAdapter;
 import com.example.safetravelsclient.models.fields.WeatherTransitionData;
+import com.example.safetravelsclient.models.services.ApiResponse;
 import com.example.safetravelsclient.models.services.LocationMarker;
 import com.example.safetravelsclient.models.services.LocationMarkerService;
 import com.example.safetravelsclient.models.transition.WeatherDataTransition;
@@ -80,7 +81,7 @@ public class WeatherListActivity extends AppCompatActivity
         //this.transition_data = new ArrayList<WeatherTransitionData>();
         this.weather_list_adapter = new WeatherListAdapter(this, R.layout.weather_list_entry_layout, this.weather_list);
         //int id, String loc, String temp, String temp_high, String temp_low, String prec, String humi, String desc, String wind_v, String wind_d
-        this.weather_list.add(new WeatherTransitionData(0, "Loc", "Temp", "TempH", "TempL", "Prec", "Humi", "Desc", "WindV", "WindD"));
+        this.weather_list.add(new WeatherTransitionData(0, "Loc", "Temp", "TempH", "TempL", "Prec", "Humi", "Desc", "WindV", "WindD", "Time"));
         this.list_view.setAdapter(weather_list_adapter);
         this.list_view.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
@@ -138,46 +139,6 @@ public class WeatherListActivity extends AppCompatActivity
 
         //Log.d("MyApp", "HERE END");
         this.weather_list_adapter.notifyDataSetChanged();
-        //this.weather_list_adapter.
-        //ArrayList<WeatherListSubjectData> weather_list = new ArrayList<WeatherListSubjectData>();
-        //weather_list.add(new WeatherListSubjectData("Faye", "32", "10", "img"))
-        /*this.list_view.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
-            @Override
-            public void onItemClick(AdapterView<?> adapter, View view, int position, long id)
-            {
-                Log.d("MyApp", "INITEMCLICK");
-                WeatherTransitionData at_pos = (WeatherTransitionData)adapter.getItemAtPosition(position);
-                Intent intent = new Intent(getApplicationContext(), InDepthViewActivity.class);
-                //WeatherListSubjectData subject_at_position = getWeatherListView().getItemAtPosition(position);
-                //WeatherTransitionData data_at_position = transition_data.get()
-                /*this.marker_id = weatherDataParcel.readInt();
-                this.marker_data.setLocation(weatherDataParcel.readString());
-                this.marker_data.setTemperature(weatherDataParcel.readString());
-                this.marker_data.setTemperatureHigh(weatherDataParcel.readString());
-                this.marker_data.setTemperatureLow(weatherDataParcel.readString());
-                this.marker_data.setHumidity(weatherDataParcel.readString());
-                this.marker_data.setDescription(weatherDataParcel.readString());
-                this.marker_data.setWindVelocity(weatherDataParcel.readString());
-                this.marker_data.setWindDirection(weatherDataParcel.readString());*/
-                /*intent.p
-                intent.putExtra("Id", at_pos.getMarkerId());
-                intent.putExtra("Loc", at_pos.getlocation());
-                intent.putExtra("Temp", at_pos.getTemperature());
-                intent.putExtra("TempHigh", at_pos.getTemperatureHigh());
-                intent.putExtra("TempLow", at_pos.getTemperatureLow());
-                intent.putExtra("Humi", at_pos.getHumidity());
-                intent.putExtra("Desc", at_pos.getHumidity());
-                intent.putExtra("WindV", at_pos.getWindVelocity());
-                intent.putExtra("WindD", at_pos.getWindDirection());
-                intent.putExtra
-                (
-                        getString(R.string.intent_weather_data),
-                        new WeatherDataTransition((WeatherTransitionData)getWeatherListView().getItemAtPosition(position))
-                );
-                startActivity(intent);
-            }
-        });*/
     }
 
     public List<String[]> fetchFromServer()
@@ -188,10 +149,15 @@ public class WeatherListActivity extends AppCompatActivity
         //String id = "1";
         UUID userID = new UUID(Long.parseLong(id.substring(0,16)),Long.parseLong(id.substring(16,32)));
         //userID.
-        marker = this.location_service.getLocationMarker(userID ,50).getData();
+        //marker = this.location_service.getUserMarkers(userID).getData();
+        ArrayList<ApiResponse<LocationMarker>> get_markers = this.location_service.getUserMarkers(userID);
+        for(ApiResponse<LocationMarker> mark : get_markers)
+        {
+            this.weather_list.add(new WeatherTransitionData(mark.getData()));
+        }
         //marker = this.location_service.getLocationMarker(1).getData();
         //if(marker.getTemperature() == null) {Log.d("log: ", "Temperature- null" );}
-        this.weather_list.add(new WeatherTransitionData(marker));
+        //this.weather_list.add(new WeatherTransitionData(marker));
         return out;
     }
 

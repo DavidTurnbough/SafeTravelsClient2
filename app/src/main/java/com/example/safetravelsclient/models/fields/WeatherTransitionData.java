@@ -16,6 +16,7 @@ public class WeatherTransitionData
     private String description;
     private String wind_velocity;
     private String wind_direction;
+    private String arrival_time;
     private String image;
 
     public WeatherTransitionData()
@@ -29,6 +30,7 @@ public class WeatherTransitionData
         this.description = "";
         this.wind_velocity = "";
         this.wind_direction = "";
+        this.arrival_time = "";
         this.image = "";
     }
 
@@ -44,6 +46,7 @@ public class WeatherTransitionData
         this.description = marker.getWeatherDescription();
         this.wind_velocity = marker.getWindVelocity();
         this.wind_direction = "";
+        this.arrival_time = marker.getArrivalTime().toString();
     }
 
     public WeatherTransitionData(int id, String loc, String temp, String prec, String wind)
@@ -51,11 +54,17 @@ public class WeatherTransitionData
         this.marker_id = id;
         this.location = loc;
         this.temperature = temp;
+        this.temperature_high = "";
+        this.temperature_low = "";
         this.precipitation = prec;
+        this.humidity = "";
+        this.description = "";
         this.wind_velocity = wind;
+        this.wind_direction = "";
+        this.arrival_time = "";
     }
 
-    public WeatherTransitionData(int id, String loc, String temp, String temp_high, String temp_low, String prec, String humi, String desc, String wind_v, String wind_d)
+    public WeatherTransitionData(int id, String loc, String temp, String temp_high, String temp_low, String prec, String humi, String desc, String wind_v, String wind_d, String time)
     {
         this.marker_id = id;
         this.location = loc;
@@ -67,6 +76,7 @@ public class WeatherTransitionData
         this.description = desc;
         this.wind_velocity = wind_v;
         this.wind_direction = wind_d;
+        this.arrival_time = time;
     }
 
     public WeatherTransitionData(String loc, String temp, String prec, String img)
@@ -100,6 +110,7 @@ public class WeatherTransitionData
         this.description = copy.getDescription();
         this.wind_velocity = copy.getWindVelocity();
         this.wind_direction = copy.getWindDirection();
+        this.arrival_time = copy.getArrivalTime();
     }
 
     public String packageStrings()
@@ -114,7 +125,8 @@ public class WeatherTransitionData
         out = out + this.humidity + ", ";
         out = out + this.description + ", ";
         out = out + this.wind_velocity + ", ";
-        out = out + this.wind_direction;
+        out = out + this.wind_direction + ", ";
+        out = out + this.arrival_time;
         return out;
     }
 
@@ -159,4 +171,7 @@ public class WeatherTransitionData
 
     public String getWindDirection() {return this.wind_direction;}
     public void setWindDirection(String wind_d) {this.wind_direction = wind_d;}
+
+    public String getArrivalTime() {return this.arrival_time;}
+    public void setArrivalTime(String time) {this.arrival_time = time;}
 }
