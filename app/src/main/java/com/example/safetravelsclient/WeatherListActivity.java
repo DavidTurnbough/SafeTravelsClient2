@@ -56,11 +56,35 @@ public class WeatherListActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         Log.d("MyApp", "HERE WE GO");
+        this.setContentView(R.layout.content_weather_list);
+        this.back_button = findViewById(R.id.back_button_weather_list);
+
+        this.location_service = new LocationMarkerService();
+        this.list_view = this.getWeatherListView();
+        this.list_view.setBackgroundColor(getColor(R.color.colorListView));
+        //this.weather_list = new ArrayList<WeatherListSubjectData>();
+        this.weather_list = new ArrayList<WeatherTransitionData>();
+        //this.transition_data = new ArrayList<WeatherTransitionData>();
+        this.weather_list_adapter = new WeatherListAdapter(this, R.layout.weather_list_entry_layout, this.weather_list);
+        //int id, String loc, String temp, String temp_high, String temp_low, String prec, String humi, String desc, String wind_v, String wind_d
+        this.weather_list.add(new WeatherTransitionData(0, "Location", "Temp", "TempH", "TempL", "Prec", "Humi", "Desc", "WindV", "WindD", "Time", "Image"));
+        this.list_view.setAdapter(weather_list_adapter);
         //int count =
-        this.weather_transition = this.getIntent().getParcelableArrayExtra("WeatherData");
+        //this.weather_transition = this.getIntent().getParcelableArrayExtra("WeatherData");
 
 
         transitions = getIntent().getExtras().getParcelableArrayList("WeatherData");
+
+        if(transitions != null)
+        {
+            for(WeatherDataTransition trans : transitions)
+            {
+                this.user_id = trans.getUserId();
+                WeatherTransitionData add_data = new WeatherTransitionData(trans.getMarkerData());
+                add_data.setMarkerId(trans.getMarkerId());
+                this.weather_list.add(add_data);
+            }
+        }
 
             //Log.d("Transition_Data: ", this.transition_data.toString());
 
@@ -76,8 +100,6 @@ public class WeatherListActivity extends AppCompatActivity
 
         //    = bundle.getParcelable("WeatherData");
 
-        this.setContentView(R.layout.content_weather_list);
-        this.back_button = findViewById(R.id.back_button_weather_list);
 
         this.back_button.setOnClickListener(new View.OnClickListener()
         {
