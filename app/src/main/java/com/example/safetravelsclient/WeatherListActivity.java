@@ -33,7 +33,7 @@ import com.example.safetravelsclient.models.fields.WeatherListSubjectData;
 public class WeatherListActivity extends AppCompatActivity
 {
     WeatherTransitionData weather_data;
-    WeatherDataTransition weather_transition;
+    Parcelable[] weather_transition;
 
     private static final String TAG = "WeatherListActivity";
     private static final int NUM_VALUES = 4;
@@ -44,7 +44,8 @@ public class WeatherListActivity extends AppCompatActivity
     private UUID user_id;
   //  public WeatherDataTransition weatherDataTransition[]
      ArrayList<WeatherDataTransition> incoming_list;
-    public Parcelable[] transition_data; //= new WeatherDataTransition[10];
+    public Parcelable[] transition_data = new WeatherDataTransition[20];
+    public ArrayList<WeatherDataTransition> transitions = new ArrayList<WeatherDataTransition>();
     private ListView list_view;
     Button back_button;
 
@@ -55,25 +56,23 @@ public class WeatherListActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         Log.d("MyApp", "HERE WE GO");
+        //int count =
+        this.weather_transition = this.getIntent().getParcelableArrayExtra("WeatherData");
 
-        Bundle bundle = this.getIntent().getExtras();
-        if (bundle != null)
-        {
-            //int len = bundle.getParcelableArray("WeatherData").length;
-            //this.transition_data = new WeatherDataTransition[len];
-            this.transition_data = bundle.getParcelableArray("WeatherData");
-            Log.d("Transition_Data: ", this.transition_data.toString());
-        }
-        else
-        {
-            this.fetchFromServer();
-        }
-        //incoming_list = getIntent().getParcelableExtra("WeatherData");
+
+        transitions = getIntent().getExtras().getParcelableArrayList("WeatherData");
+
+            //Log.d("Transition_Data: ", this.transition_data.toString());
+
+        //transitions.get(0).getMarkerData().
+           // this.fetchFromServer();
+       // }
+      //incoming_list = getIntent().getParcelableExtra("WeatherData");
        // this.weather_transition = getIntent().getParcelableArrayListExtra("WeatherData");
        // incoming_list = getIntent().getBundleExtra("WeatherData");
 
         //System.out.println("Lsit Size: " + incoming_list.size());
-        this.weather_transition = this.getIntent().getParcelableExtra(this.getString(R.string.intent_weather_data));
+      //  this.weather_transition = this.getIntent().getParcelableExtra(this.getString(R.string.intent_weather_data));
 
         //    = bundle.getParcelable("WeatherData");
 
