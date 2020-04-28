@@ -5,4 +5,7 @@
     <string name="title_activity_landing_activity">LandingActivity</string>
     <string name="activity_maps_to_weather_list">List</string>
     <string name="intent_extra_product">intent_extra_product</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

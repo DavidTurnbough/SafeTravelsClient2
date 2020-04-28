@@ -55,6 +55,7 @@
             android:clickable="true"
             android:layout_gravity="right"
             android:elevation="10dp"
+            android:text="64°"
             android:adjustViewBounds="true"
             android:src="@drawable/attempt1"
             android:textColor="@android:color/background_light"
@@ -85,15 +86,6 @@
         android:background="@drawable/info"
         android:clickable="true"
         android:elevation="10dp" />
-
-    <TextView
-        android:id="@+id/temp_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="450dp"
-        android:text="TextView"
-        android:textSize="30sp" />
 
 
 </RelativeLayout>
