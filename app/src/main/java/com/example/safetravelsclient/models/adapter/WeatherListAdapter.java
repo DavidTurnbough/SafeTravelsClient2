@@ -167,7 +167,7 @@ public class WeatherListAdapter extends ArrayAdapter<WeatherTransitionData>
                 {
                     if (Integer.parseInt(subj.getWindVelocity()) > 9)
                     {
-                        subj.setWindVelocity("9");
+                        //subj.setWindVelocity("9");
 
                     }
                     windTextView.setText(subj.getWindVelocity()+" MPH");
