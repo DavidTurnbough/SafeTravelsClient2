@@ -22,6 +22,7 @@ import java.util.Locale;
 
 import androidx.annotation.NonNull;
 
+import static com.example.safetravelsclient.R.color.colorListEntryBG;
 import static com.example.safetravelsclient.R.layout.weather_list_entry_layout;
 import static java.lang.Integer.parseInt;
 
@@ -43,7 +44,9 @@ public class WeatherListAdapter extends ArrayAdapter<WeatherTransitionData>
     {
         //super(context, textViewResourceId, w_list);
         super(context, R.layout.weather_list_entry_layout, w_list);
+        //context.
         //this.weather_list = new ArrayList<WeatherListSubjectData>();
+        this.context = context;
         this.weather_list = w_list;
         //this.weather_list = weath_list;
 
@@ -69,40 +72,13 @@ public class WeatherListAdapter extends ArrayAdapter<WeatherTransitionData>
         return this.weather_list.get(pos);
     }
 
-    /*
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View row = convertView;
-        WeatherListSubjectData viewHolder;
-        if (row == null) {
-            LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row = inflater.inflate(R.layout.weather_list_entry_layout, parent, false);
-            viewHolder = new WeatherListSubjectData();
-            //viewHolder.setImg = (ImageView) row.findViewById(R.id.fruitImg);
-            viewHolder.setTvMarkerId((TextView)row.findViewById(R.id.list_entry_id));
-            viewHolder.setTvLocation((TextView)row.findViewById(R.id.list_entry_location));
-            viewHolder.setTvTemperature((TextView)row.findViewById(R.id.list_entry_temperature));
-            viewHolder.setTvPrecipitation((TextView)row.findViewById(R.id.list_entry_precipitation));
-            viewHolder.setTvWindVelocity((TextView)row.findViewById(R.id.list_entry_wind_velocity));
-            row.setTag(viewHolder);
-        } else {
-            viewHolder = (WeatherListSubjectData)row.getTag();
-        }
-        WeatherListSubjectData entry = getItem(position);
-        viewHolder.getTvMarkerId().setText(entry.getMarkerId());
-        viewHolder.getTvLocation().setText(entry.getlocation());
-        viewHolder.getTvTemperature().setText(entry.getTemperature());
-        viewHolder.getTvPrecipitation().setText(entry.getPrecipitation());
-        viewHolder.getTvWindVelocity().setText(entry.getWindVelocity());
-        return row;
-    }*/
-
 
     @NonNull
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent)
     {
         View view = convertView;
+
         if (view == null)
         {
             LayoutInflater inflater = LayoutInflater.from(this.getContext());
@@ -201,6 +177,7 @@ public class WeatherListAdapter extends ArrayAdapter<WeatherTransitionData>
 
             }
         }
+        view.setBackgroundColor(context.getResources().getColor(R.color.colorListEntryBG));
 
         return view;
     }
