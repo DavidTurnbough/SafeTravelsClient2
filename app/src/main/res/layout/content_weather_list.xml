@@ -14,46 +14,38 @@
     tools:context="com.example.safetravelsclient.WeatherListActivity"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-    <TextView
-        android:layout_below="@id/content_weather_listing"
-        android:layout_width="10dp"
-        android:layout_height="10dp"
-        />
+
 
     <ListView
         android:id="@+id/content_weather_listing"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10px"
+        android:layout_height="600dp"
+        android:layout_marginBottom="50dp"
+        android:paddingBottom="10dp"
+
         android:headerDividersEnabled="false"
         android:footerDividersEnabled="true"
         android:divider="@drawable/list_view_divider"
         android:dividerHeight="3dp"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        android:background="#2b2b2b"
-
+        android:background="@color/colorListEntryBG"
         android:descendantFocusability="blocksDescendants">
     </ListView>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center_horizontal|bottom"
-        >
-            <Button
-            android:id="@+id/back_button_weather_list"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="0dp"
-            android:layout_marginBottom="15dp"
 
-            android:layout_gravity="bottom"
-            android:background="@drawable/get_directions_button"
-            android:text="Map"
-            />
-    </LinearLayout>
+    <Button
+        android:id="@+id/back_button_weather_list"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_below="@+id/content_weather_listing"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+
+        android:layout_marginBottom="50dp"
+        android:background="@drawable/get_directions_button"
+        android:text="Map" />
+
 
 </LinearLayout>

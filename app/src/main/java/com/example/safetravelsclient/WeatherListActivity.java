@@ -61,7 +61,7 @@ public class WeatherListActivity extends AppCompatActivity
 
         this.location_service = new LocationMarkerService();
         this.list_view = this.getWeatherListView();
-        this.list_view.setBackgroundColor(getColor(R.color.colorListView));
+        this.list_view.setBackgroundColor(getColor(R.color.colorClear));
         //this.weather_list = new ArrayList<WeatherListSubjectData>();
         this.weather_list = new ArrayList<WeatherTransitionData>();
         //this.transition_data = new ArrayList<WeatherTransitionData>();
@@ -87,20 +87,6 @@ public class WeatherListActivity extends AppCompatActivity
             }
         }
 
-            //Log.d("Transition_Data: ", this.transition_data.toString());
-
-        //transitions.get(0).getMarkerData().
-           // this.fetchFromServer();
-       // }
-      //incoming_list = getIntent().getParcelableExtra("WeatherData");
-       // this.weather_transition = getIntent().getParcelableArrayListExtra("WeatherData");
-       // incoming_list = getIntent().getBundleExtra("WeatherData");
-
-        //System.out.println("Lsit Size: " + incoming_list.size());
-      //  this.weather_transition = this.getIntent().getParcelableExtra(this.getString(R.string.intent_weather_data));
-
-        //    = bundle.getParcelable("WeatherData");
-
 
         this.back_button.setOnClickListener(new View.OnClickListener()
         {
@@ -111,16 +97,16 @@ public class WeatherListActivity extends AppCompatActivity
                 //startActivityOnClick(view);
             }
         });
-        this.location_service = new LocationMarkerService();
-        this.list_view = this.getWeatherListView();
-        this.list_view.setBackgroundColor(getColor(R.color.colorListView));
+        //this.location_service = new LocationMarkerService();
+        //this.list_view = this.getWeatherListView();
+        //this.list_view.setBackgroundColor(getColor(R.color.colorListView));
         //this.weather_list = new ArrayList<WeatherListSubjectData>();
        // this.weather_list = new ArrayList<WeatherTransitionData>();
         //this.transition_data = new ArrayList<WeatherTransitionData>();
-        this.weather_list_adapter = new WeatherListAdapter(this, R.layout.weather_list_entry_layout, this.weather_list);
+        //this.weather_list_adapter = new WeatherListAdapter(this, R.layout.weather_list_entry_layout, this.weather_list);
         //int id, String loc, String temp, String temp_high, String temp_low, String prec, String humi, String desc, String wind_v, String wind_d
       //  this.weather_list.add(new WeatherTransitionData(0, "Location", "Temp", "TempH", "TempL", "Prec", "Humi", "Desc", "WindV", "WindD", "Time", "Image"));
-        this.list_view.setAdapter(weather_list_adapter);
+        //this.list_view.setAdapter(weather_list_adapter);
         this.list_view.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
@@ -128,19 +114,8 @@ public class WeatherListActivity extends AppCompatActivity
             {
                 Log.d("MyApp", "INITEMCLICK");
                 WeatherTransitionData at_pos = (WeatherTransitionData)adapter.getItemAtPosition(position);
-                Intent intent = new Intent(getApplicationContext(), InDepthViewActivity.class);
-                //WeatherListSubjectData subject_at_position = getWeatherListView().getItemAtPosition(position);
-                //WeatherTransitionData data_at_position = transition_data.get()
-                /*this.marker_id = weatherDataParcel.readInt();
-                this.marker_data.setLocation(weatherDataParcel.readString());
-                this.marker_data.setTemperature(weatherDataParcel.readString());
-                this.marker_data.setTemperatureHigh(weatherDataParcel.readString());
-                this.marker_data.setTemperatureLow(weatherDataParcel.readString());
-                this.marker_data.setHumidity(weatherDataParcel.readString());
-                this.marker_data.setDescription(weatherDataParcel.readString());
-                this.marker_data.setWindVelocity(weatherDataParcel.readString());
-                this.marker_data.setWindDirection(weatherDataParcel.readString());*/
-                /*intent.p
+                //Intent intent = new Intent(getApplicationContext(), InDepthViewActivity.class);
+/*
                 intent.putExtra("Id", at_pos.getMarkerId());
                 intent.putExtra("Loc", at_pos.getlocation());
                 intent.putExtra("Temp", at_pos.getTemperature());
@@ -150,31 +125,21 @@ public class WeatherListActivity extends AppCompatActivity
                 intent.putExtra("Desc", at_pos.getHumidity());
                 intent.putExtra("WindV", at_pos.getWindVelocity());
                 intent.putExtra("WindD", at_pos.getWindDirection());*/
-                WeatherDataTransition weatherDataTransition = new WeatherDataTransition((WeatherTransitionData)getWeatherListView().getItemAtPosition(position));
+                /*WeatherDataTransition weatherDataTransition = new WeatherDataTransition((WeatherTransitionData)getWeatherListView().getItemAtPosition(position));
                 intent.putExtra
                         (
                                 getString(R.string.intent_weather_data),
                                 weatherDataTransition
                         );
+                startActivity(intent);*/
+                Intent intent = new Intent(getApplicationContext(), InDepthViewActivity.class);
+                //  intent.putExtras()
+                intent.putExtra("item_to_display", new WeatherDataTransition((WeatherTransitionData)getWeatherListView().getItemAtPosition(position)));
+                intent.putParcelableArrayListExtra("WeatherData", transitions);
                 startActivity(intent);
             }
         });
         List<String[]> test_entries = populateListTest();
-        //for(String[] entry:test_entries)
-        /*for(int i = 0; i < test_entries.size(); i++)
-        {
-            String loc = test_entries.get(i)[0];
-            String temp = test_entries.get(i)[1] + " \u2109";
-            String prec = test_entries.get(i)[2] + "%";
-            String wind =  test_entries.get(i)[3] + "mph";
-            //System.out.println(loc + ", " + temp + ", " + prec + ", " + wind);
-            WeatherTransitionData add = new WeatherTransitionData(i, loc, temp, prec, wind);
-            this.weather_list.add(add);
-            //this.weather_list_adapter.add(add);
-            //_adapter.add(add);
-        }*/
-        //this.fetchFromServer();
-
         //Log.d("MyApp", "HERE END");
         this.weather_list_adapter.notifyDataSetChanged();
     }

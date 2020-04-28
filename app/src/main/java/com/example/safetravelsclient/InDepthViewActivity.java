@@ -14,6 +14,8 @@ import com.example.safetravelsclient.WeatherListActivity;
 import com.example.safetravelsclient.models.fields.WeatherTransitionData;
 import com.example.safetravelsclient.models.transition.WeatherDataTransition;
 
+import java.util.ArrayList;
+
 public class InDepthViewActivity extends AppCompatActivity {
 
     String myLocation = "Springdale, AR";
@@ -27,6 +29,8 @@ public class InDepthViewActivity extends AppCompatActivity {
     String myTemperatureLow = "8";
     WeatherTransitionData weather_data;
     WeatherDataTransition weather_transition;
+    public ArrayList<WeatherDataTransition> transitions = new ArrayList<WeatherDataTransition>();
+
 
     Button back_button;
 
@@ -39,18 +43,27 @@ public class InDepthViewActivity extends AppCompatActivity {
 
         //button = findViewById(R.id.directionButton);
 
+        //this.weather_data = this.getIntent().getParcelableExtra(this.getString(R.string.intent_weather_data));
+        this.weather_transition = this.getIntent().getParcelableExtra("item_to_display");
+        transitions = getIntent().getExtras().getParcelableArrayList("WeatherData");
+        //this.weather_transition = this.getIntent().getParcelableExtra(this.getString(R.string.intent_weather_data));
+        this.weather_data = this.weather_transition.getMarkerData();
+
         this.back_button.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                startActivity(new Intent(getApplicationContext(), WeatherListActivity.class));
+                //startActivity(new Intent(getApplicationContext(), WeatherListActivity.class));
+                Intent intent = new Intent(getApplicationContext(), WeatherListActivity.class);
+                //  intent.putExtras()
+                //intent.putExtra("item_to_display", new WeatherDataTransition((WeatherTransitionData)getWeatherListView().getItemAtPosition(position)));
+                intent.putParcelableArrayListExtra("WeatherData", transitions);
+                startActivity(intent);
                 //startActivityOnClick(view);
             }
         });
-        //this.weather_data = this.getIntent().getParcelableExtra(this.getString(R.string.intent_weather_data));
-        this.weather_transition = this.getIntent().getParcelableExtra(this.getString(R.string.intent_weather_data));
-        this.weather_data = this.weather_transition.getMarkerData();
+
         this.setLocation(this.weather_data.getLocation());
         //this.setWeatherDescription(this.weather_data.getDescription()); // ***********************Uncomment this
         this.setWeatherDescription("Thunderstorm"); // ****************************************************Delete This - Hardcoded value
