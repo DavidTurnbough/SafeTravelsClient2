@@ -23,6 +23,7 @@ import java.util.Locale;
 import androidx.annotation.NonNull;
 
 import static com.example.safetravelsclient.R.layout.weather_list_entry_layout;
+import static java.lang.Integer.parseInt;
 
 public class WeatherListAdapter extends ArrayAdapter<WeatherTransitionData>
 {
@@ -120,32 +121,32 @@ public class WeatherListAdapter extends ArrayAdapter<WeatherTransitionData>
             if(image_view != null)
             {
 
-                if(weatherDescription == "Cloudy")
+                if(weatherDescription.equals("Clouds"))
                 {
                     image_view.setImageResource(R.drawable.cloudy);
 
                 }
-                else if(weatherDescription == "Fog")
+                else if(weatherDescription.equals("Fog"))
                 {
                     image_view.setImageResource(R.drawable.fog);
 
                 }
-                else if(weatherDescription == "Partly Cloudy")
+                else if(weatherDescription.equals("Partly Cloudy"))
                 {
                     image_view.setImageResource(R.drawable.partly_cloudy);
 
                 }
-                else if(weatherDescription == "Rainy")
+                else if(weatherDescription.equals("Rain"))
                 {
                     image_view.setImageResource(R.drawable.rainy);
 
                 }
-                else if(weatherDescription == "Snowy")
+                else if(weatherDescription.equals("Snow"))
                 {
                     image_view.setImageResource(R.drawable.snowy);
 
                 }
-                else if(weatherDescription == "Sunny")
+                else if(weatherDescription.equals("Clear"))
                 {
                     image_view.setImageResource(R.drawable.sunny1);
 
@@ -173,17 +174,31 @@ public class WeatherListAdapter extends ArrayAdapter<WeatherTransitionData>
             TextView tempTextView = view.findViewById(R.id.list_entry_temperature);
             if (tempTextView != null)
             {
-                tempTextView.setText(subj.getTemperature());
+                tempTextView.setText(subj.getTemperature()+"°");
             }
             TextView precTextView = view.findViewById(R.id.list_entry_precipitation);
             if (precTextView != null)
             {
-                precTextView.setText(subj.getPrecipitation());
+                precTextView.setText(subj.getPrecipitation()+"%");
             }
             TextView windTextView = view.findViewById(R.id.list_entry_wind_velocity);
             if (windTextView != null)
             {
-                windTextView.setText(subj.getWindVelocity());
+                if (subj.getWindVelocity().equals("Wind Speed")) {
+                    windTextView.setText(subj.getWindVelocity() + "");
+                }
+                else
+                {
+                    if (Integer.parseInt(subj.getWindVelocity()) > 9)
+                    {
+                        subj.setWindVelocity("9");
+
+                    }
+                    windTextView.setText(subj.getWindVelocity()+" MPH");
+                }
+               // int value = Integer.parseInt(subj.getWindVelocity());
+
+
             }
         }
 

@@ -84,6 +84,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Locale;
+import java.util.Random;
 import java.util.UUID;
 
 import static java.lang.Thread.sleep;
@@ -145,7 +146,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
         button = findViewById(R.id.directions);
-        temp_text = findViewById(R.id.temp_text);
+//        temp_text = findViewById(R.id.temp_text);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -609,11 +610,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                //JSONArray array = response.getJSONArray("list");
                                //JSONObject object = response.getJSONObject("coord");
                                JSONObject main = result.getJSONObject("main");
+                               String name = result.getString("name");
                                JSONArray weatherArray = result.getJSONArray("weather");
                                JSONObject weatherObject = weatherArray.getJSONObject(0);
                                JSONObject wind = result.getJSONObject("wind");
 
                                String weatherMain = weatherObject.getString("main");
+                               //String location = name.getString("name");
                                String weatherDescription = weatherObject.getString("description");
                                int temp = main.getInt("temp");
                                int tempHigh = main.getInt("temp_max");
@@ -623,17 +626,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                int humidity = main.getInt("humidity");
 
                                WeatherTransitionData weatherTransitionData = new WeatherTransitionData();
+                               weatherTransitionData.setTemperature(String.valueOf(temp));
                                weatherTransitionData.setImage(weatherMain);
                                weatherTransitionData.setDescription(weatherDescription);
                                weatherTransitionData.setHumidity(String.valueOf(humidity));
-                               weatherTransitionData.setLocation("Location");
+                               weatherTransitionData.setLocation(name);
                                weatherTransitionData.setTemperatureHigh(String.valueOf(tempHigh));
                                weatherTransitionData.setTemperatureLow(String.valueOf(tempLow));
                                weatherTransitionData.setWindDirection(String.valueOf(2));
                                weatherTransitionData.setWindVelocity(String.valueOf(windSpeed));
                                weatherTransitionData.setMarkerId(markerId);
-
-                               // weatherTransitionData.setPrecipitation(String.valueOf(0));
+                               weatherTransitionData.setPrecipitation(String.valueOf(45));
                                // UUID id = new UUID(0,0);
                                //weatherTransitionData.setId(id);
                                //weatherTransitionData.setTime(String.valueOf(2));
@@ -650,6 +653,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                            }
                        }
                     , markers.get(i).latitude, markers.get(i).longitude);
+
 
 
 

@@ -67,7 +67,7 @@ public class WeatherListActivity extends AppCompatActivity
         //this.transition_data = new ArrayList<WeatherTransitionData>();
         this.weather_list_adapter = new WeatherListAdapter(this, R.layout.weather_list_entry_layout, this.weather_list);
         //int id, String loc, String temp, String temp_high, String temp_low, String prec, String humi, String desc, String wind_v, String wind_d
-        this.weather_list.add(new WeatherTransitionData(0, "Location", "Temp", "TempH", "TempL", "Prec", "Humi", "Desc", "WindV", "WindD", "Time", "Image"));
+        this.weather_list.add(new WeatherTransitionData(0, "Location", "Temp", "TempH", "TempL", "Prec", "Humi", "Desc", "Wind Speed", "WindD", "Time", "Image"));
         this.list_view.setAdapter(weather_list_adapter);
         //int count =
         //this.weather_transition = this.getIntent().getParcelableArrayExtra("WeatherData");
@@ -82,6 +82,7 @@ public class WeatherListActivity extends AppCompatActivity
                 this.user_id = trans.getUserId();
                 WeatherTransitionData add_data = new WeatherTransitionData(trans.getMarkerData());
                 add_data.setMarkerId(trans.getMarkerId());
+                add_data.setPrecipitation("30");
                 this.weather_list.add(add_data);
             }
         }
@@ -114,11 +115,11 @@ public class WeatherListActivity extends AppCompatActivity
         this.list_view = this.getWeatherListView();
         this.list_view.setBackgroundColor(getColor(R.color.colorListView));
         //this.weather_list = new ArrayList<WeatherListSubjectData>();
-        this.weather_list = new ArrayList<WeatherTransitionData>();
+       // this.weather_list = new ArrayList<WeatherTransitionData>();
         //this.transition_data = new ArrayList<WeatherTransitionData>();
         this.weather_list_adapter = new WeatherListAdapter(this, R.layout.weather_list_entry_layout, this.weather_list);
         //int id, String loc, String temp, String temp_high, String temp_low, String prec, String humi, String desc, String wind_v, String wind_d
-        this.weather_list.add(new WeatherTransitionData(0, "Location", "Temp", "TempH", "TempL", "Prec", "Humi", "Desc", "WindV", "WindD", "Time", "Image"));
+      //  this.weather_list.add(new WeatherTransitionData(0, "Location", "Temp", "TempH", "TempL", "Prec", "Humi", "Desc", "WindV", "WindD", "Time", "Image"));
         this.list_view.setAdapter(weather_list_adapter);
         this.list_view.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
