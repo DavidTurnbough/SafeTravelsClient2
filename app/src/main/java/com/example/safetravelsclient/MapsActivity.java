@@ -42,6 +42,7 @@ import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -59,6 +60,7 @@ import com.example.safetravelsclient.models.interfaces.VolleyCallback;
 import com.example.safetravelsclient.models.services.ApiResponse;
 import com.example.safetravelsclient.models.services.LocationMarker;
 import com.example.safetravelsclient.models.services.LocationMarkerService;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -112,7 +114,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private WeatherListAdapter weather_list_adapter;
 
     public Date newDate;
-   // public WeatherDataTransition practice[] = new WeatherDataTransition[20];
+    // public WeatherDataTransition practice[] = new WeatherDataTransition[20];
     public ArrayList<WeatherDataTransition> practice = new ArrayList<WeatherDataTransition>();
 
 
@@ -134,6 +136,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     Button button;
     private Polyline currentPolyline;
     static UUID uuid = UUID.randomUUID();
+    Button infoButton;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -147,6 +150,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         button = findViewById(R.id.directions);
 //        temp_text = findViewById(R.id.temp_text);
+
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -176,6 +180,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             Log.i("Log info", "Location Saved");
         else
             Log.i("Log info", "Location not found");
+
     }
 
 
@@ -184,24 +189,30 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         //  this.startActivity(new Intent(getApplicationContext(), WeatherListActivity.class));
         System.out.println(practice.size());
 
-        for (int i = 0; i < practice.size(); i++)
-        {
+        for (int i = 0; i < practice.size(); i++) {
             if (practice.get(i) != null)
                 tally++;
         }
 
         // WeatherDataTransition bundle[] = new WeatherDataTransition[tally];
 
-       // for (int i = 0; i < tally; i++)
+        // for (int i = 0; i < tally; i++)
         //{
-         //   bundle[i] = practice[i];
-       // }
+        //   bundle[i] = practice[i];
+        // }
         Intent intent = new Intent(getApplicationContext(), WeatherListActivity.class);
         //  intent.putExtras()
         intent.putParcelableArrayListExtra("WeatherData", practice);
         this.startActivity(intent);
     }
 
+
+    // Creates a pop-up when the user clicks the i symbol instructing the user on how to
+    // use the application.
+    public void openInfoDialog(View view) {
+        InfoDialog infoDialog = new InfoDialog();
+        infoDialog.show(getSupportFragmentManager(), "infoDialog");
+    }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -214,7 +225,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         toolbar.setBackground(getResources().getDrawable(R.drawable.rounded_corners));
 
         //mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        Log.d("mylog", "Added Markers");
+        //Log.d("mylog", "Added Markers");
 
     }
 
