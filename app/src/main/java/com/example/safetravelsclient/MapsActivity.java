@@ -42,6 +42,7 @@ import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -49,6 +50,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.android.volley.toolbox.Volley;
 import com.example.safetravelsclient.models.HttpDataHandler;
@@ -80,10 +82,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
@@ -98,12 +102,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private GoogleMap mMap;
     private MarkerOptions place1, place2;
     static int startup = 0;
+    static private int NUM_PERMS = 3;
     private Date arrivalTime;
     private String location;
     private LocationManager locationManager;
     private String provider;
     //private FusedLocationProviderClient mFused;
     private final int FINE_LOCATION_PERMISSION = 9999;
+    private final int CODE_ASK_PERMISSIONS = 10;
+    private boolean permissions_granted = false;
 
     public LocationMarker tempLocationMarker = new LocationMarker();
 
@@ -139,43 +146,54 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_maps);
+        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
+            this.checkPermissions();
+        }
+        else
+        {
+            this.permissions_granted = true;
+        }
+        if(permissions_granted) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
 
-
-        button = findViewById(R.id.directions);
+            button = findViewById(R.id.directions);
 //        temp_text = findViewById(R.id.temp_text);
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.map);
+            mapFragment.getMapAsync(this);
 
-        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+        /*if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, FINE_LOCATION_PERMISSION);
             // mMap.setMyLocationEnabled(true);
 
+        }*/
+            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+            Criteria criteria = new Criteria();
+            criteria.setAccuracy(Criteria.ACCURACY_COARSE);
+            criteria.setAltitudeRequired(false);
+            criteria.setSpeedRequired(false);
+            criteria.setBearingRequired(false);
+            criteria.setCostAllowed(false);
+
+            //provider = locationManager.getBestProvider(new Criteria(), false);
+            provider = locationManager.getBestProvider(criteria, false);
+
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+            Location location = locationManager.getLastKnownLocation(provider);
+            if (location != null)
+                Log.i("Log info", "Location Saved");
+            else
+                Log.i("Log info", "Location not found");
         }
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-        Criteria criteria = new Criteria();
-        criteria.setAccuracy(Criteria.ACCURACY_COARSE);
-        criteria.setAltitudeRequired(false);
-        criteria.setSpeedRequired(false);
-        criteria.setBearingRequired(false);
-        criteria.setCostAllowed(false);
-
-        provider = locationManager.getBestProvider(new Criteria(), false);
-
-        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        Location location = locationManager.getLastKnownLocation(provider);
-        if (location != null)
-            Log.i("Log info", "Location Saved");
-        else
-            Log.i("Log info", "Location not found");
     }
 
 
@@ -338,36 +356,42 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         //------
 
         if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
+            this.checkPermissions();
         }
-        locationManager.requestLocationUpdates(provider, 400, 1, this);
-        System.out.println("This is the uuid: " + uuid);
+        else
+        {
+            permissions_granted = true;
+        }
+        if(permissions_granted) {
+            //locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            //provider = locationManager.getBestProvider(new Criteria(), false);
 
-        if (startup != 0)
-            getRouteData(new VolleyCallback() {
-                             @Override
-                             public void onSuccess(JSONObject result) throws JSONException {
-                                 JSONArray rows = result.getJSONArray("rows");
-                                 JSONObject rowsObject = rows.getJSONObject(0);
-                                 JSONArray elements = rowsObject.getJSONArray("elements");
-                                 JSONObject elementsObject = elements.getJSONObject(0);
-                                 JSONObject duration = elementsObject.getJSONObject("duration");
-                                 String addedTime = duration.getString("text");
+            locationManager.requestLocationUpdates(provider, 400, 1, this);
+            System.out.println("This is the uuid: " + uuid);
 
-                                 Date currentTime = new Date();
-                                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss.S", Locale.US);
+            if (startup != 0)
+                getRouteData(new VolleyCallback() {
+                                 @Override
+                                 public void onSuccess(JSONObject result) throws JSONException {
+                                     JSONArray rows = result.getJSONArray("rows");
+                                     JSONObject rowsObject = rows.getJSONObject(0);
+                                     JSONArray elements = rowsObject.getJSONArray("elements");
+                                     JSONObject elementsObject = elements.getJSONObject(0);
+                                     JSONObject duration = elementsObject.getJSONObject("duration");
+                                     String addedTime = duration.getString("text");
 
+                                     Date currentTime = new Date();
+                                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss.S", Locale.US);
 
-                                 //ApiResponse<LocationMarker> apiResponse = (
-                                 //   new LocationMarkerService().addLocationMarker(tempLocationMarker)
+                                     //ApiResponse<LocationMarker> apiResponse = (
+                                     //   new LocationMarkerService().addLocationMarker(tempLocationMarker)
 
-                                 // );
+                                     // );
 
-
+                                 }
                              }
-                         }
-            );
-
+                );
+        }
         // tempLocationMarker.setPrecipitationChance(1);
         // tempLocationMarker.setTemperature(1);
 
@@ -965,6 +989,89 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
      */
+
+    private void checkPermissions()
+    {
+        ArrayList<String> required_perms = new ArrayList<String>();
+        //String[] req_perms = new String[NUM_PERMS];
+        ArrayList<String> requested_perms = new ArrayList<String>();
+        if(addPermission(requested_perms, Manifest.permission.INTERNET))
+        {
+            required_perms.add("INTERNET");
+        }
+        if(addPermission(requested_perms, Manifest.permission.ACCESS_COARSE_LOCATION))
+        {
+            required_perms.add("ACCESS COARSE LOCATION");
+        }
+        if(addPermission(requested_perms, Manifest.permission.ACCESS_FINE_LOCATION))
+        {
+            required_perms.add("ACCESS FINE LOCATION");
+        }
+        if(requested_perms.size() > 0)
+        {
+            if(required_perms.size() > 0)
+            {
+                if(Build.VERSION.SDK_INT >= 23)
+                {
+                    requestPermissions(requested_perms.toArray(new String[requested_perms.size()]), CODE_ASK_PERMISSIONS);
+                    return;
+                }
+            }
+            if(Build.VERSION.SDK_INT >= 23)
+            {
+                requestPermissions(requested_perms.toArray(new String[requested_perms.size()]), CODE_ASK_PERMISSIONS);
+                return;
+            }
+        }
+    }
+
+    private boolean addPermission(List<String> permissions, String perm_check) {
+        if (Build.VERSION.SDK_INT >= 23)
+        {
+            if (checkSelfPermission(perm_check) != PackageManager.PERMISSION_GRANTED)
+            {
+                permissions.add(perm_check);
+                if (!shouldShowRequestPermissionRationale(perm_check))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    @Override
+    public void onRequestPermissionsResult(int request_code, String[] permissions, int[] grantResults) {
+        /*switch (requestCode) {
+            case CODE_ASK_PERMISSIONS: {*/
+        if(request_code == CODE_ASK_PERMISSIONS)
+        {
+            Map<String, Integer> perms = new HashMap<>();
+            perms.put(Manifest.permission.INTERNET, PackageManager.PERMISSION_GRANTED);
+            perms.put(Manifest.permission.ACCESS_FINE_LOCATION, PackageManager.PERMISSION_GRANTED);
+            perms.put(Manifest.permission.ACCESS_COARSE_LOCATION, PackageManager.PERMISSION_GRANTED);
+            for (int i = 0; i < permissions.length; i++)
+            {
+                perms.put(permissions[i], grantResults[i]);
+            }
+
+            if (perms.get(Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED
+                    && perms.get(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                    && perms.get(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+            {
+                permissions_granted = true;
+            }
+            else
+            {
+                    // Permission Denied
+                    /*Toast.makeText(MapsActivity.this, "Some Permission is Denied", Toast.LENGTH_SHORT)
+                            .show();*/
+            }
+        }
+        else
+        {
+            super.onRequestPermissionsResult(request_code, permissions, grantResults);
+        }
+    }
 
     public void changeLogos(String description, int temp) {
         TextView degrees = findViewById(R.id.degrees);

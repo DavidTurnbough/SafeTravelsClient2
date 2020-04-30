@@ -29,42 +29,16 @@ import static java.lang.Integer.parseInt;
 public class WeatherListAdapter extends ArrayAdapter<WeatherTransitionData>
 {
     private static final String TAG = "WeatherListArrayAdapter";
-    //List<WeatherListSubjectData> weather_list = new ArrayList<WeatherListSubjectData>();
-    //List<WeatherListSubjectData> weather_list;
     List<WeatherTransitionData> weather_list;
     Context context;
 
-    /*static class WeatherViewHolder
-    {
-        ImageView weather_image;
-        TextView location;
-    }*/
-
     public WeatherListAdapter(Context context, int textViewResourceId, List<WeatherTransitionData> w_list)
     {
-        //super(context, textViewResourceId, w_list);
+
         super(context, R.layout.weather_list_entry_layout, w_list);
-        //context.
-        //this.weather_list = new ArrayList<WeatherListSubjectData>();
         this.context = context;
         this.weather_list = w_list;
-        //this.weather_list = weath_list;
-
-        //this.context = context;
     }
-
-    /*@Override
-    public void add(WeatherListSubjectData obj)
-    {
-        weather_list.add(obj);
-        super.add(obj);
-    }
-
-    @Override
-    public int getCount()
-    {
-        return this.weather_list.size();
-    }*/
 
     @Override
     public WeatherTransitionData getItem(int pos)
@@ -85,14 +59,10 @@ public class WeatherListAdapter extends ArrayAdapter<WeatherTransitionData>
             view = inflater.inflate(weather_list_entry_layout, parent, false);
         }
 
-        //Product product = this.getItem(position);
-        //WeatherListSubjectData subj = this.getItem(position);
         WeatherTransitionData subj = this.getItem(position);
         if (subj != null)
         {
-            //TextView markerIdTextView = view.findViewById(R.id.list_entry_id);
             ImageView image_view = view.findViewById(R.id.list_entry_img);
-            //if (markerIdTextView != null)
             String weatherDescription = subj.getImage();
             if(image_view != null)
             {
@@ -135,10 +105,6 @@ public class WeatherListAdapter extends ArrayAdapter<WeatherTransitionData>
                 {
                     image_view.setImageResource(R.drawable.logo);
                 }
-                //markerIdTextView.setText(Integer.toString(subj.getMarkerId()));
-                //String image_name = subj.getImage();
-                //image_view.setImageDrawable(R.drawable.image_name);
-                //image_view.setImageResource()
             }
 
             TextView locationTextView = view.findViewById(R.id.list_entry_location);
@@ -187,44 +153,4 @@ public class WeatherListAdapter extends ArrayAdapter<WeatherTransitionData>
         return BitmapFactory.decodeByteArray(decoded_byte, 0, decoded_byte.length);
     }
 
-    /*@Override
-    public boolean areAllItemsEnabled() {
-        return false;
-    }
-    @Override
-    public boolean isEnabled(int position) {
-        return true;
-    }
-    @Override
-    public void registerDataSetObserver(DataSetObserver observer) {
-    }
-    @Override
-    public void unregisterDataSetObserver(DataSetObserver observer) {
-    }
-    @Override
-    public int getCount() {
-        return weather_list.size();
-    }
-    @Override
-    public Object getItem(int position) {
-        return position;
-    }
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-    @Override
-    public boolean hasStableIds() {
-        return false;
-    }
-
-    public View getView(int position, View convertView, ViewGroup parent)
-    {
-        WeatherListSubjectData listData = weather_list.get(position);
-        if(convertView == null)
-        {
-            LayoutInflater layout_inflater = LayoutInflater.from(context);
-            convertView = layout_inflater.inflate(R.layout.list_row, null);
-        }
-    }*/
 }
