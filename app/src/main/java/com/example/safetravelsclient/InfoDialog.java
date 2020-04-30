@@ -7,11 +7,14 @@ import android.os.Bundle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
+//**********
+// Creates a pop-up dialog box instructing user how to generate a route.
+//**********
 public class InfoDialog extends AppCompatDialogFragment {
 
+
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState)
-    {
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         builder.setTitle("")

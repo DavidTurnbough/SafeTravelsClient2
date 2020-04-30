@@ -1,5 +1,9 @@
 package com.example.safetravelsclient.models.services;
 
+//**********
+// Used as a wrapper for location marker data.
+// Holds server response (data or error message).
+//**********
 public class ApiResponse<T> {
 
     //**********
@@ -14,8 +18,7 @@ public class ApiResponse<T> {
     //**********
     // Constructors.
     //**********
-    public ApiResponse()
-    {
+    public ApiResponse() {
         this.isValidResponse = true;
         this.errorMessage = "";
         this.rawResponse = "";
@@ -25,44 +28,37 @@ public class ApiResponse<T> {
     //**********
     // Getter Methods.
     //**********
-    public String getErrorMessage()
-    {
+    public String getErrorMessage() {
         return this.errorMessage;
     }
 
-    public String getRawResponse()
-    {
+    public String getRawResponse() {
         return this.rawResponse;
     }
 
-    public T getData()
-    {
+    public T getData() {
         return this.data;
     }
 
     //**********
     // Setter Methods.
     //**********
-    public ApiResponse<T> setErrorMessage(String errorMessage)
-    {
+    public ApiResponse<T> setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
         return this;
     }
 
-    public ApiResponse<T> setRawResponse(String rawResponse)
-    {
+    public ApiResponse<T> setRawResponse(String rawResponse) {
         this.rawResponse = rawResponse;
         return this;
     }
 
-    public ApiResponse<T> setValidResponse(boolean isValidResponse)
-    {
+    public ApiResponse<T> setValidResponse(boolean isValidResponse) {
         this.isValidResponse = isValidResponse;
         return this;
     }
 
-    public ApiResponse<T> setData(T data)
-    {
+    public ApiResponse<T> setData(T data) {
         this.data = data;
         return this;
     }
@@ -70,8 +66,7 @@ public class ApiResponse<T> {
     //**********
     // Other Methods.
     //**********
-    public boolean isValidResponse()
-    {
+    public boolean isValidResponse() {
         return this.isValidResponse;
     }
 

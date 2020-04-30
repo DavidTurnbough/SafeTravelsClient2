@@ -60,6 +60,7 @@ import com.example.safetravelsclient.models.interfaces.VolleyCallback;
 import com.example.safetravelsclient.models.services.ApiResponse;
 import com.example.safetravelsclient.models.services.LocationMarker;
 import com.example.safetravelsclient.models.services.LocationMarkerService;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -214,6 +215,34 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         infoDialog.show(getSupportFragmentManager(), "infoDialog");
     }
 
+    public void currentLocation(View view) {
+
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+
+            return;
+        }
+
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 1, this); //You can also use LocationManager.GPS_PROVIDER and LocationManager.PASSIVE_PROVIDER
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 10);
+        mMap.animateCamera(cameraUpdate);
+        //locationManager.removeUpdates(this);
+    }
+
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -305,6 +334,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         this.startActivity(new Intent(this.getApplicationContext(), InDepthViewActivity.class));
     }
 
+    /*
     @Override
     public void onLocationChanged(Location location) {
 
@@ -316,7 +346,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         LatLng latLng = new LatLng(lat, lng);
         // mMap.addMarker(new MarkerOptions().position(latLng).title("My position"));
         //  mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-    }
+    }*/
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {

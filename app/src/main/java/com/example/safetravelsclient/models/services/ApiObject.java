@@ -8,14 +8,12 @@ public enum ApiObject implements PathElementInterface {
 
     private String value;
 
-    ApiObject(String value)
-    {
+    ApiObject(String value) {
         this.value = value;
     }
 
     @Override
-    public String getPathValue()
-    {
+    public String getPathValue() {
         return this.value;
     }
 
