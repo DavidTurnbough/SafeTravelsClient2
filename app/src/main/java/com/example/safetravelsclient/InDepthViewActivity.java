@@ -65,20 +65,21 @@ public class InDepthViewActivity extends AppCompatActivity {
         });
 
         this.setLocation(this.weather_data.getLocation());
-        //this.setWeatherDescription(this.weather_data.getDescription()); // ***********************Uncomment this
-        this.setWeatherDescription("Thunderstorm"); // ****************************************************Delete This - Hardcoded value
-        //this.setWind(this.weather_data.getWindVelocity() + "mph"); //*************************************Uncomment This
-        this.setWind("15 mph");//********************************************************************Delete This - Hardcoded value
-        //this.setPrecipitation(this.weather_data.getPrecipitation() + "%"); //*****************************Uncomment This
-        this.setPrecipitation("34%"); // ************************************************************Delete This - Hardcoded value
-        //this.setHumidity(this.weather_data.getHumidity() + "%"); //***************************************Uncomment This
-        this.setHumidity("32%"); //******************************************************************Delete This - Hardcoded value
+        this.setWeatherDescription(this.weather_data.getDescription()); // ***********************Uncomment this
+        //this.setWeatherDescription("Thunderstorm"); // ****************************************************Delete This - Hardcoded value
+        this.setWind(this.weather_data.getWindVelocity() + "mph"); //*************************************Uncomment This
+        //this.setWind("15 mph");//********************************************************************Delete This - Hardcoded value
+        this.setPrecipitation(this.weather_data.getPrecipitation() + "%"); //*****************************Uncomment This
+        //this.setPrecipitation("34%"); // ************************************************************Delete This - Hardcoded value
+        this.setHumidity(this.weather_data.getHumidity() + "%"); //***************************************Uncomment This
+        //this.setHumidity("32%"); //******************************************************************Delete This - Hardcoded value
         this.setDate(myDate);
-        this.setTemperature(this.weather_data.getTemperature() + (char) 0x00B0);
+        //this.setTemperature(this.weather_data.getTemperature() + (char) 0x00B0);
+        this.setTemperature("57" + (char) 0x00B0);
         //this.setTemperatureHigh(this.weather_data.getTemperatureHigh() + (char) 0x00B0 + "H"); //***********************Uncomment This
-        this.setTemperatureHigh("91" + (char) 0x00B0 + "H"); // **********************************************************Delete This - Hardcoded value
+        //this.setTemperatureHigh("91" + (char) 0x00B0 + "H"); // **********************************************************Delete This - Hardcoded value
         //this.setTemperatureLow(this.weather_data.getTemperatureLow() + (char) 0x00B0 + "L"); //*************************Uncomment This
-        this.setTemperatureLow("32" + (char) 0x00B0 + "L"); // ***********************************************************Delete This - Hardcoded Value
+        //this.setTemperatureLow("32" + (char) 0x00B0 + "L"); // ***********************************************************Delete This - Hardcoded Value
     }
 
 
@@ -119,13 +120,13 @@ public class InDepthViewActivity extends AppCompatActivity {
     }
 
     public void setTemperatureHigh(String myTemperature){
-        TextView temperatureHigh = findViewById(R.id.highTemperature);
-        temperatureHigh.setText(myTemperature);
+//        TextView temperatureHigh = findViewById(R.id.highTemperature);
+//        temperatureHigh.setText(myTemperature);
     }
 
     public void setTemperatureLow(String myTemperature){
-        TextView temperatureLow = findViewById(R.id.lowTemperature);
-        temperatureLow.setText(myTemperature);
+//        TextView temperatureLow = findViewById(R.id.lowTemperature);
+//        temperatureLow.setText(myTemperature);
     }
 
     public void setWeatherImage(String weatherDescription)

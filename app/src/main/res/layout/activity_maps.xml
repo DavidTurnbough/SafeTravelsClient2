@@ -73,7 +73,7 @@
         android:layout_marginBottom="3dp"
         android:clickable="true"
         android:elevation="10dp"
-        android:background="@drawable/getlocation" />
+        android:background="@drawable/getlocation"/>
 
     <ImageButton
         android:id="@+id/infoButton"
@@ -85,7 +85,8 @@
         android:layout_marginBottom="60dp"
         android:background="@drawable/info"
         android:clickable="true"
-        android:elevation="10dp" />
+        android:elevation="10dp"
+        android:onClick="openInfoDialog"/>
 
 
 </RelativeLayout>

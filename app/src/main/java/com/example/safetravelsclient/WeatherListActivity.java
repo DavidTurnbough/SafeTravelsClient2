@@ -54,7 +54,7 @@ public class WeatherListActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        Log.d("MyApp", "HERE WE GO");
+        //Log.d("MyApp", "HERE WE GO");
         this.setContentView(R.layout.content_weather_list);
         this.back_button = findViewById(R.id.back_button_weather_list);
         this.location_service = new LocationMarkerService();
@@ -94,7 +94,7 @@ public class WeatherListActivity extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> adapter, View view, int position, long id)
             {
-                Log.d("MyApp", "INITEMCLICK");
+                //Log.d("MyApp", "INITEMCLICK");
                 WeatherTransitionData at_pos = (WeatherTransitionData)adapter.getItemAtPosition(position);
                 Intent intent = new Intent(getApplicationContext(), InDepthViewActivity.class);
                 intent.putExtra("item_to_display", new WeatherDataTransition((WeatherTransitionData)getWeatherListView().getItemAtPosition(position)));
