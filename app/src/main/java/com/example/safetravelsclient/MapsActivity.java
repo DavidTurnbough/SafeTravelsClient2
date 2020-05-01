@@ -184,11 +184,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             else
                 Log.i("Log info", "Location not found");
         }
-        Location location = locationManager.getLastKnownLocation(provider);
-        if (location != null)
-            Log.i("Log info", "Location Saved");
-        else
-            Log.i("Log info", "Location not found");
 
     }
 
