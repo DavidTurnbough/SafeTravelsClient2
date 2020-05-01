@@ -300,6 +300,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 mMap.clear();
                 markers.clear();
                 practice.clear();
+                markerId = 0;
                 destCheck = 0;
                 startup = 0;
                 count = 0;
