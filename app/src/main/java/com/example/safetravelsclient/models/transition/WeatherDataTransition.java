@@ -1,3 +1,7 @@
+//***********************************
+//Written By Zach Cantrell
+//***********************************
+
 package com.example.safetravelsclient.models.transition;
 
 import android.os.Parcel;
@@ -62,6 +66,7 @@ public class WeatherDataTransition implements Parcelable
         this.marker_data.setWindDirection(weatherDataParcel.readString());
         this.marker_data.setArrivalTime(weatherDataParcel.readString());
         this.marker_data.setImage(weatherDataParcel.readString());
+        this.marker_data.setPrecipitation(weatherDataParcel.readString());
     }
 
     public WeatherTransitionData getMarkerData() {return this.marker_data;}
@@ -92,6 +97,7 @@ public class WeatherDataTransition implements Parcelable
         destination.writeString(marker_data.getWindDirection());
         destination.writeString(marker_data.getArrivalTime());
         destination.writeString(marker_data.getImage());
+        destination.writeString(marker_data.getPrecipitation());
     }
 
 

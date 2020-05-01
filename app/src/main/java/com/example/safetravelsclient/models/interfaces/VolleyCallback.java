@@ -1,3 +1,7 @@
+//********************************
+//Written By William Henness
+//********************************
+
 package com.example.safetravelsclient.models.interfaces;
 
 import org.json.JSONException;

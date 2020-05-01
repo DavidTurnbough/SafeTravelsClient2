@@ -13,11 +13,9 @@ public class WeatherListSubjectData
     private TextView tv_temperature;
     private String precipitation;
     private TextView tv_precipitation;
-    //private String humidity;
-    //private String description;
+
     private String wind_velocity;
     private TextView tv_wind_velocity;
-    //private String wind_direction;
     private String image;
     private ImageView iv_image;
 
@@ -27,10 +25,8 @@ public class WeatherListSubjectData
         this.location = "";
         this.temperature = "";
         this.precipitation = "";
-        //this.humidity = "";
-        //this.description = "";
+
         this.wind_velocity = "";
-        //this.wind_direction = "";
         this.image = "";
     }
 
@@ -40,10 +36,7 @@ public class WeatherListSubjectData
         this.location = loc;
         this.temperature = temp;
         this.precipitation = prec;
-        //this.humidity = humi;
-        //this.description = desc;
         this.wind_velocity = wind_v;
-        //this.wind_direction = wind_d;
     }
 
     public WeatherListSubjectData(int id, String loc, String temp, String prec, String wind_v, String img)
@@ -62,10 +55,7 @@ public class WeatherListSubjectData
         this.location = copy.getLocation();
         this.temperature = copy.getTemperature();
         this.precipitation = copy.getPrecipitation();
-        //this.humidity = copy.getHumidity();
-        //this.description = copy.getDescription();
         this.wind_velocity = copy.getWindVelocity();
-        //this.wind_direction = copy.getWindDirection();
     }
 
     public String packageStrings()
@@ -74,10 +64,7 @@ public class WeatherListSubjectData
         out = out + this.location + ", ";
         out = out + this.temperature + ", ";
         out = out + this.precipitation + ", ";
-        //out = out + this.humidity + ", ";
-        //out = out + this.description + ", ";
         out = out + this.wind_velocity + ", ";
-        //out = out + this.wind_direction;
         return out;
     }
 
@@ -113,19 +100,12 @@ public class WeatherListSubjectData
     public void setPrecipitation(String prec) {this.precipitation = prec;}
     public void setTvPrecipitation(TextView prec) {this.tv_precipitation = prec;}
 
-    //public String getHumidity() {return this.humidity;}
-    //public void setHumidity(String humi) {this.humidity = humi;}
-
-    //public String getDescription() {return this.description}
-    //public void setDescription(String desc) {this.description = desc;}
 
     public String getWindVelocity() {return this.wind_velocity;}
     public TextView getTvWindVelocity() {return this.tv_wind_velocity;}
     public void setWindVelocity(String wind_v) {this.wind_velocity = wind_v;}
     public void setTvWindVelocity(TextView wind_v) {this.tv_wind_velocity = wind_v;}
 
-    //public String getWindDirection() {return this.wind_direction;}
-    //public void setWindDirection(String wind_d) {this.wind_direction = wind_d;}
 
     public String getImg() {return this.image;}
     public void setImg(String img) {this.image = img;}

@@ -49,6 +49,7 @@
         android:layout_marginStart="7dp"
         android:layout_marginTop="51dp"
         android:background="@drawable/edittext_bg"
+        android:enabled="false"
         android:elevation="10dp"
         android:ems="10"
         android:hint="Current Location"

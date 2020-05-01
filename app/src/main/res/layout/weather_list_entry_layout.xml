@@ -2,48 +2,46 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
-    android:layout_height="40dp"
-    android:layout_marginBottom="0dp"
+    android:layout_height="50dp"
     android:layout_marginTop="0dp"
-    android:focusableInTouchMode="false"
+    android:layout_marginBottom="0dp"
     android:background="@color/colorListEntryBG"
-    android:focusable="false">
+    android:focusable="false"
+    android:focusableInTouchMode="false">
 
     <ImageView
         android:id="@+id/list_entry_img"
         android:layout_width="45dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
         android:gravity="center"
         android:paddingTop="5dp"
-        android:layout_marginBottom="2dp"
         android:text="Cherry"
-        android:textSize="8pt"
         android:textColor="@color/colorListEntryText"
-        />
+        android:textSize="8pt" />
 
     <TextView
         android:id="@+id/list_entry_location"
         android:layout_width="155dp"
-        android:layout_weight=".2"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_toRightOf="@+id/list_entry_img"
+        android:layout_weight=".2"
 
 
         android:text="Cherry"
         android:textColor="@color/colorListEntryText"
-        android:textSize="8pt"
-        />
+        android:textSize="8pt" />
 
     <TextView
         android:id="@+id/list_entry_temperature"
         android:layout_width="55dp"
-        android:layout_weight=".1"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/list_entry_location"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/list_entry_location"
+        android:layout_weight=".1"
 
         android:paddingRight="0dp"
 
@@ -56,9 +54,9 @@
         android:layout_width="55dp"
 
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/list_entry_temperature"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/list_entry_temperature"
 
 
         android:text="Cherry"
@@ -71,7 +69,6 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_toRightOf="@+id/list_entry_precipitation"
-
 
 
         android:paddingRight="0dp"

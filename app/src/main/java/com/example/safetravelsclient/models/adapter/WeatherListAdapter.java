@@ -1,3 +1,6 @@
+//*********************************************
+//Written By Zach Cantrell
+//******************************************
 package com.example.safetravelsclient.models.adapter;
 
 import android.content.Context;
@@ -133,12 +136,10 @@ public class WeatherListAdapter extends ArrayAdapter<WeatherTransitionData>
                 {
                     if (Integer.parseInt(subj.getWindVelocity()) > 9)
                     {
-                        //subj.setWindVelocity("9");
 
                     }
                     windTextView.setText(subj.getWindVelocity()+" MPH");
                 }
-               // int value = Integer.parseInt(subj.getWindVelocity());
 
 
             }
@@ -154,3 +155,5 @@ public class WeatherListAdapter extends ArrayAdapter<WeatherTransitionData>
     }
 
 }
+
+

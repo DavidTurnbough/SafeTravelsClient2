@@ -1,3 +1,7 @@
+//*******************************
+//Written By Zach Cantrell
+//*******************************
+
 package com.example.safetravelsclient.models.fields;
 
 import com.example.safetravelsclient.models.services.LocationMarker;

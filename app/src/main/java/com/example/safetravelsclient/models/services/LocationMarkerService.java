@@ -1,3 +1,7 @@
+//*************************************************************
+//Written By William Henness, David Turnbough, Zachary Cantrell
+//*************************************************************
+
 package com.example.safetravelsclient.models.services;
 
 import android.util.Log;
@@ -12,6 +16,9 @@ import org.json.JSONObject;
 
 public class  LocationMarkerService extends BaseRemoteService
 {
+    //**********
+    // Constructors.
+    //**********
     // Adds 'markers' to the URL path.
     public LocationMarkerService()
     {
@@ -35,7 +42,6 @@ public class  LocationMarkerService extends BaseRemoteService
     public ArrayList<ApiResponse<LocationMarker>> getUserMarkers(UUID userID)
     {
         String parameters = (userID.toString());
-        //return this.readLocationMarkerDetailsFromRawResponse(
         return this.readUserMarkersDetailsFromRawResponse(
                 this.<LocationMarker>getRequest(
                         this.buildPath(parameters)
@@ -112,7 +118,6 @@ public class  LocationMarkerService extends BaseRemoteService
     // Reads the raw response data of the api response, from the get method, into the location marker of the api response.
     private ArrayList<ApiResponse<LocationMarker>> readUserMarkersDetailsFromRawResponse(ApiResponse<LocationMarker> apiResponse)
     {
-        //JSONObject rawJsonObject = this.rawResponseToJSONObject(apiResponse.getRawResponse());
         ArrayList<ApiResponse<LocationMarker>> markers = new ArrayList<ApiResponse<LocationMarker>>();
         JSONArray rawJsonArray = this.rawResponseToJSONArray(apiResponse.getRawResponse());
         String rawResponse = apiResponse.getRawResponse();
@@ -120,8 +125,6 @@ public class  LocationMarkerService extends BaseRemoteService
 
 
         if(rawResponse.length() > 0) {
-            //JSONObject jsonObject = this.rawResponseToJSONObject(rawResponse);
-
             if(rawJsonArray != null)
             {
                 for(int i = 0; i < rawJsonArray.length(); i++)
@@ -140,7 +143,6 @@ public class  LocationMarkerService extends BaseRemoteService
                     }
                 }
                 apiResponse.setValidResponse(true);
-                //apiResponse.setData(new LocationMarker().loadFromJson(rawJsonObject));
             }
             else
             {

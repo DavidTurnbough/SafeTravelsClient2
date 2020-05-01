@@ -1,3 +1,7 @@
+//************
+// David Turnbough
+//**************
+
 package com.example.safetravelsclient;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,19 +22,12 @@ import java.util.ArrayList;
 
 public class InDepthViewActivity extends AppCompatActivity {
 
-    String myLocation = "Springdale, AR";
-    String myDescription = "Cloudy";
-    String myWindValue = "NNW 15mph";
-    String myPrecipitation = "23%";
-    String myHumidity = "24%";
-    String myDate = "Mon Feb 04, 2020";
-    String myTemperature = "74";
-    String myTemperatureHigh = "95";
-    String myTemperatureLow = "8";
+    //**********
+    // Variable Declarations.
+    //**********
     WeatherTransitionData weather_data;
     WeatherDataTransition weather_transition;
     public ArrayList<WeatherDataTransition> transitions = new ArrayList<WeatherDataTransition>();
-
 
     Button back_button;
 
@@ -41,12 +38,8 @@ public class InDepthViewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_in_depth_view);
         this.back_button = findViewById(R.id.backButton);
 
-        //button = findViewById(R.id.directionButton);
-
-        //this.weather_data = this.getIntent().getParcelableExtra(this.getString(R.string.intent_weather_data));
         this.weather_transition = this.getIntent().getParcelableExtra("item_to_display");
         transitions = getIntent().getExtras().getParcelableArrayList("WeatherData");
-        //this.weather_transition = this.getIntent().getParcelableExtra(this.getString(R.string.intent_weather_data));
         this.weather_data = this.weather_transition.getMarkerData();
 
         this.back_button.setOnClickListener(new View.OnClickListener()
@@ -54,35 +47,27 @@ public class InDepthViewActivity extends AppCompatActivity {
             @Override
             public void onClick(View view)
             {
-                //startActivity(new Intent(getApplicationContext(), WeatherListActivity.class));
                 Intent intent = new Intent(getApplicationContext(), WeatherListActivity.class);
-                //  intent.putExtras()
-                //intent.putExtra("item_to_display", new WeatherDataTransition((WeatherTransitionData)getWeatherListView().getItemAtPosition(position)));
+
                 intent.putParcelableArrayListExtra("WeatherData", transitions);
                 startActivity(intent);
-                //startActivityOnClick(view);
             }
         });
 
         this.setLocation(this.weather_data.getLocation());
-        this.setWeatherDescription(this.weather_data.getDescription()); // ***********************Uncomment this
-        //this.setWeatherDescription("Thunderstorm"); // ****************************************************Delete This - Hardcoded value
-        this.setWind(this.weather_data.getWindVelocity() + "mph"); //*************************************Uncomment This
-        //this.setWind("15 mph");//********************************************************************Delete This - Hardcoded value
-        this.setPrecipitation(this.weather_data.getPrecipitation() + "%"); //*****************************Uncomment This
-        //this.setPrecipitation("34%"); // ************************************************************Delete This - Hardcoded value
-        this.setHumidity(this.weather_data.getHumidity() + "%"); //***************************************Uncomment This
-        //this.setHumidity("32%"); //******************************************************************Delete This - Hardcoded value
-        this.setDate(myDate);
-        //this.setTemperature(this.weather_data.getTemperature() + (char) 0x00B0);
-        this.setTemperature("57" + (char) 0x00B0);
-        //this.setTemperatureHigh(this.weather_data.getTemperatureHigh() + (char) 0x00B0 + "H"); //***********************Uncomment This
-        //this.setTemperatureHigh("91" + (char) 0x00B0 + "H"); // **********************************************************Delete This - Hardcoded value
-        //this.setTemperatureLow(this.weather_data.getTemperatureLow() + (char) 0x00B0 + "L"); //*************************Uncomment This
-        //this.setTemperatureLow("32" + (char) 0x00B0 + "L"); // ***********************************************************Delete This - Hardcoded Value
+        this.setWeatherDescription(this.weather_data.getImage());
+        this.setWind(this.weather_data.getWindVelocity() + " MPH");
+        this.setPrecipitation(this.weather_data.getPrecipitation() + "%");
+        this.setHumidity(this.weather_data.getHumidity() + "%");
+        //this.setDate(myDate);
+        this.setTemperature(this.weather_data.getTemperature() + (char) 0x00B0);
+
     }
 
 
+    //**********
+    // Setter Methods.
+    //**********
     public void setLocation(String myLocation){
         TextView location = findViewById(R.id.location);
         location.setText(myLocation);
@@ -120,50 +105,50 @@ public class InDepthViewActivity extends AppCompatActivity {
     }
 
     public void setTemperatureHigh(String myTemperature){
-//        TextView temperatureHigh = findViewById(R.id.highTemperature);
-//        temperatureHigh.setText(myTemperature);
+
     }
 
     public void setTemperatureLow(String myTemperature){
-//        TextView temperatureLow = findViewById(R.id.lowTemperature);
-//        temperatureLow.setText(myTemperature);
+
     }
 
     public void setWeatherImage(String weatherDescription)
     {
         ImageView weatherImage = (ImageView) findViewById(R.id.weatherImage);
 
-        if(weatherDescription == "Cloudy")
-        {
-            weatherImage.setImageResource(R.drawable.cloudy);
-
-        }
-        else if(weatherDescription == "Fog")
-        {
-            weatherImage.setImageResource(R.drawable.fog);
-
-        }
-        else if(weatherDescription == "Partly Cloudy")
-        {
-            weatherImage.setImageResource(R.drawable.partly_cloudy);
-
-        }
-        else if(weatherDescription == "Rainy")
-        {
-            weatherImage.setImageResource(R.drawable.rainy);
-
-        }
-        else if(weatherDescription == "Snowy")
-        {
-            weatherImage.setImageResource(R.drawable.snowy);
-
-        }
-        else if(weatherDescription == "Sunny")
+        if (weatherDescription.equals("Clear"))
         {
             weatherImage.setImageResource(R.drawable.sunny1);
 
         }
-        else if(weatherDescription == "Thunderstorm")
+
+        else if(weatherDescription.equals("Clouds"))
+        {
+            weatherImage.setImageResource(R.drawable.cloudy);
+
+        }
+        else if(weatherDescription.equals("Fog"))
+        {
+            weatherImage.setImageResource(R.drawable.fog);
+
+        }
+        else if(weatherDescription.equals("Partly Cloudy"))
+        {
+            weatherImage.setImageResource(R.drawable.partly_cloudy);
+
+        }
+        else if(weatherDescription == "Rain")
+        {
+            weatherImage.setImageResource(R.drawable.rainy);
+
+        }
+        else if(weatherDescription.equals("Snow"))
+        {
+            weatherImage.setImageResource(R.drawable.snowy);
+
+        }
+
+        else if(weatherDescription.equals("Thunderstorm"))
         {
             weatherImage.setImageResource(R.drawable.thunderstorm);
         }
