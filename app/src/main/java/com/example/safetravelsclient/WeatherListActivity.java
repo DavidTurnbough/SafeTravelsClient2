@@ -1,3 +1,6 @@
+//***********************************
+//Written By Zach Cantrell
+//***************************************
 package com.example.safetravelsclient;
 
 import android.content.Intent;
@@ -35,14 +38,15 @@ public class WeatherListActivity extends AppCompatActivity
     WeatherTransitionData weather_data;
     Parcelable[] weather_transition;
 
+    public ArrayList<String> tempArray = new ArrayList<String>();
+
     private static final String TAG = "WeatherListActivity";
     private static final int NUM_VALUES = 4;
     private WeatherListAdapter weather_list_adapter;
     private LocationMarkerService location_service;
-    //private List<WeatherListSubjectData> weather_list;
     private List<WeatherTransitionData> weather_list;
     private UUID user_id;
-     ArrayList<WeatherDataTransition> incoming_list;
+    ArrayList<WeatherDataTransition> incoming_list;
     public Parcelable[] transition_data = new WeatherDataTransition[20];
     public ArrayList<WeatherDataTransition> transitions = new ArrayList<WeatherDataTransition>();
     private ListView list_view;
@@ -54,9 +58,10 @@ public class WeatherListActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        //Log.d("MyApp", "HERE WE GO");
+        Log.d("MyApp", "HERE WE GO");
         this.setContentView(R.layout.content_weather_list);
         this.back_button = findViewById(R.id.back_button_weather_list);
+
         this.location_service = new LocationMarkerService();
         this.list_view = this.getWeatherListView();
         this.list_view.setBackgroundColor(getColor(R.color.colorClear));
@@ -65,16 +70,18 @@ public class WeatherListActivity extends AppCompatActivity
         this.weather_list.add(new WeatherTransitionData(0, "Location", "Temp", "TempH", "TempL", "Prec", "Humi", "Desc", "Wind Speed", "WindD", "Time", "Image"));
         this.list_view.setAdapter(weather_list_adapter);
 
+
         transitions = getIntent().getExtras().getParcelableArrayList("WeatherData");
 
         if(transitions != null)
         {
+            int i = 0;
             for(WeatherDataTransition trans : transitions)
             {
                 this.user_id = trans.getUserId();
                 WeatherTransitionData add_data = new WeatherTransitionData(trans.getMarkerData());
                 add_data.setMarkerId(trans.getMarkerId());
-                add_data.setPrecipitation("30");
+                i++;
                 this.weather_list.add(add_data);
             }
         }
@@ -89,14 +96,17 @@ public class WeatherListActivity extends AppCompatActivity
                 //startActivityOnClick(view);
             }
         });
+
         this.list_view.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
             public void onItemClick(AdapterView<?> adapter, View view, int position, long id)
             {
-                //Log.d("MyApp", "INITEMCLICK");
+                Log.d("MyApp", "INITEMCLICK");
                 WeatherTransitionData at_pos = (WeatherTransitionData)adapter.getItemAtPosition(position);
+
                 Intent intent = new Intent(getApplicationContext(), InDepthViewActivity.class);
+                //  intent.putExtras()
                 intent.putExtra("item_to_display", new WeatherDataTransition((WeatherTransitionData)getWeatherListView().getItemAtPosition(position)));
                 intent.putParcelableArrayListExtra("WeatherData", transitions);
                 startActivity(intent);
@@ -111,18 +121,39 @@ public class WeatherListActivity extends AppCompatActivity
     {
         List<String[]> out = new ArrayList<String[]>();
         LocationMarker marker = new LocationMarker();
-        //String id = "00000000000000000000000000000000";
-        //UUID userID = new UUID(Long.parseLong(id.substring(0,16)),Long.parseLong(id.substring(16,32)));
-        //userID.
-        //marker = this.location_service.getUserMarkers(userID).getData();
-        ArrayList<ApiResponse<LocationMarker>> get_markers = this.location_service.getUserMarkers(this.user_id);
+        String id = "00000000000000000000000000000000";
+        UUID userID = new UUID(Long.parseLong(id.substring(0,16)),Long.parseLong(id.substring(16,32)));
+
+        ArrayList<ApiResponse<LocationMarker>> get_markers = this.location_service.getUserMarkers(userID);
         for(ApiResponse<LocationMarker> mark : get_markers)
         {
             this.weather_list.add(new WeatherTransitionData(mark.getData()));
         }
+
         return out;
     }
 
+
+
+    public void createList()
+    {
+        tempArray.add("20");
+        tempArray.add("0");
+        tempArray.add("0");
+        tempArray.add("0");
+        tempArray.add("10");
+        tempArray.add("0");
+        tempArray.add("0");
+        tempArray.add("0");
+        tempArray.add("0");
+        tempArray.add("32");
+        tempArray.add("43");
+        tempArray.add("1");
+        tempArray.add("1");
+        tempArray.add("100");
+        tempArray.add("100");
+
+    }
     public List<String[]> populateListTest()
     {
         List<String[]> out = new ArrayList<String[]>();
@@ -147,8 +178,7 @@ public class WeatherListActivity extends AppCompatActivity
         entry_3[3] = "0";
         out.add(entry_3);
 
-        //String test = entry_1[0] + ", " + entry_1[1] + ", " + entry_1[2] + ", " + entry_1[3];
-        //log(test);
+
         return out;
     }
 

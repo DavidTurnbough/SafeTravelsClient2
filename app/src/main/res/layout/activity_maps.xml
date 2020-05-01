@@ -45,17 +45,16 @@
             android:elevation="10dp"
             android:layout_gravity="left"
             android:adjustViewBounds="true"
-            android:onClick="inDepthViewOnClick"
-            android:src="@drawable/sunny1" />
+            android:onClick="listViewOnClick" />
 
         <TextView
             android:id="@+id/degrees"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"
+            android:onClick="listViewOnClick"
             android:layout_gravity="right"
             android:elevation="10dp"
-            android:text="64°"
             android:adjustViewBounds="true"
             android:src="@drawable/attempt1"
             android:textColor="@android:color/background_light"
@@ -73,6 +72,7 @@
         android:layout_marginBottom="3dp"
         android:clickable="true"
         android:elevation="10dp"
+        android:onClick="centerScreen"
         android:background="@drawable/getlocation"/>
 
     <ImageButton

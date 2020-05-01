@@ -1,3 +1,7 @@
+//********************************
+//Written By William Henness
+//******************************
+
 package com.example.safetravelsclient.models;
 
 import android.content.Context;
@@ -19,8 +23,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-
+//**********************
+//Class used to format polyline
+//**********************
 public class PointsParser extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
+
+    //*******************
+    //Variable Declarations
+    //*******************
     TaskLoadedCallback taskCallback;
     String directionMode = "driving";
 
@@ -38,18 +48,12 @@ public class PointsParser extends AsyncTask<String, Integer, List<List<HashMap<S
 
         try {
             jObject = new JSONObject(jsonData[0]);
-            //Log.d("mylog", jsonData[0]);
             DataParser parser = new DataParser();
-            //Log.d("mylog", parser.toString());
 
             // Starts parsing data
             routes = parser.parse(jObject);
-            //Log.d("mylog", "Executing routes");
-            //Log.d("mylog", routes.toString());
-
 
         } catch (Exception e) {
-            //Log.d("mylog", e.toString());
             e.printStackTrace();
         }
 
@@ -58,18 +62,21 @@ public class PointsParser extends AsyncTask<String, Integer, List<List<HashMap<S
         return routes;
     }
 
-    // Executes in UI thread, after the parsing process
+    //*********************************
+    //Set Polyline Options
+    //****************************
     @Override
     protected void onPostExecute(List<List<HashMap<String, String>>> result) {
         ArrayList<LatLng> points;
         PolylineOptions lineOptions = null;
-        // Traversing through all the routes
+        if (result.equals(null))
+        {
+            return;
+        }
         for (int i = 0; i < result.size(); i++) {
             points = new ArrayList<>();
             lineOptions = new PolylineOptions().geodesic(true);
-            // Fetching i-th route
             List<HashMap<String, String>> path = result.get(i);
-            // Fetching all the points in i-th route
             for (int j = 0; j < path.size(); j++) {
                 HashMap<String, String> point = path.get(j);
                 double lat = Double.parseDouble(point.get("lat"));
@@ -77,7 +84,8 @@ public class PointsParser extends AsyncTask<String, Integer, List<List<HashMap<S
                 LatLng position = new LatLng(lat, lng);
                 points.add(position);
             }
-            // Adding all the points in the route to LineOptions
+
+
             lineOptions.addAll(points);
             if (directionMode.equalsIgnoreCase("walking")) {
                 lineOptions.width(10);
@@ -89,7 +97,6 @@ public class PointsParser extends AsyncTask<String, Integer, List<List<HashMap<S
             Log.d("mylog", "onPostExecute lineoptions decoded");
         }
 
-        // Drawing polyline in the Google Map for the i-th route
         if (lineOptions != null) {
             taskCallback.onTaskDone(lineOptions);
 

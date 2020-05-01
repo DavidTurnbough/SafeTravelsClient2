@@ -1,3 +1,7 @@
+//**********
+// Written By: Zach Cantrell, David Turnbough, William Henness
+//**********
+
 package com.example.safetravelsclient.models.services;
 
 
@@ -18,7 +22,9 @@ import java.util.UUID;
 
 import com.example.safetravelsclient.models.interfaces.PathElementInterface;
 
-
+//**********
+// Provides Client-Server Communication
+//**********
 public abstract class BaseRemoteService
 {
     private static final String URL_JOIN = "/";
@@ -42,6 +48,10 @@ public abstract class BaseRemoteService
         this.apiObject = apiObject;
     }
 
+    //**********
+    // Build Path Methods.
+    // Used to generate the URL for database access.
+    //**********
     // URL: baseURL/markers
     public URL buildPath()
     {
@@ -128,13 +138,6 @@ public abstract class BaseRemoteService
 
                 apiResponse.setValidResponse(true);
 
-                /*conn.setRequestMethod(GET_REQUEST_METHOD);
-                //conn.setRequestMethod(GET_REQUEST_METHOD);
-
-                //conn.addRequestProperty(ACCEPT_REQUEST_PROPERTY, JSON_PAYLOAD_TYPE);
-                conn.setRequestProperty(ACCEPT_REQUEST_PROPERTY, JSON_PAYLOAD_TYPE);
-                //conn.setRequestProperty(CONTENT_TYPE_REQUEST_PROPERTY, JSON_PAYLOAD_TYPE);*/
-
                 BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
                 String line = "";
@@ -175,7 +178,6 @@ public abstract class BaseRemoteService
         if (connectionUrl == null) {
             return apiResponse
                     .setValidResponse(false);
-             //.setMessage("Invalid network path provided.");
         }
 
         HttpURLConnection httpURLConnection = null;
@@ -191,27 +193,14 @@ public abstract class BaseRemoteService
             httpURLConnection.setRequestMethod(requestType);
             httpURLConnection.addRequestProperty(ACCEPT_REQUEST_PROPERTY, JSON_PAYLOAD_TYPE);
             httpURLConnection.addRequestProperty(CONTENT_TYPE_REQUEST_PROPERTY, JSON_PAYLOAD_TYPE);
-          //  httpURLConnection.setRequestProperty("User-Agent","Mozilla/5.0 ( compatible ) ");
-           // httpURLConnection.setRequestProperty("Accept","*/*");
 
             OutputStream outputStream = httpURLConnection.getOutputStream();
             outputStream.write(serializedRequestObject);
             outputStream.flush();
             System.out.println(httpURLConnection.getResponseCode());
             System.out.println(httpURLConnection.getResponseMessage());
-            //httpURLConnection.getErrorStream();
 
-
-
-            // System.out.println("Response Code: " + httpURLConnection.getErrorStream());
-             InputStream response = httpURLConnection.getErrorStream();
-            //String result =
-           // InputStream response = httpURLConnection.getInputStream();
-            // int status = httpURLConnection.getResponseCode();
-            //  if (response == null)
-            //  {
-            //     response = httpURLConnection.getInputStream();
-            //  }
+            InputStream response = httpURLConnection.getInputStream();
 
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response));
 
@@ -236,7 +225,6 @@ public abstract class BaseRemoteService
 
             apiResponse
                     .setValidResponse(false);
-            // .setMessage(e.getMessage());
         } finally {
             if (httpURLConnection != null) {
                 httpURLConnection.disconnect();
@@ -247,6 +235,7 @@ public abstract class BaseRemoteService
     }
 
 
+    // This is never used, as it was not set up on server side
     public ApiResponse<String> deleteRequest(URL url){
 
         ApiResponse<String> apiResponse = new ApiResponse<>();
@@ -309,13 +298,13 @@ public abstract class BaseRemoteService
 
         if(rawResponse.length() > 0)
         {
-           // try
-           // {
-                //jsonObject = new JSONObject(rawResponse);
-           // }
-            //catch (JSONException e) {
-            //    e.printStackTrace();
-           // }
+            try
+            {
+                jsonObject = new JSONObject(rawResponse);
+            }
+            catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
         return jsonObject;
