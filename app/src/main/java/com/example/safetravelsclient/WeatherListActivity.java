@@ -92,7 +92,10 @@ public class WeatherListActivity extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+                Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                //  intent.putExtras()
+                intent.putParcelableArrayListExtra("WeatherData", transitions);
+                startActivity(intent);
                 //startActivityOnClick(view);
             }
         });

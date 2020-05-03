@@ -137,7 +137,7 @@ public class InDepthViewActivity extends AppCompatActivity {
             weatherImage.setImageResource(R.drawable.partly_cloudy);
 
         }
-        else if(weatherDescription == "Rain")
+        else if(weatherDescription.equals("Rain"))
         {
             weatherImage.setImageResource(R.drawable.rainy);
 
