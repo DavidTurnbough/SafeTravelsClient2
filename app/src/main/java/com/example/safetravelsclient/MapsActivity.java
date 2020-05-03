@@ -112,7 +112,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     int total = 0;
     int count = 0;
     int markerCount = 0;
-    int markerPointer = 0;
     Toolbar toolbar;
     int markerId = 1;
     Button getDirection;
@@ -300,10 +299,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 mMap.clear();
                 markers.clear();
                 practice.clear();
-                markerId = 0;
+                markerId = 1;
                 destCheck = 0;
                 startup = 0;
                 count = 0;
+                markerCount = 0;
 
                 initialSetup = false;
                 fromText = getFrom.getText().toString();
@@ -391,7 +391,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onResume() {
         super.onResume();
-
+        markerId= 1;
+        markerCount = 0;
         if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             this.checkPermissions();
         }
@@ -659,7 +660,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
                markerId++;
-               markerPointer++;
            }
 
         startup = 1;
@@ -819,7 +819,7 @@ return tempLocationMarker;
                 String stringOne = points.get(i).toString();
                 LatLng valueOne = parseString(stringOne);
                 markers.add(valueOne);
-                MarkerOptions location = new MarkerOptions().position(valueOne).title(String.valueOf(markerCount + 1));
+                MarkerOptions location = new MarkerOptions().position(valueOne).title(String.valueOf(markerCount));
                 mMap.addMarker(location);
 
             } else {
