@@ -100,7 +100,7 @@ public class WeatherListAdapter extends ArrayAdapter<WeatherTransitionData>
                     image_view.setImageResource(R.drawable.sunny1);
 
                 }
-                else if(weatherDescription == "Thunderstorm")
+                else if(weatherDescription.equals("Thunderstorm"))
                 {
                     image_view.setImageResource(R.drawable.thunderstorm);
                 }
