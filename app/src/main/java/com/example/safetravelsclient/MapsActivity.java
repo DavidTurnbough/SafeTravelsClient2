@@ -109,6 +109,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private boolean permissions_granted = false;
     public LocationMarker tempLocationMarker = new LocationMarker();
     public ArrayList<WeatherDataTransition> practice = new ArrayList<WeatherDataTransition>();
+    public ArrayList<WeatherDataTransition> transition = new ArrayList<WeatherDataTransition>();
     int total = 0;
     int count = 0;
     int markerCount = 0;
@@ -199,6 +200,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     //Open List View of weather
     //*******************
     public void listViewOnClick(View view) {
+
         Intent intent = new Intent(getApplicationContext(), WeatherListActivity.class);
         intent.putParcelableArrayListExtra("WeatherData", practice);
         this.startActivity(intent);
@@ -391,14 +393,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onResume() {
         super.onResume();
+
         markerId= 1;
         markerCount = 0;
+        precArray.clear();
         if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             this.checkPermissions();
         }
         if (permissions_granted) {
             locationManager.requestLocationUpdates(provider, 400, 1, this);
             if (startup != 0) {
+                practice = getIntent().getExtras().getParcelableArrayList("WeatherData");
 
                 getRouteData(new VolleyCallback() {
                                  @Override
@@ -596,72 +601,79 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         points = currentPolyline.getPoints();
 
         GetMarkers(points);
-           for (int i = 0; i < markers.size(); i++) {
+        for (int i = 0; i < markers.size(); i++) {
 
-               createMarkerObject(markers.get(i));
-               LocationMarker locationMarker = createMarkerObject(markers.get(i));
+            createMarkerObject(markers.get(i));
+            LocationMarker locationMarker = createMarkerObject(markers.get(i));
 
-               if (startup == 0) {
-                   ApiResponse<LocationMarker> apiResponse = (
-                           new LocationMarkerService().addLocationMarker(locationMarker));
-                   prec = apiResponse.getData().getPrecipitationChance();
-                   precArray.add(prec);
-               }
-
-                   //**********************
-                   //Get weather for all markers on route
-                   //***********************
-                   getWeather(new VolleyCallback() {
-                                  @Override
-                                  public void onSuccess(JSONObject result) throws JSONException {
-                                      JSONObject main = result.getJSONObject("main");
-                                      String name = result.getString("name");
-                                      JSONArray weatherArray = result.getJSONArray("weather");
-                                      JSONObject weatherObject = weatherArray.getJSONObject(0);
-                                      JSONObject wind = result.getJSONObject("wind");
-
-                                      String weatherMain = weatherObject.getString("main");
-                                      String weatherDescription = weatherObject.getString("description");
-                                      int temp = main.getInt("temp");
-                                      int tempHigh = main.getInt("temp_max");
-                                      int tempLow = main.getInt("temp_min");
-                                      int windSpeed = wind.getInt("speed");
-                                      int humidity = main.getInt("humidity");
-
-                                      if (total == 0) {
-                                          changeLogos(weatherMain, temp);
-                                          total++;
-                                      }
-
-                                      WeatherTransitionData weatherTransitionData = new WeatherTransitionData();
-                                      weatherTransitionData.setTemperature(String.valueOf(temp));
-                                      weatherTransitionData.setImage(weatherMain);
-                                      weatherTransitionData.setDescription(weatherDescription);
-                                      weatherTransitionData.setHumidity(String.valueOf(humidity));
-                                      weatherTransitionData.setLocation(name);
-                                      weatherTransitionData.setTemperatureHigh(String.valueOf(tempHigh));
-                                      weatherTransitionData.setTemperatureLow(String.valueOf(tempLow));
-                                      weatherTransitionData.setWindDirection(String.valueOf(2));
-                                      weatherTransitionData.setWindVelocity(String.valueOf(windSpeed));
-                                      weatherTransitionData.setMarkerId(markerId);
-                                      if (precArray.size() != 0)
-                                      weatherTransitionData.setPrecipitation(String.valueOf(precArray.get(total-1)));
-                                      total++;
-
-                                      weatherDataTransition = new WeatherDataTransition(weatherTransitionData);
-                                      practice.add(count, weatherDataTransition);
-                                      count++;
-
-                                      System.out.println("Hello");
-
-                                  }
-                              }
-                           , markers.get(i).latitude, markers.get(i).longitude);
+            if (startup == 0) {
+                ApiResponse<LocationMarker> apiResponse = (
+                        new LocationMarkerService().addLocationMarker(locationMarker));
+                prec = apiResponse.getData().getPrecipitationChance();
+                precArray.add(prec);
 
 
-               markerId++;
-           }
+                //**********************
+                //Get weather for all markers on route
+                //***********************
+                getWeather(new VolleyCallback() {
+                               @Override
+                               public void onSuccess(JSONObject result) throws JSONException {
+                                   JSONObject main = result.getJSONObject("main");
+                                   String name = result.getString("name");
+                                   JSONArray weatherArray = result.getJSONArray("weather");
+                                   JSONObject weatherObject = weatherArray.getJSONObject(0);
+                                   JSONObject wind = result.getJSONObject("wind");
 
+                                   String weatherMain = weatherObject.getString("main");
+                                   String weatherDescription = weatherObject.getString("description");
+                                   int temp = main.getInt("temp");
+                                   int tempHigh = main.getInt("temp_max");
+                                   int tempLow = main.getInt("temp_min");
+                                   int windSpeed = wind.getInt("speed");
+                                   int humidity = main.getInt("humidity");
+
+                                   if (total == 0) {
+                                       changeLogos(weatherMain, temp);
+                                       total++;
+                                   }
+
+                                   WeatherTransitionData weatherTransitionData = new WeatherTransitionData();
+                                   weatherTransitionData.setTemperature(String.valueOf(temp));
+                                   weatherTransitionData.setImage(weatherMain);
+                                   weatherTransitionData.setDescription(weatherDescription);
+                                   weatherTransitionData.setHumidity(String.valueOf(humidity));
+                                   weatherTransitionData.setLocation(name);
+                                   weatherTransitionData.setTemperatureHigh(String.valueOf(tempHigh));
+                                   weatherTransitionData.setTemperatureLow(String.valueOf(tempLow));
+                                   weatherTransitionData.setWindDirection(String.valueOf(2));
+                                   weatherTransitionData.setWindVelocity(String.valueOf(windSpeed));
+                                   weatherTransitionData.setMarkerId(markerId);
+                                   if (precArray.size() != 0)
+                                       weatherTransitionData.setPrecipitation(String.valueOf(precArray.get(total - 1)));
+                                   total++;
+
+                                   weatherDataTransition = new WeatherDataTransition(weatherTransitionData);
+                                   practice.add(count, weatherDataTransition);
+                                   count++;
+
+                                   System.out.println("Hello");
+
+                               }
+                           }
+                        , markers.get(i).latitude, markers.get(i).longitude);
+
+
+            }
+            markerId++;
+        }
+
+        if (practice.size()!= 0)
+        {
+            int currentTemp = Integer.parseInt(practice.get(0).getMarkerData().getTemperature());
+        String weatherDescription = practice.get(0).getMarkerData().getImage();
+        changeLogos(weatherDescription, currentTemp);
+    }
         startup = 1;
 
     }
@@ -691,22 +703,6 @@ return tempLocationMarker;
     }
 
 
-
-
-
-
-
-
-    public void updateRain(JSONArray jsonArray) throws JSONException {
-        for (int i = 0; i < practice.size(); i++) {
-            JSONObject jsonObject = jsonArray.getJSONObject(i);
-            String prec = jsonObject.getString("precipChance");
-            practice.get(i).getMarkerData().setPrecipitation(prec);
-        //    Double longitude = jsonObject.getDouble("Longitude");
-           // LatLng latLng = new LatLng(latitude, longitude);
-          //  markers.add(latLng);
-        }
-    }
 
     //**********************
     //Callback method for getting weather
